@@ -1,0 +1,53 @@
+
+.flyer-loader-single,
+.flyer-loader {width:100%;font-size:12px;color:#666;border:1px solid #e6e6e6;}
+
+/* 标头图片操作部分 */
+.flyer-loader .loader-title {position:relative;height:30px;line-height:30px;padding:5px 10px;border-bottom:1px solid #e6e6e6;box-shadow:0 0 2px rgba(0,0,0,.2);}
+.flyer-loader .load-status,
+.flyer-loader .load-bar {position:absolute;top:5px;height:30px;}
+.flyer-loader .load-status {left:10px;}
+.flyer-loader .load-bar {right:10px;}
+.flyer-loader .load-bar .flyer-file {display:none;}
+.flyer-loader .file-picker,
+.flyer-loader .uploader {display:inline-block;height:25px;line-height:25px;padding:0 20px;color:#666;font-size:12px;border:1px solid #e6e6e6;border-radius:3px;background-color:#fff;cursor:pointer;}
+.flyer-loader .uploader {margin-left:8px;color:#fff;border-color:#00B7EE;background-color:#00B7EE;}
+.flyer-loader .uploader:hover {border-color:#00A2D4;background-color:#00A2D4;}
+
+/* 预览区域、单个图片操作细节 */
+.flyer-loader .loader-content {min-height:120px;padding:20px 0 0 20px;background:url(image/add-image.png) 20px 45px no-repeat;}
+.flyer-loader .loader-content.single {padding:20px;background:none;}
+.flyer-loader .loader-content .load-image {position:relative;display:inline-block;width:200px;height:160px;margin:0 20px 20px 0;box-shadow:2px 2px 3px rgba(0,0,0,.2);overflow:hidden;}
+.flyer-loader .loader-content .load-image-single {position:relative;display:inline-block;width:100%;min-height:120px;box-shadow:2px 2px 3px rgba(0,0,0,.2);overflow:hidden;}
+.flyer-loader .handle-bar,
+.flyer-loader .load-progress-wrap,
+.flyer-loader .load-progress,
+.flyer-loader .load-failure,
+.flyer-loader .load-success {position:absolute;left:0;width:100%;height:25px;line-height:25px;}
+.flyer-loader .handle-bar {top:-25px;color:#fff;background:rgba(0,0,0,.8);}
+.flyer-loader .handle-bar .file-name {padding-left:5px;overflow:hidden;}
+.flyer-loader .handle-bar .delete-file {position:absolute;top:4px;right:3px;width:18px;height:18px;background:url(image/white-delete.png) no-repeat scroll 0 0 transparent;display:inline;cursor:pointer;}
+.flyer-loader .handle-bar .delete-file:hover {background-image:url(image/blue-delete.png);}
+.flyer-loader .load-progress,
+.flyer-loader .load-failure,
+.flyer-loader .load-success {display:none;bottom:0;}
+.flyer-loader .load-progress {width:0;height:10px;background:none repeat scroll 0 0 #00B7EE;}
+.flyer-loader .load-progress-wrap {position:relative;height:10px;width:100%;background-color:#fff;}
+.flyer-loader .load-failure {font-size:12px;color:#fff;text-align:center;background:none repeat scroll 0 0 #ff0000;}
+.flyer-loader .load-success {height:40px;background:url(image/success.png) no-repeat scroll right bottom transparent;}
+.file-dispose {display:table-cell;width:100%;height:160px;text-align:center;vertical-align:middle;background-image:url(image/background.png);}
+.load-image-single .file-dispose {height:auto;}
+.file-dispose img {max-width:100% !important;max-height:100% !important;vertical-align:middle;}
+
+.flyer-loader-single {position:relative;width:188px;height:188px;background:url(image/add-image.png) center no-repeat;}
+.flyer-loader-single .file-picker {height:100%;cursor:pointer;}
+.flyer-loader-single .loader-content {position:absolute;top:0;left:0;width:100%;}
+.flyer-loader-single .file-dispose {width:188px;height:188px;}
+.flyer-loader-single .delete-file {position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:22px;background:rgba(0,0,0,.6) url(image/white-delete.png) center no-repeat;cursor:pointer;}
+.flyer-loader-single .delete-file:hover {background-image:url(image/blue-delete.png);}
+.flyer-loader-single.large,
+.flyer-loader-single.large .file-dispose {width:278px;height:278px;}
+
+.flyer-loader-single.circle {border-radius:100%;}
+.flyer-loader-single.circle .file-dispose {border-radius:100%;overflow:hidden;}
+.flyer-loader-single.circle .delete-file {top:10px;right:10px;}

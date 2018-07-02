@@ -1,0 +1,11 @@
+
+# git 忽略文件
+
+/admin/runtime/*
+/website/runtime/*
+/console/runtime/*
+/.idea/*
+/vendor/*
+
+/website/controllers/DocumentController.php
+

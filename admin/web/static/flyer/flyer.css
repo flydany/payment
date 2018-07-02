@@ -1,0 +1,378 @@
+/* flyui button style */
+.flyer-button {line-height:28px;height:30px;padding:0 30px;margin:0;display:inline-block;color:#fff;font-weight:500;font-size:14px;text-align:center;background-color:#EEE;border:1px solid #ccc;cursor:pointer;text-decoration:none;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;-webkit-transition-property:all;transition-property:all;-webkit-transition-duration:.3s;transition-duration:.3s;font-family:Cantarell-Bold, Arial, sans-serif;}
+.flyer-button:visited {color:#fff;}
+.flyer-button:hover,
+.flyer-button:focus {background-color:#f6f6f6;color:#fff;border-color:#f6f6f6;text-decoration:none;outline:none;}
+.flyer-button:active,
+.flyer-button.active,
+.flyer-button.is-active {text-shadow:0 1px 0 rgba(255, 255, 255, 0.3);text-decoration:none;background-color:#eee;border-color:#ccc;color:#d4d4d4;-webkit-transition-duration:0s;transition-duration:0s;-webkit-box-shadow:inset 0 1px 3px rgba(0, 0, 0, 0.2);box-shadow:inset 0 1px 3px rgba(0, 0, 0, 0.2);}
+.flyer-button.disabled,
+.flyer-button.is-disabled,
+.flyer-button:disabled {top:0 !important;background:#eee !important;border-color:#ccc !important;text-shadow:0 1px 1px white !important;color:#CCC !important;cursor:default !important;appearance:none !important;-webkit-box-shadow:none !important;box-shadow:none !important;opacity:.8 !important;}
+.flyer-button.thin {height:24px;line-height:22px;padding:0 18px;}
+.flyer-button.narrow {padding:0 10px;}
+.flyer-button.huge {height:80px;line-height:80px;padding:0 100px;font-size:28px;}
+/* button border style */
+.border-circle {border-radius:100%;}
+.border-round {border-radius:3px;}
+.border-square {border-radius:0;}
+/* button background color */
+.flyer-button.normal {background-color:#4284ec;border-color:#4284ec;}
+.flyer-button.normal:hover {background-color:#76a5f1;border-color:#76a5f1;}
+.flyer-button.danger {background-color:#cf6666;border-color:#cf6666;}
+.flyer-button.warning {background-color:#76a5f1;border-color:#76a5f1;}
+.flyer-button.success {background-color:#3c763d;border-color:#3c763d;}
+.flyer-button.notice {background-color:#76a5f1;border-color:#76a5f1;}
+.flyer-button.orange {background-color:#ffa500;border-color:#ffa500;}
+
+/* flyer tabs */
+.flyer-tabs {}
+.flyer-tabs .tab-header {height:35px;line-height:35px;border-left:1px solid #ccc;}
+.flyer-tabs .header {display:block;float:left;height:34px;padding:0 25px 0 20px;font-size:14px;background-color:#fff;border-top:1px solid #ccc;border-right:1px solid #ccc;border-bottom:1px solid #ccc;cursor:pointer;}
+.flyer-tabs .header i.notice {display:none;}
+.flyer-tabs .header.has-error {position:relative;color:#A94442;border-color:#EBCCD1;background-color:#f9eeee;}
+.flyer-tabs .header.has-error i.notice {position:absolute;display:block;top:5px;right:5px;}
+.flyer-tabs .header.active {font-weight:700;border-bottom:1px solid #f3f3f3;}
+.flyer-tabs .tab-contenter {padding:20px;border:1px solid #ccc;min-height:580px;}
+.flyer-tabs .contenter {display:none;}
+.flyer-tabs .contenter.active {display:block;}
+.flyer-tabs .header {background:-moz-linear-gradient(top, #ffffff 0%, #f3f3f3 100%);background:-webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(100%, #f3f3f3));background:-webkit-linear-gradient(top, #ffffff 0%, #f3f3f3 100%);background:-o-linear-gradient(top, #ffffff 0%, #f3f3f3 100%);background:-ms-linear-gradient(top, #ffffff 0%, #f3f3f3 100%);}
+.tabs .header.active {background:-moz-linear-gradient(top, #f3f3f3 0%, #ffffff 100%);background:-webkit-gradient(linear, left top, left bottom, color-stop(0%, #f3f3f3), color-stop(100%, #ffffff));background:-webkit-linear-gradient(top, #f3f3f3 0%, #ffffff 100%);background:-o-linear-gradient(top, #f3f3f3 0%, #ffffff 100%);background:-ms-linear-gradient(top, #f3f3f3 0%, #ffffff 100%);}
+
+/* flyer form style */
+.flyer-form .form-item {margin-bottom:15px;} /*font-size:0;*/
+.flyer-form .input-title {display:block;float:left;width:110px;height:30px;line-height:30px;padding:0 12px;font-size:12px;font-weight:400;text-align:right;text-overflow:ellipsis;text-shadow: 0 1px 0 #fff;}
+.flyer-form .item-inline {display:inline-block;}
+.flyer-form .input-inline,
+.flyer-form .input-block {position:relative;font-size:12px;}
+.flyer-form .input-block {margin-left:110px;}
+.flyer-form .input-inline {display:inline-block;width:190px;margin-right:10px;vertical-align:top;zoom:1;}
+.flyer-form .input-auto,
+.flyer-form .flyer-input,
+.flyer-form select.flyer-select,
+.flyer-form .flyer-textarea {display:block;width:100%;height:30px;line-height:100%;padding-left:5px;font-size:12px;border:1px solid #ccc;border-radius:2px;background-color:#fff;}
+.flyer-form .flyer-input,
+.flyer-form .flyer-select,
+.flyer-form .flyer-textarea {-webkit-box-shadow:0 0 2px rgba(0,0,0,.2);box-shadow:0 0 2px rgba(0,0,0,.2);-webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;}
+.flyer-form .auto,
+.flyer-form .flyer-input,
+.flyer-form select.flyer-select,
+.flyer-form .flyer-textarea,
+.flyer-form .warn-span,
+.flyer-form .input-title,
+.flyer-form .input-inline,
+.flyer-form .input-block {outline:0;-webkit-transition:border-color .3s cubic-bezier(.65, .05, .35, .5);transition:border-color .3s cubic-bezier(.65, .05, .35, .5);-webkit-box-sizing:border-box!important;-moz-box-sizing:border-box!important;box-sizing:border-box!important;}
+.flyer-form .auto {display:inline-block;width:auto !important;}
+.flyer-form .flyer-textarea {min-height:100px;line-height:22px;}
+.flyer-form .input-mid {line-height:30px;padding-left:10px;color:#666;}
+
+/* start & end date show */
+.flyer-form .date-limit {}
+.flyer-form .date-limit .date-start,
+.flyer-form .date-limit .date-end {float:left;width:105px;}
+.flyer-form .date-limit .date-start {border-radius:0;}
+.flyer-form .date-limit .date-end {border-left:1px solid #ddd;border-top-left-radius:0;border-bottom-left-radius:0;}
+
+/* flyer form title background */
+.flyer-form.pane .input-title {width:110px;height:32px;line-height:32px;text-align:center;border-top:1px solid #ccc;border-bottom:1px solid #ccc;border-left:1px solid #ccc;border-radius:2px 0 0 2px;background-color:#eee;}
+.flyer-form.pane .input-inline,
+.flyer-form.pane .input-block {border-radius:0 2px 2px 0;}
+.flyer-form.pane .flyer-input,
+.flyer-form.pane .flyer-select,
+.flyer-form.pane .flyer-select .flyer-input,
+.flyer-form.pane .flyer-textarea {border:none;}
+.flyer-form.pane .flyer-textarea {padding:5px 10px;}
+.flyer-form.pane .input-inline,
+.flyer-form.pane .input-block {border:1px solid #ccc;}
+/* text */
+/***
+.flyer-form.pane .item-text {height:auto;}
+.flyer-form.pane .item-text .form-item {margin-bottom:10px;}
+.flyer-form.pane .item-text .input-title {height:32px;line-height:32px;}
+.flyer-form.pane .item-text .input-title {float:none;width:100%;text-align:left;border-right:1px solid #ccc;border-bottom:none;border-radius:2px 2px 0 0;}
+.flyer-form.pane .item-text .input-block:before {display:table;line-height:0;content:"";clear:both;}
+.flyer-form.pane .item-text .input-block {margin-left:0;}
+.flyer-form.pane .item-text .input-inline,
+.flyer-form.pane .item-text .input-block {border:1px solid #ccc;border-radius:0 0 2px 2px;}
+.flyer-form.pane .item-text .item-inline,
+.flyer-form.pane .item-text .item-inline .input-inline {width:500px;margin-right:10px;}
+.flyer-form.pane .item-text .flyer-input,
+.flyer-form.pane .item-text .flyer-select,
+.flyer-form.pane .item-text .flyer-textarea {border:none;}
+.flyer-form.pane .item-text .flyer-textarea {padding:5px 10px;}
+ */
+.flyer-form.pane .item-text {height:auto;}
+.flyer-form.pane .item-text > .input-title {height:32px;line-height:32px;}
+.flyer-form.pane .item-text > .input-title {float:none;width:100%;text-align:left;border-right:1px solid #ccc;border-bottom:none;border-radius:2px 2px 0 0;}
+.flyer-form.pane .item-text > .input-block:before {display:table;line-height:0;content:"";clear:both;}
+.flyer-form.pane .item-text > .input-block {margin-left:0;}
+.flyer-form.pane .item-text > .input-inline,
+.flyer-form.pane .item-text > .input-block {border:1px solid #ccc;border-radius:0 0 2px 2px !important;}
+.flyer-form.pane .item-text.item-inline,
+.flyer-form.pane .item-text.item-inline > .input-inline {width:500px;}
+/* search form style */
+.flyer-form.search {border-bottom:1px solid #ccc;}
+.flyer-form.search .form-item {font-size:0;height:auto !important;}
+.flyer-form.search .item-inline {font-size:12px;}
+.flyer-form.search .form-item,
+.flyer-form.search .input-title,
+.flyer-form.search .input-block,
+.flyer-form.search .input-inline,
+.flyer-form.search .flyer-button {height:28px;line-height:28px;}
+.flyer-form.search .flyer-input,
+.flyer-form.search .flyer-select,
+.flyer-form.search .input-auto {height:26px;line-height:26px;}
+.flyer-form.search .flyer-select.active ul {top:28px;}
+.flyer-form.search .flyer-select li {height:25px;line-height:25px;}
+.flyer-form.search .flyer-select .drop {top:8px;}
+.flyer-form.search .form-item {margin-bottom:6px;}
+.flyer-form.search .input-title {width:auto !important;padding:0 10px 0 0;}
+.flyer-form.search.pane .input-title {padding:0 10px;}
+.flyer-form.search .input-inline {width:auto;} /*min-width:80px;*/
+/* table containt form style */
+.flyer-form.flyer-table .form-item,
+.flyer-form.flyer-table .input-block,
+.flyer-form.flyer-table .input-inline,
+.flyer-form.flyer-table .flyer-input,
+.flyer-form.flyer-table .flyer-select,
+.flyer-form.flyer-table .input-auto,
+.flyer-form.flyer-table .input-title,
+.flyer-form.flyer-table .flyer-button {height:24px;line-height:24px;}
+.flyer-form.flyer-table .flyer-select.active ul {top:26px;}
+.flyer-form.flyer-table .flyer-select li {height:22px;line-height:22px;}
+.flyer-form.flyer-table .flyer-select .drop {top:7px;}
+/* date plugs */
+.flyer-date {background:#fff url(image/date-ico.png) center right no-repeat;background-size:auto 100%;cursor:pointer;}
+/* error OR success input style */
+.flyer-form .checker {position:relative;}
+.flyer-form .has-error .flyer-input,
+.flyer-form .has-error .flyer-select,
+.flyer-form .has-error .flyer-textarea,
+.flyer-form.pane .has-error .input-inline,
+.flyer-form.pane .has-error .input-block {border-color:#cf6666;box-shadow:0 0 3px rgba(207, 102, 102, .4);}
+.flyer-form .has-pass .flyer-input,
+.flyer-form .has-pass .flyer-select,
+.flyer-form .has-pass .flyer-textarea,
+.flyer-form.pane .has-pass .input-inline,
+.flyer-form.pane .has-pass .input-block {border-color:#3c763d;box-shadow:0 0 3px rgba(60, 118, 61, .4);}
+.flyer-form .has-notice .flyer-input,
+.flyer-form .has-notice .flyer-select,
+.flyer-form .has-notice .flyer-textarea,
+.flyer-form.pane .has-notice .input-inline,
+.flyer-form.pane .has-notice .input-block {border-color:#1064a4;box-shadow:0 0 3px rgba(16, 100, 164, .4);}
+.flyer-form .warn-span {display:none;position:absolute;top:0;right:0;padding:0 6px;width:auto;height:30px;line-height:30px;background-color:#fff;border:1px solid #ccc;border-top:none;border-top-right-radius:2px;border-bottom-right-radius:2px;z-index:99;}
+.flyer-form .has-pass .warn-span {display:block;color:#3c763d;border-color:#def0d7;background-color:#def0d7;}
+.flyer-form .has-error .warn-span {display:block;color:#cf6666;border-color:#f9eeee;background-color:#f9eeee;}
+.flyer-form .has-notice .warn-span {display:block;color:#1064A4;border-color:#F2F9FE;background-color:#F2F9FE;}
+.flyer-form .has-error .warn-span, .flyer-form .has-pass .warn-span {display:block;}
+
+/* flyer select style */
+.flyer-select {position:relative;}
+.flyer-select input {
+    border-color: #c6c6c6;
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.1);
+    -moz-box-shadow: 0 1px 1px rgba(0,0,0,.1);
+    -ms-box-shadow: 0 1px 1px rgba(0,0,0,.1);
+    box-shadow: 0 1px 1px rgba(0,0,0,.1);
+    background-color: #F8F8F8;
+    background-image: -webkit-linear-gradient(top, #f8f8f8, #f1f1f1);
+    background-image: -moz-linear-gradient(top, #f8f8f8, #f1f1f1);
+    background-image: -ms-linear-gradient(top, #f8f8f8, #f1f1f1);
+    background-image: linear-gradient(top, #f8f8f8, #f1f1f1);
+}
+.flyer-select:hover input {
+  background-color: #f3f3f3;
+  background-image: -webkit-linear-gradient(top, #f8f8f8, #e8e8e8);
+  background-image: -moz-linear-gradient(top, #f8f8f8, #e8e8e8);
+  background-image: -ms-linear-gradient(top, #f8f8f8, #e8e8e8);
+  background-image: linear-gradient(top, #f8f8f8, #e8e8e8);
+}
+.flyer-select.active input {
+    -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+    -moz-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+    background-color: #eee;
+    background-image: -webkit-linear-gradient(top,#eee,#e0e0e0);
+    background-image: -moz-linear-gradient(top,#eee,#e0e0e0);
+    background-image: -ms-linear-gradient(top,#eee,#e0e0e0);
+    background-image: -o-linear-gradient(top,#eee,#e0e0e0);
+    background-image: linear-gradient(top,#eee,#e0e0e0);
+    border-color: #ccc;
+}
+.flyer-select .drop {position:absolute;top:10px;right:10px;}
+.flyer-select ul {position:absolute;visibility:hidden;opacity:0;top:15px;left:0;max-height:180px;overflow-y:auto;padding:3px 0;background-color:#fff;border:1px solid #ccc;border-radius:2px;box-shadow:0 0 5px rgba(0,0,0,.4);z-index:1000000;}
+.flyer-select.active ul {visibility:visible;opacity:1;top:34px;}
+.flyer-select ul,
+.flyer-select li {min-width:100%;margin:0;outline:0;-webkit-box-sizing:border-box!important;-moz-box-sizing:border-box!important;box-sizing:border-box!important;}
+.flyer-select li {height:30px;line-height:30px;padding:0 10px;}
+.flyer-select li.hover,
+.flyer-select li:hover {background-color:#eee;}
+.flyer-select li:active {color:#fff;background-color:#70C3FF;}
+.flyer-select li.select {color:#fff;background-color:#44ABF4;}
+.flyer-select li,
+.flyer-select input,
+.flyer-select .drop {cursor:pointer;}
+
+/* flyer switch style */
+.flyer-switch input[type=checkbox] {display:none;}
+.flyer-switch {position:relative;width:80px;height:30px;line-height:30px;background:#333333;border-radius:3px;}
+.flyer-switch:before {content:'On';position:absolute;top:0;left:12px;height:2px;color:#7FC6A6;font-size:11px;}
+.flyer-switch:after {content:'Off';position:absolute;top:0;left:50px;height:2px;color:#FF8800;font-size:11px;}
+.flyer-switch label {position:absolute;display:block;top:6px;left:5px;width:35px;height:18px;background:#FF8800;border-radius:3px;cursor:pointer;z-index:1;}
+.flyer-switch input[type=checkbox]:checked + label {left:40px;background:#7FC6A6;}
+/* 功能 菜单 */
+.flyer-switch.navigator:before {content:'菜单';}
+.flyer-switch.navigator:after {content:'功能';}
+.flyer-switch.yes-no-chinese:before {content:'是';}
+.flyer-switch.yes-no-chinese:after {content:'否';}
+/* large (form use) */
+.thin .flyer-switch {width:67px;height:23px;line-height:23px;}
+.thin .flyer-switch:before {left:5px;font-size:11px;}
+.thin .flyer-switch:after {left:39px;font-size:11px;}
+.thin .flyer-switch label {top:3px;left:2px;width:33px;height:17px;}
+.thin .flyer-switch input[type=checkbox]:checked + label {left:32px;}
+/* large (form use) */
+.large .flyer-switch {width:80px;height:30px;line-height:30px;}
+.large .flyer-switch:before {left:12px;font-size:14px;}
+.large .flyer-switch:after {left:50px;font-size:14px;}
+.large .flyer-switch label {top:6px;left:5px;width:35px;height:18px;}
+.large .flyer-switch input[type=checkbox]:checked + label {left:40px;}
+
+/* flyer choise style */
+.space,
+.flyer-choise {font-size:12px;}
+.flyer-choise,
+.flyer-choise label {display:inline-block;height:30px;line-height:30px;}
+.flyer-choise {display:inline-block;width:90px;margin-right:8px;}
+.flyer-choise input[type=checkbox],
+.flyer-choise input[type=radio] {display:none;}
+.flyer-choise label {width:62px;padding-left:28px;color:#666;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;background:#efefef url(image/input-unchecked.png) 6px 7px no-repeat;border-radius:2px;cursor:pointer;}
+.flyer-choise input[type=radio] + label {background-image:url(image/radio-unchecked.png);}
+.flyer-choise input[type=checkbox]:not([disabled]) + label:hover,
+.flyer-choise input[type=radio]:not([disabled]) + label:hover {background-color:#eaeaea;}
+.flyer-choise input[type=checkbox]:checked + label,
+.flyer-choise input[type=radio]:checked + label {color:#fff;background-color:#4284ec;background-image:url(image/input-checked.png);}
+.flyer-choise input[type=checkbox]:checked:not([disabled]) + label:hover,
+.flyer-choise input[type=radio]:checked:not([disabled]) + label:hover {background-color:#76a5f1;}
+.red-choise .flyer-choise input[type=checkbox]:checked + label,
+.red-choise .flyer-choise input[type=radio]:checked + label,
+.has-error .flyer-choise input[type=checkbox]:checked + label,
+.has-error .flyer-choise input[type=radio]:checked + label {background-color:#f35252 !important;color:#fff !important;}
+/* margin container */
+.flyer-choise-conter {}
+.flyer-choise-conter .flyer-choise {margin:0px 10px 10px 0;}
+/* disabled */
+.flyer-choise input:checked:disabled + label,
+.flyer-choise input:checked:disabled + label:hover,
+.flyer-choise input:disabled + label,
+.flyer-choise input:disabled + label:hover {filter:alpha(opacity=50);-moz-opacity:0.5;-khtml-opacity:0.5;opacity:0.5;}
+/* sex choise */
+.sex .flyer-choise {width:60px;margin-bottom:0;}
+.sex .flyer-choise label {width:35px;}
+/* small (table use) */
+.thin .flyer-choise,
+.thin .flyer-choise label {height:24px;line-height:24px;}
+.thin .flyer-choise label {background-position:5px 3px;}
+/* moderate (form use) */
+.moderate .flyer-choise {width:120px;}
+.moderate .flyer-choise label {width:92px;}
+/* large (form use) */
+.large .flyer-choise {width:180px;}
+.large .flyer-choise label {width:152px;}
+/* auto (不定长) */
+.auto .flyer-choise {width:auto;}
+.auto .flyer-choise label {width:auto;padding-right:16px;}
+
+/* 状态栏 style */
+.flyer-status {display:inline-block;padding:3px 6px;line-height:18px;color:#ffffff;border-radius:3px;}
+.flyer-status.green {background-color:#3c763d;}
+.flyer-status.red {background-color:#A94442;}
+.flyer-status.blue {background-color:#4284ec;}
+.flyer-status.orange {background-color:#ffa500;}
+.flyer-status.purple {background-color:#9900ff;}
+.flyer-status.gray {background-color:#b0b0b0;}
+.flyer-status.light {filter:alpha(opacity=50);-moz-opacity:0.5;-khtml-opacity:0.5;opacity:0.5;}
+.flyer-status.thin {padding:1px 6px;}
+
+/* flyer table style */
+.flyer-table,
+.flyer-table table {width:100%;outline:0;-webkit-box-sizing:border-box!important;-moz-box-sizing:border-box!important;box-sizing:border-box!important;}
+.flyer-table table {border:1px solid #ddd;}
+.flyer-table table:hover {box-shadow:0 0 5px rgba(0, 0, 0, 0.2);}
+.flyer-table thead {background:-moz-linear-gradient(top, #ffffff 0%, #f3f3f3 100%);background:-webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(100%, #f3f3f3));background:-webkit-linear-gradient(top, #ffffff 0%, #f3f3f3 100%);background:-o-linear-gradient(top, #ffffff 0%, #f3f3f3 100%);background:-ms-linear-gradient(top, #ffffff 0%, #f3f3f3 100%);-moz-box-shadow:0 2px 2px rgba(0, 0, 0, 0.2);-webkit-box-shadow:0 2px 2px rgba(0, 0, 0, 0.2);box-shadow:0 2px 2px rgba(0, 0, 0, 0.2);}
+.flyer-table th,
+.flyer-table td {height:30px;line-height:30px;padding:0 6px;text-align:left;vertical-align:middle;border:none;border-left:1px solid #ccc;}
+.flyer-table th.first,
+.flyer-table td.first .flyer-table th:first-child,
+.flyer-table td:first-child {border-left:none;}
+.flyer-table td.first input[type=checkbox],
+.flyer-table td.first input[type=radio] {display:none;}
+.flyer-table th {height:32px;}
+.flyer-table td {background-color:#ffffff;border-top:1px solid #ccc;}
+.flyer-table tr.even td {background-color:#fcfcfc;}
+.flyer-table tr.select td {background-color:#fbf2ce !important;}
+.flyer-table tr:hover td {background-color:#fafafa;}
+.flyer-table th.tac,
+.flyer-table td.tac {text-align:center;}
+.flyer-table th.tar,
+.flyer-table td.tar {text-align:right;}
+.flyer-table .hide-width th {padding:0;border:none;height:0;background-color:#f5f5f5;}
+.flyer-table a {text-decoration:none;}
+.flyer-table a:hover {text-decoration:none;}
+.flyer-table td.handle a {display:block;float:left;border:1px solid #ccc;padding:2px 5px;}
+/* table td height style */
+.flyer-table.thin td,
+.flyer-table.thin tbody .handle {height:27px;}
+.flyer-table.thin th,
+.flyer-table.thin thead .handle {height:30px;}
+.flyer-table.fat td,
+.flyer-table.fat tbody .handle {height:37px;}
+.flyer-table.fat th,
+.flyer-table.fat thead .handle {height:35px;}
+/* 表格中需要编辑保存属性的时候需要调整的css */
+.flyer-table {}
+.flyer-table input,
+.flyer-table select {height:24px;padding-left:4px;}
+.flyer-table tr:hover td {background-color:#f5f5f5;}
+/* 表格中的 单选多选 padding */
+.flyer-table .td {padding-bottom:0;padding-right:0;}
+.flyer-table .flyer-choise {margin-bottom:5px;}
+
+/* flyer form style */
+.flyer-colum-2 {position:relative;padding-left:320px;}
+.flyer-colum-2 .left {position:absolute;width:300px;top:0;left:0;}
+.flyer-colum-2 .right {}
+
+/*** * 分页样式 * <div class="page right thin"><ul><li class="previous"><a><<prev</a></li><li class="active"><a>1</a></li><li class="next"><a>next>></a></li></ul></div> */
+.flyer-page {height:32px;width:100%;margin:10px 0;}
+.flyer-page.left ul {float:left;}
+.flyer-page.left .handle {float:right;}
+.flyer-page.right ul {float:right;}
+.flyer-page.right .handle {float:left;}
+.flyer-page ul {border:1px solid #ccc;border-radius:1px;}
+.flyer-page li,
+.flyer-page li a {display:inline-block;height:30px;line-height:30px;}
+.flyer-page li {float:left;border-left:1px solid #ccc;}
+.flyer-page li a {padding:0 10px;color:#1e232f;text-decoration:none;}
+/*当前页*/
+.flyer-page li:hover a {color:#1e232f;box-shadow:0 0 5px rgba(0, 0, 0, 0.5);cursor:pointer;}
+.flyer-page li.active a {color:#cccccc;}
+.flyer-page li.active:hover a {cursor:default;box-shadow:none;}
+/*上一页，下一页*/
+.flyer-page li.prev a,
+.flyer-page li.next a {font-size:12px;}
+.flyer-page li.prev {border-left:none;}
+.flyer-page li.next a {}
+/* page height style */
+.flyer-page.thin {height:27px;}
+.flyer-page.thin li,
+.flyer-page.thin li a {height:25px;line-height:25px;}
+.flyer-page.normal {height:32px;}
+.flyer-page.normal li,
+.flyer-page.normal li a {height:30px;line-height:30px;}
+.flyer-page.fat {height:37px;}
+.flyer-page.fat li,
+.flyer-page.fat li a {height:35px;line-height:35px;}
+
+
+.transition {-webkit-transition:all .2s ease;-moz-transition:all .2s ease;-o-transition:all .2s ease;-ms-transition:all .2s ease;transition:all .2s ease;}
