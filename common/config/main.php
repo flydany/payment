@@ -25,9 +25,6 @@ return [
             'cookieValidationKey' => 'GqsorrWN7wpLzUdc_AQrCfJfduth8hkV',
             'class' => 'common\components\Request',
         ],
-        'view' => [
-            'class' => 'common\components\View',
-        ],
     ],
     'params' => require(__DIR__ . '/params.php'),
 ];

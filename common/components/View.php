@@ -34,4 +34,15 @@ class View extends \yii\web\View {
     {
         return Yii::$app->controller;
     }
+    
+    /**
+     * 重写JS引入规则
+     * @param string $js js路径
+     * @param int $position 引入顺序
+     * @param boolean|null $key 是否MD5 KEY
+     */
+    public function registerJs($js, $position = self::POS_LOAD, $key = null)
+    {
+        return parent::registerJs($js, $position, $key);
+    }
 }

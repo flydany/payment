@@ -4,87 +4,82 @@
 
 use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use common\helpers\Render;
+use common\models\AdminRole;
 
-$this->title = '管理员列表';
+$this->title = 'Manager';
+$this->addCrumbs('System');
+
+$this->registerJs('flyer/checker.class.js');
+$this->registerJs('flyer/tabler.class.js');
+$this->registerJs('flyer/tableHandler.class.js');
 ?>
 
-<div class="box-content gap">
-    <div class="search flyer-form pane" id="info-search">
-        <div class="form-item">
-            <div class="item-inline">
-                <div class="input-title">登录名</div>
-                <div class="input-inline w-100px"><input class="tabler flyer-input" name="username" placeholder="login name."></div>
-            </div>
-            <div class="item-inline">
-                <div class="input-title">手机号</div>
-                <div class="input-inline w-100px"><input class="tabler flyer-input" name="mobile" placeholder="mobile."></div>
-            </div>
-            <div class="item-inline">
-                <div class="input-title">权组</div>
-                <div class="input-inline w-100px"><?= Render::select('role_id', $roles, null, ['prompt' => '全部--', 'flyer' => 'select', 'class' => 'tabler']) ?></div>
-            </div>
-            <div class="item-inline">
-                <div class="input-inline bdn"><button class="flyer-button normal narrow border-round" id="search-button"><i class="icon-search"></i> <span>查 询</span></button></div>
-            </div>
-        </div>
+<div class="form-inline search" id="info-search">
+    <div class="input-group w-180px">
+        <span class="input-group-addon">用户名</span>
+        <input type="text" class="form-control" placeholder="Username">
     </div>
-    <div class="flyer-table mt-10px">
-        <table class="table table-bordered table-striped">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
-            </tr>
-            </tbody>
-        </table>
+    <div class="input-group w-180px">
+        <span class="input-group-addon">手机号</span>
+        <input type="text" class="form-control" placeholder="Mobile">
     </div>
-    <div class="flyer-page mt right" id="info-page">
-        <ul class="handle">
-            <li class="prev"><a href="<?= Url::to('@web/admin/admin-detail') ?>"><i class="icon-plus icon-large"></i> 添加管理员</a></li>
-            <li class="select-all" data-table="#info-table"><a><i class="icon-check icon-large"></i> 全选</a></li>
-            <li class="reverse-all" data-table="#info-table"><a><i class="icon-check-empty icon-large"></i> 反选</a></li>
-            <li class="next delete-mult" data-table="#info-table" data-href="<?= Url::to('@web/admin/admin-delete') ?>"><a><i class="icon-trash icon-large"></i> 删除选中</a></li>
-        </ul>
-        <div class="html"></div>
+    <div class="input-group w-200px">
+        <span class="input-group-addon">权组</span>
+        <?= Render::select('role_id', AdminRole::identitySelector(), null, ['prompt' => '--', 'class' => 'tabler']) ?>
     </div>
+    <button type="submit" class="btn btn-primary" id="search-button">Submit</button>
 </div>
 
-<script src="<?= Render::static('flyer/flyer.class.js') ?>"></script>
-<script src="<?= Render::static('flyer/checker.class.js') ?>"></script>
-<script src="<?= Render::static('flyer/tabler.class.js') ?>"></script>
-<script src="<?= Render::static('flyer/tableHandler.class.js') ?>"></script>
+
+<table class="table table-bordered table-striped" id="info-table">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Username</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <th scope="row">1</th>
+        <td>Mark</td>
+        <td>Otto</td>
+        <td>@mdo</td>
+    </tr>
+    <tr>
+        <th scope="row">2</th>
+        <td>Jacob</td>
+        <td>Thornton</td>
+        <td>@fat</td>
+    </tr>
+    <tr>
+        <th scope="row">3</th>
+        <td>Larry</td>
+        <td>the Bird</td>
+        <td>@twitter</td>
+    </tr>
+    </tbody>
+</table>
+<div class="page right" id="info-page">
+    <div class="btn-group" role="group" aria-label="...">
+        <button type="button" class="btn btn-default"><i class="fa fa-check-square"></i>Check All</button>
+        <button type="button" class="btn btn-default"><i class="fa fa-minus-square"></i>Inverse</button>
+        <button type="button" class="btn btn-default"><i class="fa fa-trash  "></i>Batch Delete</button>
+    </div>
+    <div class="html"></div>
+</div>
+
 <script>
-    $(document).ready(function() {
-        (new flyer).init({ form: '#info-search' });
+    jQuery(document).ready(function() {
         // 批量删除按钮事件
          tableHandler.requestMulti({ button: '.delete-mult', isKeep: false });
         // 初始化表格异步加载事件
         (new tabler).init({
             // 请求地址
-            url: '<?= Url::to('@web/admin/admin-list') ?>',
+            url: '<?= Url::to('@web/admin/list') ?>',
             // 数据渲染配置
             table: '#info-table', page: '#info-page', template: 'info-template', search: '#info-search', button: '#search-button',
             // 全选、反选按钮、页面加载完毕自动loading

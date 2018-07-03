@@ -40,7 +40,12 @@ use common\models\Navigator;
         margin-left:230px;
         padding:10px 20px 0;
         min-height:3200px;
-        background-color:#F7F7F7;
+        background-color:#FFF;
+    }
+    .breadcrumb {
+        padding:8px 0;
+        background:none;
+        margin-bottom:10px;
     }
 </style>
 <div class="col-md-3" id="left-panel">
@@ -48,6 +53,22 @@ use common\models\Navigator;
 </div>
 
 <div id="right-panel">
+    <div class="wrap">
+        <ol class="breadcrumb">
+            <li><i class="fa fa-home fa-fw"></i><a href="<?= Url::to('@web/welcome/index') ?>"><?= $this->context->module->name ?></a></li>
+            <?php if( ! empty($this->crumbs)) {
+                foreach($this->crumbs as $crumbs) {
+                    if($crumbs['url']) {
+                        echo "<li><a href=\"{$crumbs['url']}\">{$crumbs['title']}</a></li>";
+                    }
+                    else {
+                        echo "<li>{$crumbs['title']}</li>";
+                    }
+                }
+            } ?>
+            <li><?= $this->title ?></li>
+        </ol>
+    </div>
     <div class="wrap">
         <?= $content ?>
     </div>

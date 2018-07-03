@@ -27,7 +27,7 @@ class AdminController extends Controller {
     {
         if( ! $this->request->isAjax) {
             return $this->render('list', [
-                'roles' => ArrayHelper::map(AdminRole::find()->select('id, title')->asArray()->all(), 'id', 'title'),
+            
             ]);
         }
         $params = $this->request->post();

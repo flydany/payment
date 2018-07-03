@@ -190,7 +190,7 @@ use common\models\Navigator;
         </div>
         <div class="info">
             <span>Welcome,</span>
-            <h2>John Doe</h2>
+            <h2><?= $this->admin->realname ?></h2>
         </div>
     </div>
     <!-- /menu profile quick info -->
@@ -214,7 +214,7 @@ use common\models\Navigator;
                     foreach($navigators[$id] as $sid => $navigator) {
                         ?>
                         <li id="sid-<?= $sid ?>">
-                            <a><i class="fa fa-<?= $navigator['icon_class'] ?>"></i> <?= $navigator['title'] ?> <span class="fa fa-chevron-down"></span></a>
+                            <a><i class="fa fa-<?= $navigator['icon_class'] ?> fa-fw"></i> <?= $navigator['title'] ?> <span class="fa fa-chevron-down"></span></a>
                             <?php
                             if( ! empty($navigators[$sid])) {
                                 ?>

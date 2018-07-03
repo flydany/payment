@@ -17,7 +17,7 @@
     font-weight: bold;
 }
 
-/* ------------------ body frame ------------------- */
+/* -------- body frame ----- */
 *, :after, :before {
 	box-sizing: border-box;
 }
@@ -27,6 +27,46 @@ body {
 	font-weight:400;
     font:14px/20px 'MontserratRegular', Helvetica, Arial, sans-serif;
 }
+
+/* -------- search form ----- */
+.search {
+	margin-bottom:11px;
+}
+.search div[class^="input-group"] {
+	padding:4px 5px 4px 0;
+}
+
+.w-40px{width:40px !important;}
+.w-50px{width:50px !important;}
+.w-60px{width:60px !important;}
+.w-70px{width:70px !important;}
+.w-80px{width:80px !important;}
+.w-85px{width:85px !important;}
+.w-90px{width:90px !important;}
+.w-100px{width:100px !important;}
+.w-120px{width:120px !important;}
+.w-130px{width:130px !important;}
+.w-150px{width:150px !important;}
+.w-180px{width:180px !important;}
+.w-200px{width:200px !important;}
+.w-250px{width:250px !important;}
+.w-300px{width:300px !important;}
+.w-350px{width:350px !important;}
+.w-360px{width:360px !important;}
+.w-375px{width:375px !important;}
+.w-380px{width:380px !important;}
+.w-400px{width:400px !important;}
+.w-450px{width:450px !important;}
+.w-500px{width:500px !important;}
+.w-550px{width:550px !important;}
+.w-600px{width:600px !important;}
+.w-700px{width:700px !important;}
+.w-750px{width:750px !important;}
+.w-800px{width:800px !important;}
+.w-900px{width:900px !important;}
+.w-1000px{width:1000px !important;}
+.w-auto{width:auto !important;}
+.w-p100{width:100% !important;}
 
 .pd,
 .pd-10px {

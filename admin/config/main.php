@@ -19,6 +19,9 @@ return [
                 ],
             ],
         ],
+        'view' => [
+            'class' => 'admin\components\View',
+        ],
     ],
     'params' => require(__DIR__ . '/params.php'),
 ];

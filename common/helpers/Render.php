@@ -248,7 +248,7 @@ class Render {
             }
         }
         $_html = '';
-        $_html .= "<select name=\"{$name}\":option>";
+        $_html .= "<select class='form-control' name=\"{$name}\":option>";
         $_option = '';
         if($options) {
             foreach($options as $attr => $option) {
