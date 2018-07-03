@@ -43,6 +43,9 @@ class View extends \yii\web\View {
      */
     public function registerJsFile($url, $options = ['position' => self::POS_HEAD], $key = null)
     {
-        return parent::registerJsFile('@web/static/'.$url, $options, $key);
+        if(strpos('@static/', $url) >= 0) {
+            $url = str_replace('@static', '@web/static/', $url);
+        }
+        return parent::registerJsFile($url, $options, $key);
     }
 }

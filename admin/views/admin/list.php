@@ -11,9 +11,10 @@ use common\models\AdminRole;
 $this->title = 'Manager';
 $this->addCrumbs('System');
 
-$this->registerJsFile('flyer/checker.class.js');
-$this->registerJsFile('flyer/tabler.class.js');
-$this->registerJsFile('flyer/tableHandler.class.js');
+$this->registerJsFile('@static/art-template/template.js');
+$this->registerJsFile('@static/flyer/checker.class.js');
+$this->registerJsFile('@static/flyer/tabler.class.js');
+$this->registerJsFile('@static/flyer/tableHandler.class.js');
 ?>
 
 <div class="form-inline search" id="info-search">
@@ -36,35 +37,23 @@ $this->registerJsFile('flyer/tableHandler.class.js');
 <table class="table table-bordered table-striped" id="info-table">
     <thead>
     <tr>
-        <th>#</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Username</th>
+        <th>用户名</th>
+        <th>姓名</th>
+        <th>权组</th>
+        <th>手机号</th>
+        <th>有效期</th>
+        <th>创建时间</th>
+        <th>操作</th>
     </tr>
     </thead>
     <tbody>
     <tr>
-        <th scope="row">1</th>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>@mdo</td>
-    </tr>
-    <tr>
-        <th scope="row">2</th>
-        <td>Jacob</td>
-        <td>Thornton</td>
-        <td>@fat</td>
-    </tr>
-    <tr>
-        <th scope="row">3</th>
-        <td>Larry</td>
-        <td>the Bird</td>
-        <td>@twitter</td>
+        <td colspan="7">点击查询按钮.</td>
     </tr>
     </tbody>
 </table>
 <div class="page right" id="info-page">
-    <div class="btn-group" role="group" aria-label="...">
+    <div class="btn-group" role="group">
         <button type="button" class="btn btn-default"><i class="fa fa-check-square fa-fw"></i>Check All</button>
         <button type="button" class="btn btn-default"><i class="fa fa-minus-square fa-fw"></i>Inverse</button>
         <button type="button" class="btn btn-default"><i class="fa fa-trash fa-fw"></i>Batch Delete</button>

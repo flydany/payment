@@ -2,14 +2,14 @@
 
 namespace admin\assets;
 
-use common\components\View;
 use yii\web\AssetBundle;
+use common\components\View;
 
 /**
  * Main backend application asset bundle.
  */
-class AppAsset extends AssetBundle
-{
+class AppAsset extends AssetBundle {
+    
     public $basePath = '@webroot/static';
     public $baseUrl = '@web/static';
     

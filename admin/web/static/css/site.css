@@ -17,6 +17,12 @@
     font-weight: bold;
 }
 
+select {
+	-webkit-appearance: none;
+	-webkit-border-top-left-radius: 0px;
+	-webkit-border-bottom-left-radius: 0px;
+}
+
 /* -------- body frame ----- */
 *, :after, :before {
 	box-sizing: border-box;
