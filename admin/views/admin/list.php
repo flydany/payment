@@ -1,6 +1,6 @@
 <?php
 
-/* @var $this yii\web\View */
+/* @var $this admin\components\View */
 
 use yii\helpers\Url;
 use yii\helpers\Html;
@@ -11,9 +11,9 @@ use common\models\AdminRole;
 $this->title = 'Manager';
 $this->addCrumbs('System');
 
-$this->registerJs('flyer/checker.class.js');
-$this->registerJs('flyer/tabler.class.js');
-$this->registerJs('flyer/tableHandler.class.js');
+$this->registerJsFile('flyer/checker.class.js');
+$this->registerJsFile('flyer/tabler.class.js');
+$this->registerJsFile('flyer/tableHandler.class.js');
 ?>
 
 <div class="form-inline search" id="info-search">

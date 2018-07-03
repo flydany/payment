@@ -36,13 +36,13 @@ class View extends \yii\web\View {
     }
     
     /**
-     * 重写JS引入规则
+     * 重写JS文件引入规则
      * @param string $js js路径
-     * @param int $position 引入顺序
+     * @param array $options 配置信息
      * @param boolean|null $key 是否MD5 KEY
      */
-    public function registerJs($js, $position = self::POS_LOAD, $key = null)
+    public function registerJsFile($url, $options = ['position' => self::POS_HEAD], $key = null)
     {
-        return parent::registerJs($js, $position, $key);
+        return parent::registerJsFile('@web/static/'.$url, $options, $key);
     }
 }
