@@ -65,9 +65,9 @@ $this->registerJs('flyer/tableHandler.class.js');
 </table>
 <div class="page right" id="info-page">
     <div class="btn-group" role="group" aria-label="...">
-        <button type="button" class="btn btn-default"><i class="fa fa-check-square"></i>Check All</button>
-        <button type="button" class="btn btn-default"><i class="fa fa-minus-square"></i>Inverse</button>
-        <button type="button" class="btn btn-default"><i class="fa fa-trash  "></i>Batch Delete</button>
+        <button type="button" class="btn btn-default"><i class="fa fa-check-square fa-fw"></i>Check All</button>
+        <button type="button" class="btn btn-default"><i class="fa fa-minus-square fa-fw"></i>Inverse</button>
+        <button type="button" class="btn btn-default"><i class="fa fa-trash fa-fw"></i>Batch Delete</button>
     </div>
     <div class="html"></div>
 </div>
