@@ -26,6 +26,19 @@ select.bak {
 .form-inline {
 	margin-bottom:15px;
 }
+.form-row {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap;
+	margin-right: -5px;
+	margin-left: -5px;
+}
+.form-row > [class*=col-] {
+	padding-right: 5px;
+	padding-left: 5px;
+}
 
 /* -------- body frame ----- */
 *, :after, :before {

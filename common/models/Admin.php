@@ -13,7 +13,7 @@ class Admin extends ActiveRecord {
     public function rules()
     {
         return [
-            [['username', 'realname', 'mobile', 'email', 'end_date'], 'required'],
+            [['username', 'realname', 'mobile', 'email', 'effect_date'], 'required'],
             [['username', 'password_digest'], 'string', 'length' => [4, 128]],
             [['mobile'], 'match', 'pattern' => "/^1\d{10}$/"],
             [['username', 'mobile'], 'unique'],
@@ -27,13 +27,13 @@ class Admin extends ActiveRecord {
     public function attributeLabels()
     {
         return [
-            'username' => '用户名',
-            'password_digest' => '密码',
-            'role_id' => '权组',
-            'realname' => '姓名',
-            'mobile' => '手机号',
-            'email' => '邮箱',
-            'end_date' => '过期时间',
+            'username' => 'username',
+            'password_digest' => 'password',
+            'role_id' => 'power group',
+            'realname' => 'realname',
+            'mobile' => 'mobile',
+            'email' => 'email',
+            'effect_date' => 'effect date',
         ];
     }
     /**
@@ -53,7 +53,7 @@ class Admin extends ActiveRecord {
                 'realname' => ['姓名', ['chinese', 'minlength' => 2, 'maxlength' => 4, 'required']],
                 'mobile' => ['电话', ['mobile', 'required']],
                 'email' => ['邮箱', ['email', 'required']],
-                'end_date' => ['过期时间', ['date' => 'Y-m-d', 'required']],
+                'effect_date' => ['过期时间', ['date' => 'Y-m-d', 'required']],
             ],
         ];
         // type eq update
@@ -113,7 +113,7 @@ class Admin extends ActiveRecord {
      */
     public static function passwordDigest($password)
     {
-        return password_hash($password.Yii::$app->params['adminPasswordDigest'], PASSWORD_DEFAULT, ['cost' => 13]);
+        return password_hash($password.Yii::$app->params['passwordDigest'], PASSWORD_DEFAULT, ['cost' => 13]);
     }
 
     /**
@@ -122,7 +122,7 @@ class Admin extends ActiveRecord {
      */
     public function validatePassword($password)
     {
-        return password_verify($password.Yii::$app->params['adminPasswordDigest'], $this->password_digest);
+        return password_verify($password.Yii::$app->params['passwordDigest'], $this->password_digest);
     }
     
     /**
@@ -131,7 +131,7 @@ class Admin extends ActiveRecord {
      */
     public function valid()
     {
-        return ($this->end_date >= date('Y-m-d') || in_array($this->end_date, [date('Y-m-d'), '0000-00-00'])) ? true : false;
+        return ($this->effect_date >= date('Y-m-d') || in_array($this->effect_date, [date('Y-m-d'), '0000-00-00'])) ? true : false;
     }
 
     /**
@@ -143,7 +143,7 @@ class Admin extends ActiveRecord {
         if(empty($admin)) {
             return false;
         }
-        return ($admin['end_date'] >= date('Y-m-d') || in_array($admin['end_date'], [date('Y-m-d'), '0000-00-00'])) ? true : false;
+        return ($admin['effect_date'] >= date('Y-m-d') || in_array($admin['effect_date'], [date('Y-m-d'), '0000-00-00'])) ? true : false;
     }
 
     /**

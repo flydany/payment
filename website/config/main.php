@@ -2,7 +2,7 @@
 
 return [
     'id' => 'basic-website',
-    'name' => '支付中心',
+    'name' => 'Pay Point',
     'basePath' => dirname(__DIR__),
     'defaultRoute' => 'welcome/index',
     'controllerNamespace' => 'website\controllers',

@@ -1,40 +1,51 @@
 <?php
 
-/* @var $this yii\web\View */
+/* @var $this \admin\components\View */
 
 use yii\helpers\Html;
-use yii\helpers\Url;
 
-$this->title = '操作成功';
+$this->title = 'Successful Operation';
 ?>
+<style>
+    h1 {
+        font-size: 60px;
+        line-height: 90px;
+        margin: 20px 0;
+    }
+    h2 {
+        font-size: 16px;
+        font-weight: 400;
+        margin: 10px 0;
+    }
+    p {
+        margin: 0 0 10px;
+    }
+    a {
+        color:#5A738E;
+    }
+</style>
 
-<div class="box-content gap">
-    <div class="warn success mb" style="text-align:center;">
-        <p><i class="icon-ok icon-large"></i> Request Success</p>
-        <p><?php echo $message ? $message : '操作成功（Request Success）！'; ?></p>
-        <?php 
-        if($skip) {
-            echo '<p>';
-            if(is_array($skip)) {
-                foreach($skip as $k => $web) {
-                    if($k) {
-                        echo '&nbsp;&nbsp;<i class="icon-double-angle-right icon-large"></i>&nbsp;';
+<div class="container">
+    <!-- page content -->
+    <div class="alert alert-success">
+        <div class="text-center">
+            <h1 class="success-number">SUCCESS</h1>
+            <p><?= Html::encode($message) ?> Congratulations!</p>
+            <?php
+            if($skip) {
+                echo '<p>';
+                if(is_array($skip)) {
+                    foreach($skip as $k => $web) {
+                        echo $k ? '　　' : '';
+                        echo '<a href="'.$web['url'].'"><i class="fa fa-hand-pointer-o fa-fw"></i>'.$web['title'].'</a>';
                     }
-                    echo '<a class="cl-white" href="'.$web['url'].'"><i class="icon-fighter-jet"></i> '.$web['title'].'</a>';
                 }
-            }
-            else {
-                echo '浏览器会在3秒后自动跳转，<a class="cl-white" href="'.$skip.'"><i class="icon-fighter-jet"></i> 点击跳转</a>';
-            }
-            echo '</p>';
-        } ?>
+                else {
+                    echo 'the page will automatically jump after 3 seconds, <a href="'.$skip.'"><i class="fa fa-hand-pointer-o fa-fw"></i>click here</a>';
+                }
+                echo '</p>';
+            } ?>
+        </div>
     </div>
+    <!-- /page content -->
 </div>
-
-<?php if($skip && ! is_array($skip)) { ?>
-<script>
-    $(document).ready(function() {
-        $('head').append('<meta http-equiv="refresh" content="3;url=<?= Html::encode($skip) ?>">');
-    });
-</script>
-<?php } ?>

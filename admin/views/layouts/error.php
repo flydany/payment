@@ -4,14 +4,11 @@
 
 use yii\helpers\Html;
 
-$this->title = '异常操作';
+$this->title = 'Operation Failed';
 ?>
 <style>
-    body {
-        background-color:#2A3F54;
-    }
     h1 {
-        font-size: 80px;
+        font-size: 60px;
         line-height: 90px;
         margin: 20px 0;
     }
@@ -29,12 +26,11 @@ $this->title = '异常操作';
 
 <div class="container">
     <!-- page content -->
-    <div class="col-md-12">
-        <div class="col-middle">
-            <div class="text-center text-center">
-                <h1 class="error-number">ERROR</h1>
-                <h2><?= Html::encode($message) ?> <a href="#">Report this?</a></h2>
-            </div>
+    <div class="alert alert-danger">
+        <div class="text-center">
+            <h1 class="error-number">ERROR</h1>
+            <h2><?= Html::encode($message) ?></h2>
+            <p>the page will automatically jump after 3 seconds, <a href="<?= $skip ?>"><i class="fa fa-hand-pointer-o fa-fw"></i>click here?</a></p>
         </div>
     </div>
     <!-- /page content -->

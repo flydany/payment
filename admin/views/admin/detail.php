@@ -16,21 +16,21 @@ $this->registerJavascript('@static/flyer/checker.class.js');
 <div class="alert alert-info">
     <p><strong>Heads up!</strong></p>
     <p>1、The account will be disabled after the expiration date.</p>
-    <p>2、Fill in the password to modify the password</p>
+    <p>2、Fill in the password to modify the password.</p>
 </div>
 <form id="info-detail" method="post" action="/admin/<?= isset($data['id']) ? 'update?id='.$data['id'] : 'insert' ?>">
     <div class="form-group checker">
-        <label>effect date</label>
-        <input class="form-control" type="text" name="end_date" value="<?= Render::value($data, 'end_date', date('Y-m-d', strtotime('+1 year'))) ?>" placeholder="end date.">
+        <label>username</label>
+        <input class="form-control" type="text" name="username" value="<?= Render::value($data, 'username') ?>" placeholder="login name." <?= isset($data['id']) ? 'readonly' : '' ?>>
     </div>
     <div class="form-row">
         <div class="form-group col-md-6 checker">
-            <label>username</label>
-            <input class="form-control" type="text" name="username" value="<?= Render::value($data, 'username') ?>" placeholder="login name." <?= isset($data['id']) ? 'readonly' : '' ?>>
-        </div>
-        <div class="form-group col-md-6 checker">
             <label>password</label>
             <input class="form-control" type="password" name="password_digest" value="" placeholder="password.">
+        </div>
+        <div class="form-group col-md-6 checker">
+            <label>effect date</label>
+            <input class="form-control" type="text" name="effect_date" value="<?= Render::value($data, 'effect_date', date('Y-m-d', strtotime('+1 year'))) ?>" placeholder="end date.">
         </div>
     </div>
     <div class="form-group checker">

@@ -101,7 +101,7 @@ class ActiveRecord extends \yii\db\ActiveRecord {
      */
     public function errors()
     {
-        return implode('。', ArrayHelper::getColumn($this->getErrors(), '0')).'（Param Error）';
+        return implode('. ', ArrayHelper::getColumn($this->getErrors(), '0'));
     }
     
     /**
