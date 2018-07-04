@@ -12,8 +12,10 @@
 namespace common\helpers;
 
 use Yii;
+use yii\data\Pagination;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\widgets\LinkPager;
 
 class Render {
 
@@ -28,6 +30,40 @@ class Render {
             return '';
         }
         return Url::to('@web/static/'.$url);
+    }
+    
+    /**
+     * 生成分页类
+     * @param integer $totalCount 数据总数
+     * @param array $options 配置选项
+     * @return Pagination
+     */
+    public static function pagination($totalCount, $options = [])
+    {
+        $options = array_merge([
+            'totalCount' => $totalCount,
+            'pageSizeParam' => false,
+        ], $options);
+        return new Pagination($options);
+    }
+    /**
+     * 创建分页标签
+     * @param Pagination $pagination
+     * @param array $options
+     * @return string
+     * @throws \Exception
+     */
+    public static function pager($pagination, $options = [])
+    {
+        $options = array_merge([
+            'pagination' => $pagination,
+            'hideOnSinglePage' => false,
+            'firstPageLabel' => 'First',
+            'lastPageLabel' => 'Last',
+            'nextPageLabel' => 'Next',
+            'prevPageLabel' => 'Prev',
+        ], $options);
+        return LinkPager::widget($options);
     }
 
     /**
@@ -233,55 +269,10 @@ class Render {
      * @param $configurate array 配置信息
      * @return string
      */
-    public static function select($name, $lists, $select = '', $options = [], $configurate = [])
+    public static function select($name, $lists, $select = '', $options = [])
     {
-        $_status = 'status';
-        $_title = 'title';
-        $_value = 'value';
-        if( ! empty($configurate)) {
-            foreach(['status', 'title', 'value'] as $k) {
-                if( ! isset($configurate[$k])) {
-                    continue;
-                }
-                $sk = '_'.$k;
-                $$sk = $configurate[$k];
-            }
-        }
-        $_html = '';
-        $_html .= "<select class='form-control' name=\"{$name}\":option>";
-        $_option = '';
-        if($options) {
-            foreach($options as $attr => $option) {
-                if(in_array($attr, ['prompt'])) {
-                    continue;
-                }
-                $_option .= " {$attr}=\"{$option}\"";
-            }
-        }
-        $_html = str_replace(':option', $_option, $_html);
-        if(isset($options['prompt'])) {
-            $_html .= "<option value=\"\">{$options['prompt']}</option>";
-        }
-        if($lists) {
-            foreach($lists as $value => $list) {
-                $status = '';
-                $selected = '';
-                if(is_array($list)) {
-                    isset($list[$_status]) && ($status = " data-status=\"{$list[$_status]}\"");
-                    $title = $list[$_title];
-                    $value = isset($list[$_value]) ? $list[$_value] : $value;
-                }
-                else {
-                    $title = $list;
-                }
-                if(strlen($select) && ($select == $value)) {
-                    $selected = ' selected';
-                }
-                $_html .= "<option value=\"{$value}\"{$status}{$selected}>{$title}</option>";
-            }
-        }
-        $_html .= '</select>';
-        return $_html;
+        $options['class'] = 'form-control'.(isset($options['class']) ? " {$options['class']}" : '');
+        return Html::dropDownList($name, $select, $lists, $options);
     }
 
     /**

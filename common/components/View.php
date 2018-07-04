@@ -2,6 +2,7 @@
 
 namespace common\components;
 
+use admin\assets\AppAsset;
 use Yii;
 use yii\helpers\Url;
 use common\helpers\Render;
@@ -41,11 +42,16 @@ class View extends \yii\web\View {
      * @param array $options 配置信息
      * @param boolean|null $key 是否MD5 KEY
      */
-    public function registerJsFile($url, $options = ['position' => self::POS_HEAD], $key = null)
+    public function registerJavascript($url, $options = [], $key = null)
     {
         if(strpos('@static/', $url) >= 0) {
             $url = str_replace('@static', '@web/static/', $url);
         }
+        $options = array_merge([
+            AppAsset::className(),
+            'depends' => 'admin\assets\AppAsset',
+            'position' => static::POS_HEAD,
+        ], $options);
         return parent::registerJsFile($url, $options, $key);
     }
 }

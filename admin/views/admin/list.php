@@ -3,62 +3,58 @@
 /* @var $this admin\components\View */
 
 use yii\helpers\Url;
-use yii\helpers\Html;
-use yii\helpers\ArrayHelper;
 use common\helpers\Render;
 use common\models\AdminRole;
 
-$this->title = 'Manager';
+$this->title = 'Administrator List';
 $this->addCrumbs('System');
 
-$this->registerJsFile('@static/art-template/template.js');
-$this->registerJsFile('@static/flyer/checker.class.js');
-$this->registerJsFile('@static/flyer/tabler.class.js');
-$this->registerJsFile('@static/flyer/tableHandler.class.js');
+$this->registerJavascript('@static/flyer/checker.class.js');
+$this->registerJavascript('@static/flyer/tabler.class.js');
+$this->registerJavascript('@static/flyer/tableHandler.class.js');
 ?>
 
 <div class="form-inline search" id="info-search">
-    <div class="input-group w-180px">
-        <span class="input-group-addon">用户名</span>
-        <input type="text" class="form-control" placeholder="Username">
+    <div class="input-group w-250px">
+        <span class="input-group-addon"><i class="fa fa-user fa-fw"></i>username</span>
+        <input type="text" class="form-control tabler" name="username" placeholder="username">
     </div>
-    <div class="input-group w-180px">
-        <span class="input-group-addon">手机号</span>
-        <input type="text" class="form-control" placeholder="Mobile">
+    <div class="input-group w-250px">
+        <span class="input-group-addon"><i class="fa fa-phone-square fa-fw"></i>mobile</span>
+        <input type="text" class="form-control tabler" name="mobile" placeholder="mobile">
     </div>
-    <div class="input-group w-200px">
-        <span class="input-group-addon">权组</span>
+    <div class="input-group">
+        <span class="input-group-addon"><i class="fa fa-superpowers fa-fw"></i>power group</span>
         <?= Render::select('role_id', AdminRole::identitySelector(), null, ['prompt' => '--', 'class' => 'tabler']) ?>
     </div>
     <button type="submit" class="btn btn-primary" id="search-button">Submit</button>
 </div>
 
-
 <table class="table table-bordered table-striped" id="info-table">
     <thead>
     <tr>
-        <th>用户名</th>
-        <th>姓名</th>
-        <th>权组</th>
-        <th>手机号</th>
-        <th>有效期</th>
-        <th>创建时间</th>
-        <th>操作</th>
+        <th><i class="fa fa-user fa-fw"></i>username</th>
+        <th><i class="fa fa-id-card fa-fw"></i>realname</th>
+        <th><i class="fa fa-superpowers fa-fw"></i>power group</th>
+        <th><i class="fa fa-phone-square fa-fw"></i>mobile</th>
+        <th><i class="fa fa-calendar-times-o fa-fw"></i>effect date</th>
+        <th><i class="fa fa-clock-o fa-fw"></i>created at</th>
+        <th><i class="fa fa-gear fa-fw"></i>operation</th>
     </tr>
     </thead>
     <tbody>
     <tr>
-        <td colspan="7">点击查询按钮.</td>
+        <td colspan="7"><i class="fa fa-search fa-fw"></i>click on the search button to search data.</td>
     </tr>
     </tbody>
 </table>
-<div class="page right" id="info-page">
+<div class="btn-toolbar" id="info-page">
     <div class="btn-group" role="group">
-        <button type="button" class="btn btn-default"><i class="fa fa-check-square fa-fw"></i>Check All</button>
-        <button type="button" class="btn btn-default"><i class="fa fa-minus-square fa-fw"></i>Inverse</button>
-        <button type="button" class="btn btn-default"><i class="fa fa-trash fa-fw"></i>Batch Delete</button>
+        <button type="button" class="btn btn-default"><i class="fa fa-check-square fa-fw"></i>check all</button>
+        <button type="button" class="btn btn-default"><i class="fa fa-minus-square fa-fw"></i>inverse</button>
+        <button type="button" class="btn btn-default"><i class="fa fa-trash fa-fw"></i>batch delete</button>
     </div>
-    <div class="html"></div>
+    <div class="btn-group render" role="group"></div>
 </div>
 
 <script>
@@ -90,24 +86,19 @@ $this->registerJsFile('@static/flyer/tableHandler.class.js');
     });
 </script>
 <script id="info-template" type="text/html">
-    {{if infos != undefined && infos.length}}
-        {{each infos as info key}}
-            <tr id="tr-{{info.id}}" data-id="{{info.id}}">
-                <td class="first">
-                    {{if info.id != 1}}<input class="list" type="checkbox" name="info[]" value="{{info.id}}">{{/if}}
-                    {{info.username}}
-                </td>
-                <td class="role">{{info.role_id}}</td>
-                <td>{{info.realname}}</td>
-                <td>{{info.mobile}}</td>
-                <td>{{info.end_date}}</td>
-                <td>{{info.created_at | dateShow: 'minute'}}</td>
-                <td>
-                    <a class="flyer-status blue thin" href="<?= Url::to('@web/admin/admin-detail?id=') ?>{{info.id}}"><i class="icon-edit icon-large" title="修改"></i>修改</a>
-                    <a class="edit-permission flyer-status green thin" href="javascript:;"><i class="icon-bell-alt icon-large" title="设置权限"></i>设置权限</a>
-                    <a class="delete-data flyer-status red thin" href="javascript:;"><i class="icon-trash icon-large" title="删除"></i>删除</a>
-                </td>
-            </tr>
-        {{/each}}
-    {{/if}}
+    {{each infos as info key}}
+    <tr id="tr-{{info.id}}" data-id="{{info.id}}">
+        <td>{{info.username}}</td>
+        <td>{{info.realname}}</td>
+        <td class="role">{{info.role_id}}</td>
+        <td>{{info.mobile}}</td>
+        <td>{{info.end_date}}</td>
+        <td>{{info.created_at | dateShow: 'minute'}}</td>
+        <td>
+            <a class="label label-primary" href="<?= Url::to('@web/admin/detail?id=') ?>{{info.id}}"><i class="fa fa-edit fa-fw"></i>edit</a>
+            <a class="edit-permission label label-primary" href="javascript:;"><i class="fa fa-superpowers fa-fw"></i>permission</a>
+            <a class="delete-data label label-primary" href="javascript:;"><i class="fa fa-trash fa-fw"></i>delete</a>
+        </td>
+    </tr>
+    {{/each}}
 </script>

@@ -5,6 +5,14 @@
 // @created by flydany
 // 2017-04-02 20:00:00
 
+if(typeof(template) === 'undefined') {
+    jQuery.getScript('/static/art-template/template.js', function() {
+        // 引入模板类
+        template.helper("dateShow", dateShow);
+        template.helper("dayShow", dayShow);
+        template.helper("fmoney", fmoney);
+    });
+}
 // 定义时间转换函数
 function dateShow(dateString, format)
 {
@@ -40,7 +48,6 @@ function dateShow(dateString, format)
         }
     }
 }
-template.helper("dateShow", dateShow);
 // 定义日期字符串填充
 function dayShow(dayString, format)
 {
@@ -57,20 +64,6 @@ function dayShow(dayString, format)
         return year + '-' + month + '-' + day;
     }
 }
-template.helper("dayShow", dayShow);
-// 用户星级展示
-function star(star)
-{
-    var _html = '';
-    for(var i = 1; i <= star; ++i) {
-        _html += '<i class="icon-star"></i> ';
-    }
-    if(parseFloat(star) > parseInt(star)) {
-        _html += '<i class="icon-star-half"></i>';
-    }
-    return _html;
-}
-template.helper("star", star);
 // 定义金额转换函数
 function fmoney(s, n)
 {
@@ -86,7 +79,6 @@ function fmoney(s, n)
     }
     return t.split("").reverse().join("") + (n > 0 ? "." + r : '');
 }
-template.helper("fmoney", fmoney);
 
 var tabler = function() {
     // ajax 请求地址
@@ -235,10 +227,10 @@ var tabler = function() {
     // @name 显示加载提示描述
     this.showMessage = function(message, icon) {
         if($(this.tabler)[0].tagName == 'TABLE') {
-            this.renderTabler('<tr><td class="first" colspan="' + $(this.tabler).find('thead th').length + '"><i class="' + icon + '"></i> ' + message + '</td></tr>');
+            this.renderTabler('<tr><td colspan="' + $(this.tabler).find('thead th').length + '"><i class="' + icon + '"></i> ' + message + '</td></tr>');
         }
         else {
-            this.renderTabler('<div class="pd-10px"><i class="' + icon + '"></i> ' + message + '</div>');
+            this.renderTabler('<i class="' + icon + '"></i> ' + message);
         }
     }
     // @name 显示加载异常信息描述
@@ -249,7 +241,7 @@ var tabler = function() {
     this.loading = function() {
         if(this.showLoading || (this.showLoading == undefined)) {
             $(this.searchButton).attr('data-text', $(this.searchButton).find('span').text()).attr('disabled', true).find('span').text('loading...');
-            this.showMessage('数据加载中...', 'icon-spin icon-spinner');
+            this.showMessage('Searching..', 'icon-spin icon-spinner');
         }
     }
     // @name 显示搜索button
@@ -258,13 +250,13 @@ var tabler = function() {
     }
     // @name 填充page容器
     this.renderPager = function(_html) {
-        $(this.pager).find('.html').html(_html);
+        $(this.pager).find('.render').html(_html);
         return this;
     }
 
     this.init = function(param) {
         if(checker_empty(param.url)) {
-            console.log('配置错误');
+            console.log('error configuration');
         }
         // 初始化配置参数
         this.setUrl(param.url);
@@ -324,8 +316,8 @@ var tabler = function() {
             // 加载信息异常提示
             error: function() {
                 tablerClass.loaded();
-                layer.msg('数据加载异常', { shift: 6 });
-                tablerClass.showError('数据加载异常');
+                layer.msg('Search program error', { shift: 6 });
+                tablerClass.showError('Search program error');
             },
             // 数据加载成功处理方法
             success: function(ret) {
@@ -340,13 +332,13 @@ var tabler = function() {
                         tablerClass.renderTabler(_html);
                     }
                     else {
-                        tablerClass.showError('未找到任何匹配的有效数据');
+                        tablerClass.showError('Nothing has been found');
                     }
                     // 初始化表格相关
                     tablerClass.initTable();
                     // 分页填充到page容器
                     if(data.page) {
-                        tablerClass.renderPager(data.page.string);
+                        tablerClass.renderPager(data.page);
                         // 重新初始化分页事件
                         tablerClass.initPageClick();
                     }
@@ -369,6 +361,7 @@ var tabler = function() {
         this.addParam('submit', 'json');
         this.addParam('_csrf', $('meta[name=csrf-token]').attr('content'));
         var tablerClass = this;
+        console.log($(this.searcher).find(this.searchClass));
         $.each($(this.searcher).find(this.searchClass), function() {
             var name = $(this).attr('name');
             if(['radio', 'checkbox'].indexOf($(this).attr('type')) >= 0) {

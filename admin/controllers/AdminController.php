@@ -3,9 +3,10 @@
 namespace admin\controllers;
 
 use Yii;
+use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
+use common\helpers\Render;
 use common\helpers\Checker;
-use common\helpers\Pager;
 use common\models\Navigator;
 use common\models\Admin;
 use common\models\AdminRole;
@@ -26,15 +27,14 @@ class AdminController extends Controller {
     public function actionList()
     {
         if( ! $this->request->isAjax) {
-            return $this->render('list', [
-            
-            ]);
+            return $this->render('list');
         }
         $params = $this->request->post();
         $params['deleted_at'] = '0';
         $query = Admin::filterConditions(Admin::initCondition(['username', 'role_id', 'mobile', 'deleted_at'], $params));
-        $data['page'] = Pager::page(['page_count' => 20, 'total_count' => $query->count()]);
-        $data['infos'] = $query->orderBy('id desc')->offset(Pager::offset())->limit(Pager::limit())->asArray()->all();
+        $pagination = Render::pagination((clone $query)->count());
+        $data['infos'] = $query->orderBy('id desc')->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
+        $data['page'] = Render::pager($pagination);
         return $this->json($data);
     }
     
@@ -43,94 +43,93 @@ class AdminController extends Controller {
      * @param id int  - admin id by get request
      * @return string
      */
-    public function actionAdminDetail()
+    public function actionDetail()
     {
         $admin = null;
         $adminId = $this->request->get('id');
         if($adminId && ( ! $admin = Admin::finder($adminId))) {
-            return $this->error('无效的管理员（Invalid Admin）', 'admin/admin-list');
+            return $this->error('Invalid Administrator', 'admin/list');
         }
-        return $this->render('admin-detail', [
-            'roles' => ArrayHelper::map(AdminRole::find()->select('id, title')->asArray()->all(), 'id', 'title'),
+        return $this->render('detail', [
             'data' => $admin,
         ]);
     }
     /**
      * insert admin
      */
-    public function actionAdminInsert()
+    public function actionInsert()
     {
         $admin = new Admin();
         $admin->setPostRequest();
         if ( ! $admin->validate()) {
             // 参数异常，渲染错误页面
-            return $this->error($admin->errors(), 'admin/admin-detail');
+            return $this->error($admin->errors(), 'admin/detail');
         }
         if ($admin->save()) {
             // 保存成功
-            return $this->success('管理员（'.$admin->username.'）添加成功（Insert Success）', [
-                ['title' => '前往管理员列表页', 'url' => 'admin/admin-list'],
-                ['title' => '继续修改管理员', 'url' => 'admin/admin-detail?id='.$admin->id]
+            return $this->success('Administrator（'.$admin->username.'）insert success', [
+                ['title' => 'Go to manager list page', 'url' => 'admin/list'],
+                ['title' => 'Edit administrator again', 'url' => 'admin/detail?id='.$admin->id]
             ]);
         }
         // 参数异常，渲染错误页面
-        return $this->error('管理员（'.$admin->username.'）添加失败，请重试（System Fail）', 'admin/admin-detail');
+        return $this->error('Administrator（'.$admin->username.'）insert failed, please try again', 'admin/detail');
     }
     /**
      * admin detail show / update
      * use get(id) to find admin
      */
-    public function actionAdminUpdate()
+    public function actionUpdate()
     {
         /* @var $admin Admin */
         // id 为必填项，判断管理员存在状态
         // 未得到，渲染错误页面
         if( ! $admin = Admin::finder($this->request->get('id'))) {
-            return $this->error('无效的管理员（Invalid Admin）', 'admin/admin-list');
+            return $this->error('Invalid Admin', 'admin/list');
         }
         $admin->setPostRequest();
         if ( ! $admin->validate()) {
             // 参数异常，渲染错误页面
-            return $this->error($admin->errors(), 'admin/admin-detail?id='.$admin->id);
+            return $this->error($admin->errors(), 'admin/detail?id='.$admin->id);
         }
         if ($admin->save()) {
             // 保存成功
-            return $this->success('管理员（'.$admin->username.'）更新成功（Update Success）', [
-                ['title' => '前往管理员列表页', 'url' => 'admin/admin-list'],
-                ['title' => '继续修改管理员', 'url' => 'admin/admin-detail?id='.$admin->id]
+            return $this->success('Administrator（'.$admin->username.'）update success', [
+                ['title' => 'Go to manager list page', 'url' => 'admin/list'],
+                ['title' => 'Edit administrator again', 'url' => 'admin/detail?id='.$admin->id]
             ]);
         }
         // 参数异常，渲染错误页面
-        return $this->error('管理员（'.$admin->username.'）更新失败，请重试（System Fail）', 'admin/admin-detail?id='.$admin->id);
+        return $this->error('Administrator（'.$admin->username.'）update failed, please try again', 'admin/detail?id='.$admin->id);
     }
     /**
      * delete admin
      */
-    public function actionAdminDelete()
+    public function actionDelete()
     {
         if( ! (($ids = $this->request->post('id')) || ($ids = $this->request->post('ids')))) {
-            return $this->json('Invalid.Param', '请选择至少一个管理员（Exists Admin）');
+            return $this->json('Invalid.Param', 'You must choice at least one administrator');
         }
         else if(false && ('1' == $ids || (is_array($ids) && in_array('1', $ids)))) {
-            return $this->json('Invalid.Param', '系统预留管理员，不允许删除（Permission Denied）');
+            return $this->json('Invalid.Param', 'System administrator can\'t be modify');
         }
         else if(Admin::trashAll(['id' => $ids])) {
-            return $this->json(SuccessCode, '管理员删除成功（Delete Success）');
+            return $this->json(SuccessCode, 'Administrator delete success');
         }
-        return $this->json('System.Error', '管理员删除失败（Delete Fail）');
+        return $this->json('System.Error', 'Administrator delete failed');
     }
     /**
      * set admin's permission
      */
-    public function actionAdminPermissionEdit($adminId = '')
+    public function actionPermissionEdit($adminId = '')
     {
         $admin = Admin::finder($adminId ? $adminId : $this->request->get('id'));
         if( ! $admin) {
             // 参数异常，渲染错误页面
             if($this->request->IsPost) {
-                return $this->json('Invalid.Param', '无效的管理员（Invalid Admin）');
+                return $this->json('Invalid.Param', 'Invalid administrator');
             }
-            return $this->error('无效的管理员（Invalid Admin）', 'admin/admin-list');
+            return $this->error('Invalid administrator', 'admin/list');
         }
 //        if( ! $this->request->IsPost) {
         if( ! $this->request->isAjax) {
@@ -147,8 +146,8 @@ class AdminController extends Controller {
         // update admin's permission
         $rule = [
             'param' => [
-                'role' => ['所属组', ['int', 'required']],
-                'permission_detail' => ['权限', ['int']],
+                'role' => ['Power Group', ['int', 'required']],
+                'permission_detail' => ['Permission Controller', ['int']],
             ],
         ];
         $param = $this->request->getParams($rule['param'], 'post');
@@ -164,7 +163,7 @@ class AdminController extends Controller {
      * this action showing navigator
      * return render / json
      */
-    public function actionAdminRoleList()
+    public function actionRoleList()
     {
         if( ! $this->request->isAjax) {
             // 渲染页面
@@ -188,7 +187,7 @@ class AdminController extends Controller {
      * @param id int by get request
      * @return string
      */
-    public function actionAdminRoleDetail()
+    public function actionRoleDetail()
     {
         $adminRole = null;
         $roleId = $this->request->get('id');
@@ -205,7 +204,7 @@ class AdminController extends Controller {
      * @request post method
      * @return string
      */
-    public function actionAdminRoleInsert()
+    public function actionRoleInsert()
     {
         $adminRole = new AdminRole();
         $adminRole->setPostRequest();
@@ -227,7 +226,7 @@ class AdminController extends Controller {
      * @request post method
      * @return string
      */
-    public function actionAdminRoleUpdate()
+    public function actionRoleUpdate()
     {
         if( ! $adminRole = AdminRole::finder($this->request->get('id'))) {
             return $this->error('无效的权组（Invalid Admin Role）', 'admin/admin-role-list');
@@ -254,7 +253,7 @@ class AdminController extends Controller {
      * @param ids array/int  - role id by post ajax
      * @return string json
      */
-    public function actionAdminRoleDelete()
+    public function actionRoleDelete()
     {
         if( ! (($ids = $this->request->post('id')) || ($ids = $this->request->post('ids')))) {
             return $this->json('Invalid.Param', '请选择至少一个管理员权组（Invalid Param）');
@@ -272,7 +271,7 @@ class AdminController extends Controller {
      * @param id int  - role id by get request
      * @return string
      */
-    public function actionAdminRolePermissionEdit()
+    public function actionRolePermissionEdit()
     {
         $role = AdminRole::finder($this->request->get('id'));
         if( ! $role) {

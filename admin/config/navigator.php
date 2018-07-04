@@ -38,8 +38,8 @@ return [
         '009002' => ['title' => 'System', 'icon_class' => 'gear', 'controller' => 'admin', 'method' => 'role-list'],
     ],
     '009001' => [
-        '009001001' => ['title' => 'Manager', 'icon_class' => 'user', 'controller' => 'admin', 'method' => 'list'],
-        '009001002' => ['title' => 'Administrator group', 'icon_class' => 'superpowers', 'controller' => 'admin', 'method' => 'role-list'],
+        '009001001' => ['title' => 'Administrator List', 'icon_class' => 'user', 'controller' => 'admin', 'method' => 'list'],
+        '009001002' => ['title' => 'Administrator Group', 'icon_class' => 'superpowers', 'controller' => 'admin', 'method' => 'role-list'],
     ],
     '009002' => [
         '009002001' => ['title' => 'Navigation List', 'icon_class' => 'leaf', 'controller' => 'navigator', 'method' => 'index'],

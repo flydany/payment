@@ -65,7 +65,7 @@ use common\models\Navigator;
         font-size: 18px;
     }
     #sidebar-menu .menu-section {
-        margin-bottom: 35px
+        margin-bottom: 20px
     }
     #sidebar-menu .menu-section h3 {
         padding-left: 15px;
@@ -122,10 +122,6 @@ use common\models\Navigator;
     }
     #sidebar-menu .child-menu {
         display: none;
-        transition: .3s;
-        -moz-transition: .3s;
-        -webkit-transition: .3s;
-        -o-transition: .3s;
     }
     #sidebar-menu li.active > ul.child-menu {
         display:block;
@@ -209,7 +205,7 @@ use common\models\Navigator;
             ?>
             <div class="menu-section">
                 <h3><?= $part['title'] ?></h3>
-                <ul class="side-menu">
+                <ul class="nav side-menu">
                     <?php
                     foreach($navigators[$id] as $sid => $navigator) {
                         ?>
@@ -218,10 +214,10 @@ use common\models\Navigator;
                             <?php
                             if( ! empty($navigators[$sid])) {
                                 ?>
-                                <ul class="child-menu">
+                                <ul class="nav child-menu">
                                     <?php
                                     foreach($navigators[$sid] as $tid => $subNavigator) {
-                                        if($subNavigator == Yii::$app->request->getPathInfo()) {
+                                        if($subNavigator['url'] == '/'.Yii::$app->request->getPathInfo()) {
                                             ?>
                                             <li class="active"><a href="<?= $subNavigator['url'] ?>"><?= $subNavigator['title'] ?></a></li>
                                             <script>document.getElementById('sid-<?= $sid ?>').className = 'active';</script>
