@@ -2,7 +2,6 @@
 
 /* @var $this admin\components\View */
 
-use yii\helpers\Url;
 use common\helpers\Render;
 use common\models\AdminRole;
 
@@ -24,10 +23,10 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
         <input type="text" class="form-control tabler" name="mobile" placeholder="mobile">
     </div>
     <div class="input-group">
-        <span class="input-group-addon"><i class="fa fa-superpowers fa-fw"></i>power group</span>
+        <span class="input-group-addon"><i class="fa fa-superpowers fa-fw"></i>administrator group</span>
         <?= Render::select('role_id', AdminRole::identitySelector(), null, ['prompt' => '--', 'class' => 'tabler']) ?>
     </div>
-    <button type="submit" class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>Search</button>
+    <button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button>
 </div>
 
 <table class="table table-bordered table-striped" id="info-table">
@@ -35,7 +34,7 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
     <tr>
         <th><i class="fa fa-user fa-fw"></i>username</th>
         <th><i class="fa fa-id-card fa-fw"></i>realname</th>
-        <th><i class="fa fa-superpowers fa-fw"></i>power group</th>
+        <th><i class="fa fa-superpowers fa-fw"></i>administrator group</th>
         <th><i class="fa fa-phone-square fa-fw"></i>mobile</th>
         <th><i class="fa fa-calendar-times-o fa-fw"></i>effect date</th>
         <th><i class="fa fa-clock-o fa-fw"></i>created at</th>
@@ -64,7 +63,7 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
         // 初始化表格异步加载事件
         (new tabler).init({
             // 请求地址
-            url: '<?= Url::to('@web/admin/list') ?>',
+            url: '/admin/list',
             // 数据渲染配置
             table: '#info-table', page: '#info-page', template: 'info-template', search: '#info-search', button: '#search-button',
             // 全选、反选按钮、页面加载完毕自动loading
@@ -79,7 +78,7 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
                 tableHandler.alertDialog({
                     button: $(param.tabler).find('.edit-permission'),
                     title: '<i class="fa fa-superpowers"></i>Set Administrator\'s Permission', area: ['90%', '90%'],
-                    src: '<?= Url::to('@web/admin/admin-permission-edit') ?>'
+                    src: '/admin/permission-edit'
                 });
             }
         });
@@ -95,9 +94,9 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
         <td>{{info.effect_date}}</td>
         <td>{{info.created_at | dateShow: 'minute'}}</td>
         <td>
-            <a class="label label-primary" href="<?= Url::to('@web/admin/detail?id=') ?>{{info.id}}"><i class="fa fa-edit fa-fw"></i>edit</a>
-            <a class="edit-permission label label-primary" href="javascript:;"><i class="fa fa-superpowers fa-fw"></i>permission</a>
-            <a class="delete-data label label-primary" href="javascript:;"><i class="fa fa-trash fa-fw"></i>delete</a>
+            <a class="label label-primary" href="/admin/detail?id={{info.id}}"><i class="fa fa-edit fa-fw"></i>edit</a>
+            <a class="edit-permission label label-success" href="javascript:;"><i class="fa fa-superpowers fa-fw"></i>permission</a>
+            <a class="delete-data label label-danger" href="javascript:;"><i class="fa fa-trash fa-fw"></i>delete</a>
         </td>
     </tr>
     {{/each}}

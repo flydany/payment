@@ -43,6 +43,7 @@ class Render {
         $options = array_merge([
             'totalCount' => $totalCount,
             'pageSizeParam' => false,
+            'pageSize' => Yii::$app->request->getQueryParam('pageSize') ?? 20,
         ], $options);
         return new Pagination($options);
     }
@@ -58,10 +59,10 @@ class Render {
         $options = array_merge([
             'pagination' => $pagination,
             'hideOnSinglePage' => false,
-            'firstPageLabel' => 'First',
-            'lastPageLabel' => 'Last',
-            'nextPageLabel' => 'Next',
-            'prevPageLabel' => 'Prev',
+            'firstPageLabel' => '<i class="fa fa-angle-double-left fa-fw"></i>',
+            'lastPageLabel' => '<i class="fa fa-angle-double-right fa-fw"></i>',
+            'prevPageLabel' => '<i class="fa fa-angle-left fa-fw"></i>',
+            'nextPageLabel' => '<i class="fa fa-angle-right fa-fw"></i>',
         ], $options);
         return LinkPager::widget($options);
     }

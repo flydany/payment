@@ -14,8 +14,8 @@ class AppAsset extends AssetBundle {
     public $baseUrl = '@web/static';
     
     public $depends = [
-        // 'yii\web\YiiAsset',
-        'yii\bootstrap\BootstrapAsset',
+        'yii\web\YiiAsset',
+        'admin\assets\BootstrapAsset',
     ];
     
     public $css = [
@@ -27,7 +27,6 @@ class AppAsset extends AssetBundle {
     ];
     
     public $js = [
-        'jquery/jquery-2.0.3.min.js',
         'layer/layer.js',
         'js/common.js',
     ];

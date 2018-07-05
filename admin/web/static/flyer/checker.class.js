@@ -255,7 +255,7 @@ var checker = function() {
             }
         }
         else {
-            console.log('暂不支持的关系规则校验');
+            console.log('checking of relationship rules that are temporarily unsupported');
         }
         return this;
     }
@@ -356,7 +356,7 @@ var checker = function() {
         // 如果 name 为 int型数据, name = rule, 并且 required
         if(checker_int(name) === true) {
             if(this.rules.param[rule] === undefined) {
-                console.log('未知关联数据: ' + rule);
+                console.log('unknown associated data: ' + rule);
             }
             if( ! this.isRuleRequired(this.rules.param[rule][1])) {
                 if(checker_array(this.rules.param[rule][1]) === true) {
@@ -371,7 +371,7 @@ var checker = function() {
         // 如果是 name => []
         else {
             if(this.rules.param[name] === undefined) {
-                console.log('未知关联数据: ' + name);
+                console.log('unknown associated data: ' + name);
             }
             else {
                 // 循环每个需要改变的规则
@@ -396,7 +396,7 @@ var checker = function() {
                         this.rules.param[name][2] = rule[type];
                     }
                     else {
-                        console.log('未知关联数据规则改变: '.type);
+                        console.log('change of unknown association data rules: '.type);
                     }
                 }
                 // console.log(this.rules.param[name]);
@@ -479,7 +479,7 @@ var checker = function() {
             }
         }
         else {
-            console.log('未知的关联数据验证模式');
+            console.log('unknown relational data validation model');
         }
         return this;
     }
@@ -527,7 +527,7 @@ var checker = function() {
         if(checker_empty(value)) {
             if(this.isRuleRequired(rule[1])) {
                 oneStatus = 'null';
-                oneMessage.push(this.getNotice(name, 'required', '不能为空'));
+                oneMessage.push(this.getNotice(name, 'required', 'can\'t be empty'));
             }
         }
         else {
@@ -548,7 +548,7 @@ var checker = function() {
                 else if(format.toString().indexOf(':') === 0) {
                     var match = this.getDom(format.replace(':', ''), true);
                     if( ! $(match).length) {
-                        console.log('未知的关联数据键');
+                        console.log('unknown associated data key');
                     }
                     format = $(match).val();
                 }
@@ -574,7 +574,7 @@ var checker = function() {
                         // 校验失败
                         if(message !== true) {
                             oneStatus = 'error';
-                            oneMessage.push('第' + (i + 1) + '条' + this.getNotice(name, type, message));
+                            oneMessage.push((i + 1) + 'th ' + this.getNotice(name, type, message));
                             if(this.unRecycle()) {
                                 break;
                             }
@@ -620,7 +620,7 @@ var checker = function() {
 
 // @name 检测值是否为空
 function checker_required(value, format) {
-    return checker_empty(value, format) ? '不能为空' : true;
+    return checker_empty(value, format) ? 'can\'t be empty' : true;
 }
 // @name 检测值是否为空
 function checker_empty(value, format) {
@@ -636,7 +636,7 @@ function checker_empty(value, format) {
  * @return boolean
  */
 function checker_format(value, format) {
-    return Object.prototype.toString.call(value).toLowerCase() === format ? true : '格式错误';
+    return Object.prototype.toString.call(value).toLowerCase() === format ? true : 'formatting error';
 }
 /**
  * @name 校验数据是否为int型
@@ -645,15 +645,15 @@ function checker_format(value, format) {
  * @return boolean
  */
 function checker_int(value, format) {
-    return /^[+\-]?\d+$/.test(value) ? true : '格式错误';
+    return /^[+\-]?\d+$/.test(value) ? true : 'formatting error';
 }
 // @name 验证值是否为数字格式
 function checker_number(value, format) {
-    return /^\d+$/.test(value) ? true : '格式错误';
+    return /^\d+$/.test(value) ? true : 'formatting error';
 }
 // @name 校验数字格式是否为float类型
 function checker_float(value, format) {
-    return /^\d+(\.\d{0,2})?$/.test(value) ? true : '格式错误';
+    return /^\d+(\.\d{0,2})?$/.test(value) ? true : 'formatting error';
 }
 // @name 验证值是否为字符串格式
 function checker_string(value, format) {
@@ -674,52 +674,52 @@ function checker_object(value, format) {
  * @return boolean
  */
 function checker_maxlength(value, format) {
-    return (value + '').length > format ? '过长' : true;
+    return (value + '').length > format ? 'too long' : true;
 }
 // @name 校验字符串的最大长度是否低于限值
 function checker_minlength(value, format) {
-    return (value + '').length < format ? '过短' : true;
+    return (value + '').length < format ? 'too short' : true;
 }
 // @name 校验字符串的长度是否定长
 function checker_length(value, format) {
-    return (value + '').length === format ? true : '长度错误';
+    return (value + '').length === format ? true : 'length error';
 }
 // @name 校验数字是否 <= 特定值
 function checker_let(value, format) {
-    return parseInt(value) <= parseInt(format) ? true : '值过大';
+    return parseInt(value) <= parseInt(format) ? true : 'too large';
 }
 // @name 校验数字是否 < 特定值
 function checker_lt(value, format) {
-    return parseInt(value) < parseInt(format) ? true : '值过大';
+    return parseInt(value) < parseInt(format) ? true : 'too large';
 }
 // @name 校验数字是否 >= 特定值
 function checker_get(value, format) {
-    return parseInt(value) >= parseInt(format) ? true : '值过小';
+    return parseInt(value) >= parseInt(format) ? true : 'too small';
 }
 // @name 校验数字是否 > 特定值
 function checker_gt(value, format) {
-    return parseInt(value) > parseInt(format) ? true : '值过小';
+    return parseInt(value) > parseInt(format) ? true : 'too small';
 }
 // @name 校验两字符串/数字是否 = 特定值
 function checker_eq(value, format) {
-    return value == format ? true : '值错误';
+    return value == format ? true : 'value error';
 }
 // @name 校验两字符串/数字是否 = 特定值
 function checker_in(value, format) {
-    return (format && format.indexOf(value) >= 0) ? true : '值错误';
+    return (format && format.indexOf(value) >= 0) ? true : 'value error';
 }
 // @name 校验两字符串/数字是否 = 特定值
 function checker_inkey(value, format) {
-    return (format[value] !== undefined) ? true : '值错误';
+    return (format[value] !== undefined) ? true : 'value error';
 }
 // @name 校验两字符串/数字是否 = 特定值
 function checker_preg(value, format) {
     var pregs = new RegExp(format.substring(1, format.length - 1));
-    return pregs.test(value) ? true : '格式错误';
+    return pregs.test(value) ? true : 'formatting error';
 }
 // @name 校验标签组格式
 function checker_tags(value, format) {
-    return /^([^;]{1,4};){0,4}([^;]{1,4})?$/.test(value) ? true : '格式错误';
+    return /^([^;]{1,4};){0,4}([^;]{1,4})?$/.test(value) ? true : 'formatting error';
 }
 /**
  * @name 校验字符串是否url格式
@@ -728,7 +728,7 @@ function checker_tags(value, format) {
  * @returns boolean
  */
 function checker_url(value, format) {
-    return /^(http(s)?:\/\/)?[A-Za-z0-9-_]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/.test(value) ? true : '格式错误';
+    return /^(http(s)?:\/\/)?[A-Za-z0-9-_]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/.test(value) ? true : 'formatting error';
 }
 /**
  * @name 校验字符串是否为手机号格式
@@ -736,23 +736,23 @@ function checker_url(value, format) {
  * @param {string} format 此处为空
  */
 function checker_mobile(value, format) {
-    return /^1\d{10}$/.test(value) ? true : '格式错误';
+    return /^1\d{10}$/.test(value) ? true : 'formatting error';
 }
 // @name 校验普通电话、传真号码：可以“+”开头，除数字外，可含有“-”
 function checker_phone(value, format) {
-    return /^\+?(\d){1,3}[ ]?([-]?((\d)|[ ]){1,12})+$/.test(value) ? true : '格式错误';
+    return /^\+?(\d){1,3}[ ]?([-]?((\d)|[ ]){1,12})+$/.test(value) ? true : 'formatting error';
 }
 // @name 校验邮箱格式是否正确
 function checker_email(value, format) {
-    return /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/.test(value) ? true : '格式错误';
+    return /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/.test(value) ? true : 'formatting error';
 }
 // @name 校验用户名格式是否正确
 function checker_username(value, format) {
-    return /^[\w-_\.]{4,}$/.test(value) ? true : '格式错误';
+    return /^[\w-_\.]{4,}$/.test(value) ? true : 'formatting error';
 }
 // @name 校验密码格式是否正确
 function checker_password(value, format) {
-    return /^.{4,}$/.test(value) ? true : '格式错误';
+    return /^.{4,}$/.test(value) ? true : 'formatting error';
 }
 // @name 校验身份证格式是否正确
 function checker_idcard(value, format) {
@@ -760,48 +760,48 @@ function checker_idcard(value, format) {
             /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$/.test(value) ||
             /^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/.test(value)
         )
-        ? true : '格式错误';
+        ? true : 'formatting error';
 }
 // @name 校验日期格式是否正确
 function checker_date(value, format) {
     if (format === 'Y-m-d H:i:s') {
         var result = value.match(/^(\d{4})(-|\/)(\d{1,2})\2(\d{1,2})\s(\d{1,2}):(\d{1,2}):(\d{1,2})$/);
         if (result == null) {
-            return '格式错误';
+            return 'formatting error';
         }
         var d = new Date(result[1], result[3] - 1, result[4], result[5], result[6], result[7]);
-        return (d.getFullYear() == result[1] && d.getMonth() + 1 == result[3] && d.getDate() == result[4]) ? true : '格式错误';
+        return (d.getFullYear() == result[1] && d.getMonth() + 1 == result[3] && d.getDate() == result[4]) ? true : 'formatting error';
     }
     else {
         var result = value.match(/^(\d{4})(-|\/)(\d{1,2})\2(\d{1,2})$/);
         if (result == null) {
-            return '格式错误';
+            return 'formatting error';
         }
         var d = new Date(result[1], result[3] - 1, result[4]);
-        return (d.getFullYear() == result[1] && d.getMonth() + 1 == result[3] && d.getDate() == result[4]) ? true : '格式错误';
+        return (d.getFullYear() == result[1] && d.getMonth() + 1 == result[3] && d.getDate() == result[4]) ? true : 'formatting error';
     }
 }
 // @name 校验时间格式是否正确
 function checker_time(value, format) {
     var result = value.match(/^(\d{4})(-|\/)(\d{1,2})\2(\d{1,2})$/);
     if (result == null) {
-        return '格式错误';
+        return 'formatting error';
     }
     var d = new Date(result[1], result[3] - 1, result[4]);
-    return (d.getFullYear() == result[1] && d.getMonth() + 1 == result[3] && d.getDate() == result[4]) ? true : '格式错误';
+    return (d.getFullYear() == result[1] && d.getMonth() + 1 == result[3] && d.getDate() == result[4]) ? true : 'formatting error';
 }
 // @name 校验字符串格式是否为英文
 function checker_english(value, format) {
-    return /^[a-zA-Z]+$/.test(value) ? true : '格式错误';
+    return /^[a-zA-Z]+$/.test(value) ? true : 'formatting error';
 }
 // @name 校验字符串格式是否为中文
 function checker_chinese(value, format) {
-    return /^[\u4E00-\uFA29]+$/.test(value) ? true : '格式错误';
+    return /^[\u4E00-\uFA29]+$/.test(value) ? true : 'formatting error';
 }
 // IP 类型
 function checker_ip(value, format)
 {
-    return /^(([01]?\d?\d|2[0-4]\d|25[0-5])\.){3}([01]?\d?\d|2[0-4]\d|25[0-5])$/.test(value) ? true : '格式错误';
+    return /^(([01]?\d?\d|2[0-4]\d|25[0-5])\.){3}([01]?\d?\d|2[0-4]\d|25[0-5])$/.test(value) ? true : 'formatting error';
 }
 // @name 校验字符串格式是否为JSON
 function checker_json(value, format) {
@@ -809,9 +809,9 @@ function checker_json(value, format) {
         value = $.parseJSON(value);
         return (
             typeof(value) === "object" && (checker_object(value) || checker_array(value))
-        ) ? true : '格式错误';
+        ) ? true : 'formatting error';
     }
     catch (e) {
-        return '格式错误';
+        return 'formatting error';
     }
 }

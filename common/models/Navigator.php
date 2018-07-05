@@ -152,38 +152,11 @@ class Navigator extends \common\models\ActiveRecord {
     }
     
     /**
-     * find all navigators
-     * show as relation style
-     * 
-     * parent_id => [detail]
+     * 控制器列表
+     * @return array
      */
-    public static function getAllRelation()
+    public static function controllerSelector()
     {
-        $navigators = Navigator::find()->where(['flag' => 1])->orderBy('sort ASC')->asArray()->all();
-        return ArrayHelper::index($navigators, 'id', 'parent_id');
-    }
-    /**
-     * for html show nav
-     * header nav
-     */
-    public static function getHeader()
-    {
-        // -1 = welcome
-        $navigator = [['id' => '-1', 'title' => '个人中心', 'icon_class' => 'icon-flag', 'controller' => 'welcome']];
-        return array_merge($navigator, Navigator::find()->select('id, title, icon_class, controller')->where(['parent_id' => '0', 'flag' => 1, 'type' => 1])->orderBy('sort ASC')->asArray()->all());
-    }
-    /**
-     * for html show nav
-     * lefter nav
-     */
-    public static function getLefter($parent_id)
-    {
-        if($parent_id == '-1') {
-            return [
-                ['id' => '-101', 'title' => '个人资料', 'icon_class' => 'icon-asterisk', 'controller' => 'personal-data'],
-                ['id' => '-102', 'title' => '修改密码', 'icon_class' => 'icon-key', 'controller' => 'change-password'],
-            ];
-        }
-        return Navigator::find()->select('id, title, icon_class, controller')->where(['parent_id' => $parent_id, 'flag' => 1, 'type' => 1])->orderBy('sort ASC')->asArray()->all();
+        return ArrayHelper::map(Navigator::find()->select('id, title, parent_id')->orderBy('sort asc')->asArray()->all(), 'id', 'title', 'parent_id');
     }
 }

@@ -26,11 +26,11 @@ class AdminRole extends ActiveRecord {
     public function attributeLabels()
     {
         return [
-            'title' => '名称',
-            'identity' => '标识',
-            'sort' => '排序',
-            'remark' => '备注',
-            'deleted_at' => '删除时间',
+            'title' => 'administrator group title',
+            'identity' => 'identity',
+            'sort' => 'sort',
+            'remark' => 'remark',
+            'deleted_at' => 'deleted at',
         ];
     }
     
@@ -44,9 +44,9 @@ class AdminRole extends ActiveRecord {
     {
         $rule = [
             'param' => [
-                'title' => ['权组名称', ['maxlength' => 128, 'required']],
-                'identity' => ['标识', ['preg' => '/^[\w\-_\.]{1,}$/', 'required']],
-                'remark' => ['描述', ['maxlength' => 255]],
+                'title' => ['administrator group title', ['maxlength' => 128, 'required']],
+                'identity' => ['identity', ['preg' => '/^[\w\-_\.]{1,}$/', 'required']],
+                'remark' => ['remark', ['maxlength' => 255]],
             ]
         ];
         return $rule;
@@ -98,11 +98,11 @@ class AdminRole extends ActiveRecord {
             }
         }
         // 查询当前权组拥有的权限，进行去重、删除以剔除权限
-        $currPermissions = ArrayHelper::getColumn($this->rolePermissions, 'navigator_path');
+        $currPermissions = ArrayHelper::getColumn($this->rolePermissions, 'controller');
         $deletePermissions = array_diff($currPermissions, $newPermissions);
         $newPermissions = array_diff($newPermissions, $currPermissions);
         if(count($deletePermissions) > 0) {
-            if( ! AdminPermission::deleteAll(['identity' => $this->identity, 'navigator_path' => $deletePermissions])) {
+            if( ! AdminPermission::deleteAll(['identity' => $this->identity, 'controller' => $deletePermissions])) {
                 return false;
             }
         }

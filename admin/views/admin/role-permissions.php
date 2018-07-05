@@ -2,56 +2,74 @@
 
 /* @var $this yii\web\View */
 
-use yii\helpers\Url;
-use yii\helpers\Html;
-use yii\widgets\ActiveForm;
-use common\helpers\Render;
+use yii\helpers\ArrayHelper;
+use common\models\Navigator;
 
-$this->title = '管理员列表';
+$this->title = 'Administrator Group Permissions';
+$this->addCrumbs('System');
+
+$this->registerJavascript('@static/flyer/checker.class.js');
+$this->registerJavascript('@static/flyer/tableHandler.class.js');
+
+$this->registerCss('
+    .checkbox-margin label {
+        margin:5px 0;
+    }
+');
 ?>
 
-<style>
-    .flyer-choise.parent {margin:0;}
-    .flyer-choise {margin-bottom:10px;}
-    .input-mid {padding:5px;}
-</style>
+<div class="container-fluid">
+    <div class="alert alert-info mt" role="alert">
+        <p><strong>Heads up!</strong></p>
+        <p>set adminstrator group：<i class="icon-group"></i> <?= $role->title ?> 's permission.</p>
+        <p>1. when selecting a column, all permissions under the current column are included, including other rights that may be extended later.</p>
+    </div>
+    <form id="info-detail">
+        <?php
+        $navigators = require(Yii::getAlias('@admin/config/navigator.php'));
+        foreach($navigators[0] as $id => $part) {
+            ?>
+            <div class="form-group alert alert-info" role="alert">
+                <h3><i class="fa fa-<?= $part['icon_class'] ?> fa-fw"></i><?= $part['title'] ?></h3>
+                <?php
+                foreach($navigators[$id] as $sid => $navigator) {
+                    ?>
+                    <div class="checkbox-margin" id="sid-<?= $sid ?>" data-toggle="buttons">
+                        <label class="btn btn-primary col-lg-12 text-left">
+                            <i class="fa fa-<?= $navigator['icon_class'] ?> fa-fw"></i><input type="checkbox" autocomplete="off"> <?= $navigator['title'] ?>
+                        </label>
+                        <?php
+                        if( ! empty($navigators[$sid])) {
+                            ?>
+                            <?php
+                            foreach($navigators[$sid] as $tid => $subNavigator) {
+                                ?>
+                                <label class="btn btn-default active">
+                                    <i class="fa fa-<?= $subNavigator['icon_class'] ?> fa-fw"></i><input type="checkbox" checked autocomplete="off"><?= $subNavigator['title'] ?>
+                                </label>
+                                <?php
+                            }
+                            ?>
+                            <?php
+                        }
+                        ?>
+                    </div>
+                    <?php
+                }
+                ?>
+            </div>
+            <?php
+        }
+        ?>
+        <button class="btn btn-primary" id="save-button"><i class="fa fa-save fa-fw"></i>save</button>
+    </form>
+</div>
 
-<div class="mg">设置权组：<i class="icon-group"></i> <?= $role->title ?> 的权限</div>
-<form class="flyer-form box-content gap" id="flyer-create" onsubmit="return false;">
-    <div class="warn success mb">
-        <p><i class="icon-info-sign icon-large"></i> 注意事项</p>
-        <p>1、选择一级栏目时，表示当前栏目下的所有权限，包括以后可能会扩展的其他权限</p>
-    </div>
-    <div class="form-item">
-        <div class="auto thin" id="permission-detail">
-            <?php foreach($permissions[0] as $id => $title) {?>
-                <fieldset class="mb-20px pd" id="permission-role-<?= $id ?>" style="border:1px solid #ddd;padding-bottom:0 !important;">
-                    <legend>
-                        <input flyer="checkbox" class="parent" type="checkbox" id="permission-detail-<?= $id ?>" name="permission_detail[]" value="<?= $id ?>" title="<?= $title ?>">
-                    </legend>
-                    <?php if(isset($permissions[$id])) {?>
-                        <div class="permission-role-<?= $id ?>">
-                            <?php foreach($permissions[$id] as $sid => $sTitle) {?>
-                                <input flyer="checkbox" type="checkbox" id="permission-detail-<?= $sid ?>" name="permission_detail[]" value="<?= $sid ?>" title="<?= $sTitle ?>">
-                            <?php }?>
-                        </div>
-                    <?php }?>
-                </fieldset>
-            <?php }?>
-        </div>
-    </div>
-    <div class="form-item">
-        <div class="input-block tr bdn"><button class="flyer-button normal border-round thin" id="save-button"><i class="icon-save"></i> <span>保 存</span></button></div>
-    </div>
-</form>
-
-<script src="<?= Render::static('flyer/flyer.class.js') ?>"></script>
-<script src="<?= Render::static('flyer/tableHandler.class.js') ?>"></script>
 <script>
     $(document).ready(function() {
         // init form
         (new flyer).init({ form: '#flyer-create' });
-        
+
         // 点选按钮
         $('.flyer-choise.parent input[type=checkbox]').bind('click', function() {
             if ($(this).is(':checked')) {
@@ -65,7 +83,7 @@ $this->title = '管理员列表';
         // 初始用户已存在权限
         tableHandler.requestSingle({
             isConfirm: false, isAlert: false,
-            url: "<?= Url::to('@web/admin/permission-detail') ?>",
+            url: '/admin/permission-detail',
             beforeRequest: function() {
                 $('#save-button').attr('data-layer-index', layer.load(0, {shade: [0.3, '#000']}));
             },
@@ -93,11 +111,11 @@ $this->title = '管理员列表';
                 }
             }
         });
-        
+
         // 保存操作
         tableHandler.requestSingle({
             button: '#save-button', isConfirm: false,
-            url: "<?= Url::to('@web/admin/admin-role-permission-edit?id='.$role->id) ?>",
+            url: '/admin/role-permission-edit?id='.<?= $role->id ?>,
             beforeRequest: function() {
                 $('#save-button').attr('data-layer-index', layer.load(0, {shade: [0.3, '#000']}));
                 $('#save-button').attr('disabled', true).find('span').text('数据提交中.');
@@ -125,7 +143,7 @@ $this->title = '管理员列表';
             }
         });
     });
-    
+
     function fill_checkbox(checkbox, is_user)
     {
         $.each($(checkbox), function() {

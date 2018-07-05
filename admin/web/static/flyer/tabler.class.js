@@ -235,18 +235,20 @@ var tabler = function() {
     }
     // @name 显示加载异常信息描述
     this.showError = function(message) {
-        this.showMessage(message, 'icon-ban-circle');
+        this.showMessage(message, 'fa fa-ban-circle');
     }
     // @name 表格数据加载中动画、隐藏搜索button
     this.loading = function() {
         if(this.showLoading || (this.showLoading == undefined)) {
-            $(this.searchButton).attr('data-text', $(this.searchButton).find('span').text()).attr('disabled', true).find('span').text('loading...');
-            this.showMessage('Searching..', 'icon-spin icon-spinner');
+            // $(this.searchButton).attr('disabled', true);
+            $(this.searchButton).button('loading');
+            this.showMessage('searching..', 'fa fa-spin fa-spinner');
         }
     }
     // @name 显示搜索button
     this.loaded = function() {
-        $(this.searchButton).attr('disabled', false).find('span').text($(this.searchButton).attr('data-text'));
+        // $(this.searchButton).attr('disabled', false);
+        $(this.searchButton).button('reset');
     }
     // @name 填充page容器
     this.renderPager = function(_html) {
@@ -305,7 +307,7 @@ var tabler = function() {
         // 加载数据
         var tablerClass = this;
         $.ajax({
-            url: this.url,
+            url: this.buildUrl(),
             type: this.method,
             data: this.param,
             dataType: 'json',
@@ -316,8 +318,8 @@ var tabler = function() {
             // 加载信息异常提示
             error: function() {
                 tablerClass.loaded();
-                layer.msg('Search program error', { shift: 6 });
-                tablerClass.showError('Search program error');
+                layer.msg('search program error', { shift: 6 });
+                tablerClass.showError('search program error');
             },
             // 数据加载成功处理方法
             success: function(ret) {
@@ -354,14 +356,22 @@ var tabler = function() {
             }
         });
     }
+    // 获取请求地址
+    this.buildUrl = function() {
+        var split = '?';
+        if(this.url.indexOf('?') >= 0) {
+            split = '&';
+        }
+        return this.url + split + 'page=' + this.page + '&pageSize=' + this.pageSize;
+    }
     // 初始化参数
     this.initParams = function() {
         this.setParams({});
         this.addParam('page', this.page);
+        this.addParam('pageSize', this.pageSize);
         this.addParam('submit', 'json');
         this.addParam('_csrf', $('meta[name=csrf-token]').attr('content'));
         var tablerClass = this;
-        console.log($(this.searcher).find(this.searchClass));
         $.each($(this.searcher).find(this.searchClass), function() {
             var name = $(this).attr('name');
             if(['radio', 'checkbox'].indexOf($(this).attr('type')) >= 0) {
@@ -388,11 +398,11 @@ var tabler = function() {
     }
     this.initPageClick = function() {
         var tablerClass = this;
-        $(this.pager).find('a.pager').each(function() {
+        $(this.pager).find('a').each(function() {
             // $(this).attr('data-href', $(this).attr('href'));
-            // $(this).attr('href', 'javascript:;');
+            $(this).attr('href', 'javascript:;');
             $(this).bind('click', function() {
-                tablerClass.setPage($(this).attr('data-page'));
+                tablerClass.setPage(parseInt($(this).attr('data-page')) + 1);
                 tablerClass.load();
             });
         });

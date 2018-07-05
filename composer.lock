@@ -1,46 +1,32 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "741bc684e185e5aea4c6ad02086a74b4",
+    "content-hash": "bfcf35d8e00ce7ac5929cddb20790936",
     "packages": [
         {
             "name": "2amigos/yii2-date-time-picker-widget",
-            "version": "1.0.4",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/2amigos/yii2-date-time-picker-widget.git",
-                "reference": "721a23e245b3b2a5ca2669e9a35a4ebdab321c8c"
+                "reference": "572e2448ba1cd207b339dd5d117e3d1d23f0bbc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/2amigos/yii2-date-time-picker-widget/721a23e245b3b2a5ca2669e9a35a4ebdab321c8c.zip",
-                "reference": "721a23e245b3b2a5ca2669e9a35a4ebdab321c8c",
+                "url": "https://files.phpcomposer.com/files/2amigos/yii2-date-time-picker-widget/572e2448ba1cd207b339dd5d117e3d1d23f0bbc3.zip",
+                "reference": "572e2448ba1cd207b339dd5d117e3d1d23f0bbc3",
                 "shasum": ""
             },
             "require": {
-                "bower-asset/smalot-bootstrap-datetimepicker": "2.4.4",
-                "yiisoft/yii2": "~2.0",
-                "yiisoft/yii2-bootstrap": "~2.0.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.*",
-                "scrutinizer/ocular": "~1.1"
+                "yiisoft/yii2": "*"
             },
             "type": "yii2-extension",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0-dev"
-                },
-                "asset-installer-paths": {
-                    "bower-asset-library": "vendor/bower"
-                }
-            },
             "autoload": {
                 "psr-4": {
-                    "dosamigos\\datetimepicker\\": "src"
+                    "dosamigos\\datetimepicker\\": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -49,24 +35,19 @@
             ],
             "authors": [
                 {
-                    "name": "2amigOS! Consulting Group",
-                    "email": "hola@2amigos.us",
-                    "homepage": "http://2amigos.us",
-                    "role": "Developer"
+                    "name": "Antonio Ramirez",
+                    "email": "ramirez.cobos@gmail.com",
+                    "homepage": "http://2amigos.us"
                 }
             ],
             "description": "Bootstrap DateTimePicker widget for Yii2.",
-            "homepage": "http://yiiwheels.com/extension/bootstrap-datetimepicker",
             "keywords": [
-                "2amigos",
-                "DateTimePicker",
+                "datepicker",
                 "extension",
                 "widget",
-                "yii",
-                "yii 2",
-                "yii2"
+                "yii"
             ],
-            "time": "2017-07-05T05:38:36+00:00"
+            "time": "2014-06-24T14:28:07+00:00"
         },
         {
             "name": "bower-asset/bootstrap",
@@ -238,40 +219,6 @@
                 ]
             },
             "time": "2014-10-22T12:02:42+00:00"
-        },
-        {
-            "name": "bower-asset/smalot-bootstrap-datetimepicker",
-            "version": "2.4.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/smalot/bootstrap-datetimepicker.git",
-                "reference": "32143c8b45575e51c92a8e29997cbe556d1bbba3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/smalot/bootstrap-datetimepicker/zipball/32143c8b45575e51c92a8e29997cbe556d1bbba3",
-                "reference": "32143c8b45575e51c92a8e29997cbe556d1bbba3",
-                "shasum": ""
-            },
-            "type": "bower-asset-library",
-            "extra": {
-                "bower-asset-main": [
-                    "js/bootstrap-datetimepicker.min.js",
-                    "css/bootstrap-datetimepicker.min.css"
-                ],
-                "bower-asset-ignore": [
-                    "build",
-                    "sample in bootstrap v2",
-                    "sample in bootstrap v3",
-                    "screenshot",
-                    "tests",
-                    ".gitattributes",
-                    ".gitignore",
-                    ".travis.yml",
-                    "minify.sh"
-                ]
-            },
-            "time": "2017-03-03T10:00:24+00:00"
         },
         {
             "name": "bower-asset/yii2-pjax",
@@ -450,6 +397,60 @@
                 }
             ],
             "time": "2018-01-05T05:29:36+00:00"
+        },
+        {
+            "name": "rmrevin/yii2-fontawesome",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rmrevin/yii2-fontawesome.git",
+                "reference": "cd3d21dd3b294b4f35e9263f60d8194071da9aaa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/rmrevin/yii2-fontawesome/cd3d21dd3b294b4f35e9263f60d8194071da9aaa.zip",
+                "reference": "cd3d21dd3b294b4f35e9263f60d8194071da9aaa",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "yiisoft/yii2": "^2.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.7"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "asset-installer-paths": {
+                    "npm-asset-library": "vendor/npm",
+                    "bower-asset-library": "vendor/bower"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "rmrevin\\yii\\fontawesome\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Revin Roman",
+                    "email": "roman@rmrevin.com",
+                    "homepage": "https://rmrevin.com/"
+                }
+            ],
+            "description": "Asset Bundle for Yii2 with Font Awesome",
+            "keywords": [
+                "asset",
+                "awesome",
+                "bundle",
+                "font",
+                "yii"
+            ],
+            "time": "2018-04-01T12:38:28+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",

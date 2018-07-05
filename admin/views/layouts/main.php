@@ -1,12 +1,9 @@
 <?php
 
-/* @var $this \yii\web\View */
+/* @var $this \admin\components\View */
 /* @var $content string */
 
-use yii\helpers\Url;
 use yii\helpers\Html;
-use common\helpers\Render;
-use common\models\Navigator;
 
 \admin\assets\AppAsset::register($this);
 ?>
@@ -55,7 +52,7 @@ use common\models\Navigator;
 <div id="right-panel">
     <div class="wrap">
         <ol class="breadcrumb">
-            <li><i class="fa fa-home fa-fw"></i><a href="<?= Url::to('@web/welcome/index') ?>"><?= $this->context->module->name ?></a></li>
+            <li><i class="fa fa-home fa-fw"></i><a href="/site/index'"><?= $this->context->module->name ?></a></li>
             <?php if( ! empty($this->crumbs)) {
                 foreach($this->crumbs as $crumbs) {
                     if($crumbs['url']) {

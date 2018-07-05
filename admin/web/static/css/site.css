@@ -40,6 +40,13 @@ select.bak {
 	padding-left: 5px;
 }
 
+/* layer style */
+.layui-layer-loading{background:none !important;border:none !important;}
+.layui-layer-title {position:relative;width:auto;}
+.layui-layer-title,
+.layui-layer-setwin {z-index:10011;}
+.layui-layer-content{overflow:hidden;z-index:10010;}
+
 /* -------- body frame ----- */
 *, :after, :before {
 	box-sizing: border-box;
@@ -101,45 +108,45 @@ ul.pagination {
 .w-p100{width:100% !important;}
 
 .pd,
-.pd-10px {
-	padding:10px !important;
+.pd-15px {
+	padding:15px !important;
 }
 .pd-20px  {
 	padding:20px !important;
 }
 .pl,
-.pl-10px {
-	padding-left:10px !important;
+.pl-15px {
+	padding-left:15px !important;
 }
 .pr,
-.pr-10px {
-	padding-right:10px !important;
+.pr-15px {
+	padding-right:15px !important;
 }
 .pt-5px  {
 	padding-top:5px !important;
 }
 .pt,
 .pt-10px {
-	padding-top:10px !important;
+	padding-top:15px !important;
 }
 .pt-20px {
 	padding-top:20px !important;
 }
 .pb,
-.pb-10px {
-	padding-bottom:10px !important;
+.pb-15px {
+	padding-bottom:15px !important;
 }
 
 .mg,
-.mg-10px {
-	margin:10px !important;
+.mg-15px {
+	margin:15px !important;
 }
 .mt-5px {
 	margin-top:5px !important;
 }
 .mt,
-.mt-10px {
-	margin-top:10px !important;
+.mt-15px {
+	margin-top:15px !important;
 }
 .mt-20px {
 	margin-top:20px !important;
@@ -148,8 +155,8 @@ ul.pagination {
 	margin-left:5px !important;
 }
 .ml,
-.ml-10px {
-	margin-left:10px !important;
+.ml-15px {
+	margin-left:15px !important;
 }
 .ml-20px {
 	margin-left:20px !important;
@@ -161,15 +168,15 @@ ul.pagination {
 	margin-right:5px !important;
 }
 .mr,
-.mr-10px {
-	margin-right:10px !important;
+.mr-15px {
+	margin-right:15px !important;
 }
 .mr-20px {
 	margin-right:20px !important;
 }
 .mb,
-.mb-10px {
-	margin-bottom:10px !important;
+.mb-15px {
+	margin-bottom:15px !important;
 }
 .mb-20px {
 	margin-bottom:20px !important;

@@ -10,12 +10,12 @@ var tableHandler = {
 
     confirm: function(param, title) {
         if ( ! title) {
-            title = '信息';
+            title = 'information';
         }
-        layer.confirm('确定要执行此操作吗？', {
+        layer.confirm('are you sure you want to perform this operation?', {
                 icon: 3,
                 title: title,
-                btn: ['确定', '取消']
+                btn: ['confirm', 'cancel']
             },
             function(index) {
                 layer.close(index);
@@ -35,7 +35,7 @@ var tableHandler = {
      */
     insertLine: function(param) {
         if( ! param.button) {
-            console.log('弹窗参数异常');
+            console.log('parameters wrong');
         }
         $(param.button).bind('click', function() {
             param.mthis = this;
@@ -130,14 +130,14 @@ var tableHandler = {
                 },
                 // 加载信息异常提示
                 error: function() {
-                    layer.msg('JSON请求异常', { shift: 6 });
+                    layer.msg('json request failed', { shift: 6 });
                 },
                 // 数据加载成功处理方法
                 success: function(ret) {
                     var data = ret;
                     // 处理成功
                     if (data.code == tableHandler.SuccessCode) {
-                        layer.msg('保存成功!');
+                        layer.msg('save successful!');
                         if (data.id) {
                             $(param.tr).attr('data-id', data.id).attr('data-type', 'insert');
                         }
@@ -175,22 +175,9 @@ var tableHandler = {
                 if (tableHandler.callUserFunction(param.beforeAlert, param) === false) {
                     return false;
                 }
-                // 禁用外部滚动条 scrollbar
-                // 显示最大化弹层按钮 maxmin
-                param.dialog = { scrollbar: false, maxmin: true, type: 1, content: param.content, fix: false, area: param.area, title: param.title };
-                if (param.dialog.content === undefined) {
-                    var url = param.src ? param.src : $(this).attr('data-href');
-                    param.dialog.content = url + ((url.indexOf('?') > 0) ? '&' : '?') + 'id=' + $(param.tr).attr('data-id');
-                    param.dialog.type = 2;
-                }
                 // 设置弹层类型
                 param.index = layer.open(param.dialog);
                 // 全屏显示
-                // layer.full(param.index);
-                $(param.mthis).attr('data-layer-index', param.index);
-                if ($(param.tr).length) {
-                    $(param.tr).attr('data-layer-index', param.index);
-                }
                 if (param.dialog.type == 1) {
                     param.dialog.content = '';
                 }
@@ -301,7 +288,7 @@ var tableHandler = {
             param.tr = $(mthis).parents(param.trKey ? param.trKey : 'tr');
             var id = $(param.tr).attr('data-id');
             if (id <= 0) {
-                layer.msg('页面数据异常，请您刷新重试!', { shift: 6 });
+                layer.msg('there was something wrong, please try again!', { shift: 6 });
                 return false;
             }
             param.data.id = id;
@@ -320,7 +307,7 @@ var tableHandler = {
         param.url = param.url ? param.url : $(mthis).attr('data-href');
         // 确认弹窗
         if(param.isConfirm || param.isConfirm === undefined) {
-            tableHandler.confirm({ functionName: tableHandler.request, param: param }, param.title ? param.title : '操作');
+            tableHandler.confirm({ functionName: tableHandler.request, param: param }, param.title ? param.title : 'operation');
         }
         else {
             tableHandler.request(param);
@@ -341,7 +328,7 @@ var tableHandler = {
             var checkbox = $(param.table).find('input[type=checkbox].list:checked');
             var checkboxLength = $(checkbox).length;
             if (checkboxLength <= 0) {
-                layer.msg((param.title ? param.title : '批量操作') + '需要先选中需要的数据', { shift: 6 });
+                layer.msg((param.title ? param.title : 'batch operation') + ' need select the line which you want to operator', { shift: 6 });
                 return false;
             }
             if (tableHandler.callUserFunction(param.beforeRequest, param) == false) {
@@ -364,7 +351,7 @@ var tableHandler = {
             param.tr = $(checkbox).parents(param.trKey ? trKey.trKey : 'tr');
             param.url = param.url ? param.url : $(this).attr('data-href');
             // 确认弹窗
-            tableHandler.confirm({ functionName: tableHandler.request, param: param }, param.title ? param.title : '批量操作');
+            tableHandler.confirm({ functionName: tableHandler.request, param: param }, param.title ? param.title : 'batch operation');
             return true;
         });
     },
@@ -408,14 +395,14 @@ var tableHandler = {
             },
             // 加载信息异常提示
             error: function() {
-                layer.msg('JSON请求异常', { shift: 6 });
+                layer.msg('ajax request failed', { shift: 6 });
             },
             // 数据加载成功处理方法
             success: function(ret) {
                 param.response = ret;
                 if (param.response.code == tableHandler.SuccessCode) {
                     if(param.isAlert || param.isAlert === undefined) {
-                        layer.msg(param.response.message ? param.response.message : (param.title ? param.title : '操作') + '成功');
+                        layer.msg(param.response.message ? param.response.message : (param.title ? param.title : 'operation') + ' successful');
                     }
                     if(param.isKeep || param.isKeep === undefined) {
 
@@ -425,12 +412,12 @@ var tableHandler = {
                     }
                     if ($(param.table).find('tbody').length) {
                         if ( ! $(param.table).find('tbody tr').length) {
-                            $(param.table).find('tbody').html('<tr><td class="first" colspan="' + $(param.table).find('thead th').length + '"><i class="icon-ban-circle"></i> 当前数据已被清空</td></tr>');
+                            $(param.table).find('tbody').html('<tr><td class="first" colspan="' + $(param.table).find('thead th').length + '"><i class="icon-ban-circle"></i> current data clear already</td></tr>');
                         }
                     }
                     else {
                         if (param.trKey && ! $(param.table).find(param.trKey).length) {
-                            $(param.table).html('<div class="pd-10px"><i class="icon-ban-circle"></i> 当前数据已被清空</div>');
+                            $(param.table).html('<div class="pd-10px"><i class="icon-ban-circle"></i> current data clear already</div>');
                         }
                     }
 

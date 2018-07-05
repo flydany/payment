@@ -3,10 +3,8 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 
-use yii\helpers\Url;
-use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use common\helpers\Render;
-use common\models\Navigator;
 
 ?>
 
@@ -163,13 +161,14 @@ use common\models\Navigator;
 </style>
 <script>
     jQuery(document).ready(function() {
-        jQuery('#sidebar-menu .side-menu > li').bind('click', function() {
-            if(jQuery(this).hasClass('active')) {
-                jQuery(this).removeClass('active');
+        jQuery('#sidebar-menu .side-menu > li > a').bind('click', function() {
+            var li = jQuery(this).parent('li');
+            if(jQuery(li).hasClass('active')) {
+                jQuery(li).removeClass('active');
             }
             else {
                 jQuery('#sidebar-menu .side-menu > li.active').removeClass('active');
-                jQuery(this).addClass('active');
+                jQuery(li).addClass('active');
             }
         });
     });
@@ -195,12 +194,6 @@ use common\models\Navigator;
     <div id="sidebar-menu">
         <?php
         $navigators = require(Yii::getAlias('@admin/config/navigator.php'));
-        $navigators = array_map(function($data) {
-            return array_map(function($nav) {
-                $nav['url'] = '/'.$nav['controller'].'/'.$nav['method'];
-                return $nav;
-            }, $data);
-        }, $navigators);
         foreach($navigators[0] as $id => $part) {
             ?>
             <div class="menu-section">
@@ -208,8 +201,14 @@ use common\models\Navigator;
                 <ul class="nav side-menu">
                     <?php
                     foreach($navigators[$id] as $sid => $navigator) {
+                        if( ! empty($navigators[$sid])) {
+                            $active = in_array($this->activeNavigator(), ArrayHelper::getColumn($navigators[$sid], 'controller')) ? ' class="active"' : '';
+                        }
+                        else {
+                            $active = ($navigator['controller'] == $this->activeNavigator()) ? ' class="active"' : '';
+                        }
                         ?>
-                        <li id="sid-<?= $sid ?>">
+                        <li<?= $active ?> id="sid-<?= $sid ?>">
                             <a><i class="fa fa-<?= $navigator['icon_class'] ?> fa-fw"></i> <?= $navigator['title'] ?> <span class="fa fa-chevron-down"></span></a>
                             <?php
                             if( ! empty($navigators[$sid])) {
@@ -217,17 +216,10 @@ use common\models\Navigator;
                                 <ul class="nav child-menu">
                                     <?php
                                     foreach($navigators[$sid] as $tid => $subNavigator) {
-                                        if($subNavigator['url'] == '/'.Yii::$app->request->getPathInfo()) {
-                                            ?>
-                                            <li class="active"><a href="<?= $subNavigator['url'] ?>"><?= $subNavigator['title'] ?></a></li>
-                                            <script>document.getElementById('sid-<?= $sid ?>').className = 'active';</script>
-                                            <?php
-                                        }
-                                        else {
-                                            ?>
-                                            <li><a href="<?= $subNavigator['url'] ?>"><?= $subNavigator['title'] ?></a></li>
-                                            <?php
-                                        }
+                                        $active = ($subNavigator['controller'] == $this->activeNavigator()) ? ' class="active"' : '';
+                                        ?>
+                                        <li<?= $active ?>><a href="/<?= $subNavigator['controller'] ?>"><?= $subNavigator['title'] ?></a></li>
+                                        <?php
                                     }
                                     ?>
                                 </ul>

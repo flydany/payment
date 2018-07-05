@@ -21,8 +21,8 @@ class AdminPermission extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'identity' => '标识',
-            'controller' => '控制器',
+            'identity' => 'identity',
+            'controller' => 'controller',
         ];
     }
     
@@ -94,7 +94,7 @@ class AdminPermission extends ActiveRecord
      * super 有当前系统的所有权限
      * return {"1":{"11":true},"4":{"super":true}}
      */
-    public static function getPermissionAsControllerId($identity)
+    public static function permissionSelector($identity)
     {
         $permissions = (new Query)->select(['admin_permission.id', 'admin_permission.controller', 'admin_permission.identity', 'controller.id controller_id', 'method.id method_id', 'method.parent_id _controller_id'])
             ->from('admin_permission')

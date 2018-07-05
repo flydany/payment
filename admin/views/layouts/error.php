@@ -24,14 +24,12 @@ $this->title = 'Operation Failed';
     }
 </style>
 
-<div class="container">
+<div class="container-fluid alert alert-danger" role="alert">
     <!-- page content -->
-    <div class="alert alert-danger">
-        <div class="text-center">
-            <h1 class="error-number">ERROR</h1>
-            <h2><?= Html::encode($message) ?></h2>
-            <p>the page will automatically jump after 3 seconds, <a href="<?= $skip ?>"><i class="fa fa-hand-pointer-o fa-fw"></i>click here?</a></p>
-        </div>
+    <div class="text-center">
+        <h1 class="error-number">ERROR</h1>
+        <h2><?= Html::encode($message) ?></h2>
+        <p>the page will automatically jump after 3 seconds, <a href="<?= $skip ?>"><i class="fa fa-hand-pointer-o fa-fw"></i>click here?</a></p>
     </div>
     <!-- /page content -->
 </div>

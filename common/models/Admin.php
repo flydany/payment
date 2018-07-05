@@ -29,7 +29,7 @@ class Admin extends ActiveRecord {
         return [
             'username' => 'username',
             'password_digest' => 'password',
-            'role_id' => 'power group',
+            'role_id' => 'administrator group',
             'realname' => 'realname',
             'mobile' => 'mobile',
             'email' => 'email',
@@ -47,13 +47,13 @@ class Admin extends ActiveRecord {
         // jsut search
         $rule = [
             'param' => [
-                'username' => ['登录名', ['username', 'required']],
-                'role_id' => ['权组', ['int']],
-                'password_digest' => ['密码', ['password']],
-                'realname' => ['姓名', ['chinese', 'minlength' => 2, 'maxlength' => 4, 'required']],
-                'mobile' => ['电话', ['mobile', 'required']],
-                'email' => ['邮箱', ['email', 'required']],
-                'effect_date' => ['过期时间', ['date' => 'Y-m-d', 'required']],
+                'username' => ['username', ['username', 'required']],
+                'role_id' => ['administrator group', ['int']],
+                'password_digest' => ['password', ['password']],
+                'realname' => ['realname', ['maxlength' => 64, 'required']],
+                'mobile' => ['mobile', ['mobile', 'required']],
+                'email' => ['email', ['email', 'required']],
+                'effect_date' => ['effect date', ['date' => 'Y-m-d', 'required']],
             ],
         ];
         // type eq update
