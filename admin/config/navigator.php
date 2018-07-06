@@ -12,16 +12,16 @@ return [
         '001003' => ['title' => 'Agreement', 'icon_class' => 'free-code-camp', 'controller' => '#'],
     ],
     '001001' => [
-        '001001001' => ['title' => 'Recharge Statistics', 'icon_class' => 'home', 'controller' => 'recharge/index'],
-        '001001002' => ['title' => 'Recharge Record', 'icon_class' => 'home', 'controller' => 'recharge/list'],
+        '001001001' => ['title' => 'Recharge Statistics', 'icon_class' => 'bar-chart', 'controller' => 'recharge/index'],
+        '001001002' => ['title' => 'Recharge Record', 'icon_class' => 'book', 'controller' => 'recharge/list'],
     ],
     '001002' => [
-        '001002001' => ['title' => 'Withdraw Statistics', 'icon_class' => 'home', 'controller' => 'withdraw/index'],
-        '001002002' => ['title' => 'Withdraw Record', 'icon_class' => 'home', 'controller' => 'withdraw/list'],
+        '001002001' => ['title' => 'Withdraw Statistics', 'icon_class' => 'area-chart', 'controller' => 'withdraw/index'],
+        '001002002' => ['title' => 'Withdraw Record', 'icon_class' => 'book', 'controller' => 'withdraw/list'],
     ],
     '001003' => [
-        '001003001' => ['title' => 'Agreement Statistics', 'icon_class' => 'home', 'controller' => 'agreement/index'],
-        '001003002' => ['title' => 'Agreement Record', 'icon_class' => 'home', 'controller' => 'agreement/list'],
+        '001003001' => ['title' => 'Agreement Statistics', 'icon_class' => 'area-chart', 'controller' => 'agreement/index'],
+        '001003002' => ['title' => 'Agreement Record', 'icon_class' => 'book', 'controller' => 'agreement/list'],
     ],
     
     '002' => [
@@ -29,23 +29,23 @@ return [
         '002002' => ['title' => 'Merchant', 'icon_class' => 'thumb-tack', 'controller' => '#'],
     ],
     '002001' => [
-        '002001001' => ['title' => 'Project List', 'icon_class' => 'home', 'controller' => 'project/list'],
-        '002001002' => ['title' => 'Project Contacts', 'icon_class' => 'home', 'controller' => 'project/contacts'],
+        '002001001' => ['title' => 'Project List', 'icon_class' => 'book', 'controller' => 'project/list'],
+        '002001002' => ['title' => 'Project Contacts', 'icon_class' => 'address-book', 'controller' => 'project/contacts'],
     ],
     '002002' => [
         '002002001' => ['title' => 'Merchant List', 'icon_class' => 'home', 'controller' => 'platform/merchant-list'],
     ],
     
     '009' => [
-        '009001' => ['title' => 'Manager', 'icon_class' => 'superpowers', 'controller' => 'admin/list'],
-        '009002' => ['title' => 'System', 'icon_class' => 'gear', 'controller' => 'admin/role-list'],
+        '009001' => ['title' => 'Manager', 'icon_class' => 'superpowers', 'controller' => '#'],
+        '009002' => ['title' => 'System', 'icon_class' => 'gear', 'controller' => '#'],
     ],
     '009001' => [
         '009001001' => ['title' => 'Administrator List', 'icon_class' => 'user', 'controller' => 'admin/list'],
-        '009001002' => ['title' => 'Administrator Group', 'icon_class' => 'superpowers', 'controller' => 'admin/role-list'],
+        '009001002' => ['title' => 'Administrator Group', 'icon_class' => 'superpowers', 'controller' => 'admin/group-list'],
     ],
     '009002' => [
-        '009002001' => ['title' => 'Navigation List', 'icon_class' => 'leaf', 'controller' => 'navigator/index'],
+        '009002001' => ['title' => 'Navigation List', 'icon_class' => 'navicon', 'controller' => 'navigator/index'],
         '009002002' => ['title' => 'Maintain', 'icon_class' => 'home', 'controller' => 'system/index'],
     ],
 ];

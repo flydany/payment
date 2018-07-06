@@ -3,7 +3,7 @@
 /* @var $this admin\components\View */
 
 use common\helpers\Render;
-use common\models\AdminRole;
+use common\models\PermissionGroup;
 
 $this->title = 'Administrator List';
 $this->addCrumbs('System');
@@ -22,10 +22,6 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
         <span class="input-group-addon"><i class="fa fa-phone-square fa-fw"></i>mobile</span>
         <input type="text" class="form-control tabler" name="mobile" placeholder="mobile">
     </div>
-    <div class="input-group">
-        <span class="input-group-addon"><i class="fa fa-superpowers fa-fw"></i>administrator group</span>
-        <?= Render::select('role_id', AdminRole::identitySelector(), null, ['prompt' => '--', 'class' => 'tabler']) ?>
-    </div>
     <button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button>
 </div>
 
@@ -34,7 +30,6 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
     <tr>
         <th><i class="fa fa-user fa-fw"></i>username</th>
         <th><i class="fa fa-id-card fa-fw"></i>realname</th>
-        <th><i class="fa fa-superpowers fa-fw"></i>administrator group</th>
         <th><i class="fa fa-phone-square fa-fw"></i>mobile</th>
         <th><i class="fa fa-calendar-times-o fa-fw"></i>effect date</th>
         <th><i class="fa fa-clock-o fa-fw"></i>created at</th>
@@ -43,7 +38,7 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
     </thead>
     <tbody>
     <tr>
-        <td colspan="7"><i class="fa fa-search fa-fw"></i>click on the search button to search data.</td>
+        <td colspan="6"><i class="fa fa-search fa-fw"></i>click on the search button to search data.</td>
     </tr>
     </tbody>
 </table>
@@ -74,12 +69,6 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
                 tableHandler.renderCategory({ category: $(param.tabler).find('.role'), select: 'role_id' });
                 // 初始化 删除按钮事件
                 tableHandler.requestSingle({ button: $(param.tabler).find('.delete-data'), url: $('.delete-mult:first').data('href'), isKeep: false });
-                // 初始化 权限修改按钮事件
-                tableHandler.alertDialog({
-                    button: $(param.tabler).find('.edit-permission'),
-                    title: '<i class="fa fa-superpowers"></i>Set Administrator\'s Permission', area: ['90%', '90%'],
-                    src: '/admin/permission-edit'
-                });
             }
         });
     });
@@ -89,13 +78,12 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
     <tr id="tr-{{info.id}}" data-id="{{info.id}}">
         <td>{{info.username}}</td>
         <td>{{info.realname}}</td>
-        <td class="role">{{info.role_id}}</td>
         <td>{{info.mobile}}</td>
         <td>{{info.effect_date}}</td>
         <td>{{info.created_at | dateShow: 'minute'}}</td>
         <td>
             <a class="label label-primary" href="/admin/detail?id={{info.id}}"><i class="fa fa-edit fa-fw"></i>edit</a>
-            <a class="edit-permission label label-success" href="javascript:;"><i class="fa fa-superpowers fa-fw"></i>permission</a>
+            <a class="label label-success" href="/admin/permissions?id={{info.id}}"><i class="fa fa-superpowers fa-fw"></i>permission</a>
             <a class="delete-data label label-danger" href="javascript:;"><i class="fa fa-trash fa-fw"></i>delete</a>
         </td>
     </tr>

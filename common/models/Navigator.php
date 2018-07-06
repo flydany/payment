@@ -114,12 +114,12 @@ class Navigator extends \common\models\ActiveRecord {
     // @rturn boolean
     public function onChange($oldController)
     {
-        
         if($this->isNewRecord || ($oldController == $this->controller)) {
             return true;
         }
-        $sql = "update admin_permission set navigator_path = replace(navigator_path, '{$oldController}~', '{$this->controller}~') where navigator_path like '{$oldController}~%'";
-        return Yii::$app->db->createCommand($sql)->execute();
+        // $sql = "update admin_permission set controller = replace(controller, '{$oldController}~', '{$this->controller}~') where controller like '{$oldController}~%'";
+        // return Yii::$app->db->createCommand($sql)->execute();
+        return Permission::updateAll(['controller' => $this->controller], ['controller' => $oldController]);
     }
 
     /**

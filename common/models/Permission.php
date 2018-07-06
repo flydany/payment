@@ -2,9 +2,10 @@
 
 namespace common\models;
 
+use Yii;
 use yii\db\Query;
 
-class AdminPermission extends ActiveRecord
+class Permission extends ActiveRecord
 {
     // only define rules for those attributes that
     // will receive user inputs.
@@ -66,7 +67,7 @@ class AdminPermission extends ActiveRecord
             return $this->hasOne(Admin::className(), ['id' => 'identity']);
         }
         else {
-            return $this->hasOne(AdminRole::className(), ['id' => 'identity']);
+            return $this->hasOne(PermissionGroup::className(), ['id' => 'identity']);
         }
     }
     

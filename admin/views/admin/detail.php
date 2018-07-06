@@ -4,7 +4,7 @@
 
 use common\helpers\Render;
 use common\models\Admin;
-use common\models\AdminRole;
+use common\models\PermissionGroup;
 
 $this->addCrumbs('System');
 $this->addCrumbs('Administrator List', 'admin/list');
@@ -36,8 +36,8 @@ $this->registerJavascript('@static/flyer/checker.class.js');
         </div>
     </div>
     <div class="form-group checker">
-        <label>administrator group</label>
-        <?= Render::select('role_id', AdminRole::identitySelector(), Render::value($data, 'role_id'), ['prompt' => '--']) ?>
+        <label>permission group</label>
+        <?= Render::select('role_id', PermissionGroup::identitySelector(), Render::value($data, 'role_id'), ['prompt' => '--']) ?>
     </div>
     <div class="form-row">
         <div class="form-group col-md-6 checker">

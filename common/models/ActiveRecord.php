@@ -105,33 +105,13 @@ class ActiveRecord extends \yii\db\ActiveRecord {
     }
     
     /**
-     * 从post请求中获取的数据赋予当前对象
-     * @param $tbKey array 需要转换键名称的对应关系
-     * @param $checkValid boolean 是否需要检测值有效性
-     * @return boolean
-     */
-    public function setPostRequest($tbKey = null, $checkValid = false)
-    {
-        return $this->setAttributesByKey(Yii::$app->request->post(), $tbKey, $checkValid);
-    }
-    /**
-     * 从get请求中获取的数据赋予当前对象
-     * @param $tbKey array 需要转换键名称的对应关系
-     * @param $checkValid boolean 是否需要检测值有效性
-     * @return boolean
-     */
-    public function setGetRequest($tbKey = null, $checkValid = false)
-    {
-        return $this->setAttributesByKey(Yii::$app->request->get(), $tbKey, $checkValid);
-    }
-    /**
      * set Attributes by front -> database key
      * @param $param array 填充的数组
      * @param $tbKey array 需要转换键名称的对应关系
      * @param $checkValid boolean 是否需要检测值有效性
      * @return boolean
      */
-    public function setAttributesByKey($param, $tbKey = null, $checkValid = false)
+    public function loadAttributes($param, $tbKey = null, $checkValid = false)
     {
         if($tbKey) {
             foreach($tbKey as $key => $dbKey) {
@@ -154,7 +134,8 @@ class ActiveRecord extends \yii\db\ActiveRecord {
         //     }
         // }
         // echo '<pre>'; print_r($param); die;
-        return parent::setAttributes($param, $checkValid);
+        parent::setAttributes($param, $checkValid);
+        return $this;
     }
 
     // set Attributes by front -> database key

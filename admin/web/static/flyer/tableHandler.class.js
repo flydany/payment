@@ -176,10 +176,22 @@ var tableHandler = {
                     return false;
                 }
                 // 设置弹层类型
-                param.index = layer.open(param.dialog);
-                // 全屏显示
-                if (param.dialog.type == 1) {
-                    param.dialog.content = '';
+                param.dialog = {
+                    title: param.title, cssClass: "container-fluid",
+                    size: param.size ? param.size : BootstrapDialog.SIZE_LARGE,
+                    type: BootstrapDialog.TYPE_DEFAULT
+                };
+                var url = param.src ? param.src : $(this).attr('data-href');
+                url += ((url.indexOf('?') > 0) ? '&' : '?') + 'id=' + $(param.tr).attr('data-id');
+
+                param.dialog.message = '<iframe src="' + url + '" width="100%" height="100%" style="border:none;"></iframe>';
+                $('body').append(param.dialog.message);
+
+                param.index = BootstrapDialog.show(param.dialog);
+
+                $(param.mthis).attr('data-index', param.index);
+                if ($(param.tr).length) {
+                    $(param.tr).attr('data-index', param.index);
                 }
 
                 // 如果存在事件触发后调用的函数，调用函数

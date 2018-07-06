@@ -3,12 +3,12 @@
 /* @var $this \admin\components\View */
 
 use common\helpers\Render;
-use common\models\AdminRole;
+use common\models\PermissionGroup;
 
 $this->addCrumbs('System');
 $this->addCrumbs('Administrator Group List', 'admin/role-list');
 $this->title = (isset($data['id']) ? 'Update' : 'Insert'). ' Administrator Group';
-$this->setActiveNavigator('admin/role-list');
+$this->setActiveNavigator('admin/group-list');
 
 $this->registerJavascript('@static/flyer/checker.class.js');
 ?>
@@ -17,9 +17,9 @@ $this->registerJavascript('@static/flyer/checker.class.js');
     <p><strong>Heads up!</strong></p>
     <p><?= $this->modifyNotice(Render::value($data, 'id')) ?></p>
 </div>
-<form id="info-detail" method="post" action="/admin/role-<?= isset($data['id']) ? 'update?id='.$data['id'] : 'insert' ?>">
+<form id="info-detail" method="post" action="/admin/group-<?= isset($data['id']) ? 'update?id='.$data['id'] : 'insert' ?>">
     <div class="form-group checker">
-        <label>administrator group title</label>
+        <label>permission group title</label>
         <input class="form-control" type="text" name="title" value="<?= Render::value($data, 'title') ?>" placeholder="identity.">
     </div>
     <div class="form-group checker">
@@ -31,7 +31,7 @@ $this->registerJavascript('@static/flyer/checker.class.js');
         <textarea class="form-control" name="remark" placeholder="email."><?= Render::value($data, 'remark') ?></textarea>
     </div>
     <button type="submit" class="btn btn-primary" id="save-button"><i class="fa fa-save fa-fw"></i>save</button>
-    <textarea id="info-detail-json" data-form="#info-detail" style="display:none;"><?= AdminRole::checker() ?></textarea>
+    <textarea id="info-detail-json" data-form="#info-detail" style="display:none;"><?= PermissionGroup::checker() ?></textarea>
     <input type="hidden" name="_csrf" value="<?=Yii::$app->request->getCsrfToken() ?>">
 </form>
 

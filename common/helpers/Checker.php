@@ -88,12 +88,12 @@ class Checker {
         return implode('。', $this->message);
     }
     // @name 获取规则中预设的异常提示
-    public function getNotice($key, $type, $default = '')
+    public function getNotice($key, $type)
     {
         if(isset($this->rules['param'][$key][2][$type])) {
             return $this->rules['param'][$key][2][$type];
         }
-        return $default;
+        return static::getWarn($type);
     }
 
     // @name 重置配置参数
@@ -153,7 +153,7 @@ class Checker {
             }
             // 目前只需要验证 type = value 类型的数据，后续如果需要可以在此处扩展
             else {
-                throw new \Exception("未知的关联数据验证模式：{$key}", 101004);
+                throw new \Exception("unknown relational data validation model：{$key}", 101004);
             }
         }
     }
@@ -166,7 +166,7 @@ class Checker {
         $required = true;
         foreach($relate[0] as $rule) {
             if( ! is_array($rule)) {
-                throw new \Exception('未知的数据值关联验证规则', 101005);
+                throw new \Exception('unknown data value association validation rules.', 101005);
             }
             // 解析$rule数组
             $name = $rule[0];
@@ -187,7 +187,7 @@ class Checker {
                     $func = "checker_{$type}";
                     // 未定义的验证规则，直接退出返回错误
                     if( ! method_exists($this, $func)) {
-                        throw new \Exception("未定义数据值关联验证方法：{$func}", 101006);
+                        throw new \Exception("undefined data value association verification method：{$func}", 101006);
                     }
                     // 获取数据校验format值
                     $format = isset($rule[2]) ? $rule[2] : '';
@@ -211,13 +211,13 @@ class Checker {
             foreach($relate[1] as $name => $rule) {
                 if(static::checker_int($name) === true) {
                     if( ! isset($this->rules['param'][$rule])) {
-                        throw new \Exception("未知关联数据：{$rule}", 101007);
+                        throw new \Exception("unknown associated data：{$rule}", 101007);
                     }
                     $this->rules['param'][$name][1]['required'] = true;
                 }
                 else {
                     if( ! isset($this->rules['param'][$name])) {
-                        throw new \Exception("未知关联数据：{$name}", 101007);
+                        throw new \Exception("unknown associated data：{$name}", 101007);
                     }
                     foreach($rule as $type => $value) {
                         if(static::checker_int($type) === true) {
@@ -237,7 +237,7 @@ class Checker {
                                 $this->rules['param'][$name][2] = $value;
                             } break;
                             default : {
-                                throw new \Exception("未知关联数据规则改变：{$type}", 101008);
+                                throw new \Exception("change of unknown association data rules：{$type}", 101008);
                             }
                         }
                     }
@@ -246,7 +246,7 @@ class Checker {
         }
     }
     // 根据rule对数据进行验证 【'title(string)', 'rules(array)', 'required(required|true|false)', 'message(array)'】
-    // 如：['电子账号', ['accountid', 'length' => 19, 'required'], ['accountid' => '格式错误', 'length' => '长度错误']]
+    // 如：['电子账号', ['accountid', 'length' => 19, 'required'], ['accountid' => 'formatting error', 'length' => '长度错误']]
     public function verifyData()
     {
         // 预设处理状态为校验通过
@@ -286,7 +286,7 @@ class Checker {
         if($value === '' || $value === null) {
             if($rule[1] == 'required' || isset($rule[1]['required']) || (is_array($rule[1]) && in_array('required', $rule[1]))) {
                 $oneStatus = 'null';
-                $oneMsg[] = $this->getNotice($name, 'required', '不能为空');
+                $oneMsg[] = $this->getNotice($name, 'required');
             }
         }
         else {
@@ -310,26 +310,26 @@ class Checker {
                     if(static::checker_string($format) && substr($format, 0, 1) === ':') {
                         $format = str_replace(':', '', $format);
                         if( ! isset($this->params[$format])) {
-                            throw new \Exception('未知的关联数据键');
+                            throw new \Exception('unknown associated data key.');
                         }
                         $format = $this->params[$format];
                     }
                 }
                 $func = 'checker_'.$type;
                 if( ! method_exists($this, $func)) {
-                    throw new \Exception("未定义数据值关联验证方法：{$func}", 101006);
+                    throw new \Exception("undefined data value association verification method：{$func}", 101006);
                 }
                 if( ! is_array($value)) {
                     if(call_user_func_array([$this, $func], [$value, $format]) !== true) {
                         $oneStatus = 'error';
-                        $oneMsg[] = $this->getNotice($name, $type, static::getWarn($func));
+                        $oneMsg[] = $this->getNotice($name, $type);
                     }
                 }
                 else {
                     foreach($value as $k => $v) {
                         if(($msg = call_user_func_array([$this, $func], [$v, $format])) !== true) {
                             $oneStatus = 'error';
-                            $oneMsg[] = '第'.($k + 1).'条'.$this->getNotice($name, $type, $msg);
+                            $oneMsg[] = ($k + 1).'th('.$v.') '.$this->getNotice($name, $type);
                             if($this->unRecycle()) {
                                 break 2;
                             }
@@ -493,7 +493,7 @@ class Checker {
     {
         $unixTime_1 = strtotime($value);
         if ( ! is_numeric($unixTime_1)) {
-            return '格式错误';
+            return false;
         }
         $checkDate = date($format, $unixTime_1);
         $unixTime_2 = strtotime($checkDate);
@@ -566,22 +566,27 @@ class Checker {
     {
         return preg_match("/^[\w-_@\.]+$/i", $value) ? true : false;
     }
+    // check string is valid for controller ?
+    public static function checker_controller($value, $format = '')
+    {
+        return preg_match("/^[\w-_\/]+$/i", $value) ? true : false;
+    }
     // return check type's warn message
     public static function getWarn($type)
     {
         static $message = [
-            'length' => '长度错误', 'maxlength' => '过长', 'minlength' => '过短', 'tags' => '格式错误',
-            'eq' => '值错误', 'empty' => '值不为空', 'in' => '值错误', 'inkey' => '值错误', 'null' => '值不为空',
-            'lt' => '值过小', 'gt' => '值过大', 'let' => '值过小', 'get' => '值过大',
-            'number' => '格式错误', 'int' => '格式错误', 'string' => '格式错误', 'float' => '格式错误',
-            'bankcard' => '格式错误', 'idcard' => '格式错误', 'mobile' => '格式错误', 'email' => '格式错误',
-            'date' => '格式错误', 'url' => '格式错误', 'ip' => '格式错误', 'qq' => '格式错误', 'phone' => '格式错误',
-            'chinese' => '格式错误', 'english' => '格式错误',
-            'accountid' => '格式错误', 'username' => '格式错误', 'password' => '格式错误', 'status' => '格式错误', 'json' => '格式错误',
-            'preg' => '格式错误',
+            'length' => 'length error', 'maxlength' => 'too long', 'minlength' => 'too short', 'tags' => 'formatting error', 'required' => 'can\'t be empty',
+            'eq' => 'value error', 'empty' => 'value can not be empty', 'in' => 'value error', 'inkey' => 'value error', 'null' => 'value can not be empty',
+            'lt' => 'too small', 'gt' => 'overvalue', 'let' => 'too small', 'get' => 'overvalue',
+            'number' => 'formatting error', 'int' => 'formatting error', 'string' => 'formatting error', 'float' => 'formatting error',
+            'bankcard' => 'formatting error', 'idcard' => 'formatting error', 'mobile' => 'formatting error', 'email' => 'formatting error',
+            'date' => 'formatting error', 'url' => 'formatting error', 'ip' => 'formatting error', 'qq' => 'formatting error', 'phone' => 'formatting error',
+            'chinese' => 'formatting error', 'english' => 'formatting error',
+            'accountid' => 'formatting error', 'username' => 'formatting error', 'password' => 'formatting error', 'status' => 'formatting error', 'json' => 'formatting error',
+            'preg' => 'formatting error',
         ];
         if( ! isset($message[$type])) {
-            return '格式错误';
+            return 'formatting error';
         }
         return $message[$type];
     }

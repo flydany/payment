@@ -17,7 +17,6 @@ class Admin extends ActiveRecord {
             [['username', 'password_digest'], 'string', 'length' => [4, 128]],
             [['mobile'], 'match', 'pattern' => "/^1\d{10}$/"],
             [['username', 'mobile'], 'unique'],
-            [['role_id'], 'integer'],
         ];
     }
     /**
@@ -29,7 +28,6 @@ class Admin extends ActiveRecord {
         return [
             'username' => 'username',
             'password_digest' => 'password',
-            'role_id' => 'administrator group',
             'realname' => 'realname',
             'mobile' => 'mobile',
             'email' => 'email',
@@ -48,7 +46,6 @@ class Admin extends ActiveRecord {
         $rule = [
             'param' => [
                 'username' => ['username', ['username', 'required']],
-                'role_id' => ['administrator group', ['int']],
                 'password_digest' => ['password', ['password']],
                 'realname' => ['realname', ['maxlength' => 64, 'required']],
                 'mobile' => ['mobile', ['mobile', 'required']],
@@ -65,23 +62,42 @@ class Admin extends ActiveRecord {
     }
     
     /**
-     * @name find admin's power role
-     * @param $this->id int 当前对象编号
-     * @return object admin role query
+     * admin's power detail
+     * @function getAdminGroups 获取权组数组
+     * @function getRoleIdentity 获取权组标识数组
+     * @function getPermissionGroups 获取权组数组
+     * @function getAdminPermissions 获取用户权限数组
+     * @function getGroupPermissions 获取权组权限数组
+     * @function getPermissions 获取用户所有权限数组
+     * @function permissionSelector 获取用户所有权限数组
      */
-    public function getAdminRole()
+    public function getAdminGroups()
     {
-        return $this->hasOne(AdminRole::className(), ['id' => 'role_id']);
+        return $this->hasMany(AdminGroup::className(), ['admin_id' => 'id']);
     }
-    
-    /**
-     * @name find admin's power detail
-     * @param $this->id int 当前对象编号
-     * @return object admin permission query
-     */
+    public function getIdentities()
+    {
+        return array_column($this->adminGroups, 'identity');
+    }
+    public function getPermissionGroups()
+    {
+        return PermissionGroup::find()->where(['identity' => $this->identities])->all();
+    }
     public function getAdminPermissions()
     {
-        return $this->hasMany(AdminPermission::className(), ['identity' => 'id']);
+        return $this->hasMany(Permission::className(), ['identity' => 'id']);
+    }
+    public function getGroupPermissions()
+    {
+        return Permission::find()->where(['identity' => $this->identities])->all();
+    }
+    public function getPermissions()
+    {
+        return array_merge($this->adminPermissions, $this->groupPermissions);
+    }
+    public function permissionSelector()
+    {
+        return array_filter(array_column($this->permissions, 'controller'));
     }
     /**
      * @name do some thing before save this admin object
@@ -161,84 +177,36 @@ class Admin extends ActiveRecord {
     
     /**
      * @name change admin's permission
-     * @param $role_id int  - role id
      * @param $permissions array  - permission details (navigator's id)
      * @return array [code, message]
      */
-    public function setPermissions($role_id, $permissions)
+    public function setPermissions($roles, $permissions)
     {
         // 如果用户所属组改变了，则此处更新所属组
-        if($role_id != $this->role_id) {
-            $this->role_id = $role_id;
+        if(implode(', ', $roles) != $this->roles) {
+            $this->adminGroups = implode(', ', $roles);
             $this->updated_at = time();
             if( ! $this->save()) {
                 return false;
             }
         }
         if(empty($permissions)) {
-            return AdminPermission::deleteAll(['identity' => $this->id]);
-        }
-        // 搜索当前选中的权限
-        $newPermissions = [];
-        $navigators = Navigator::find()->where(['id' => $permissions])->with('parent')->orderBy('id ASC')->all();
-        if(empty($navigators)) {
-            return false;
-        }
-        foreach($navigators as $navigator) {
-            if($navigator->parent_id == 0) {
-                $newPermissions[] = $navigator->controller .'~';
-            }
-            else if( ! in_array($navigator->parent->controller .'~', $newPermissions)) {
-                $newPermissions[] = $navigator->parent->controller .'~'. $navigator->controller;
-            }
-        }
-        // 去除 当前选中权限 数组中的 所属组已有的 权限
-        if($this->role_id && $this->adminRole) {
-            // 搜索当前所属组的详细信息
-            $newPermissions = array_diff($newPermissions, ArrayHelper::getColumn($this->adminRole->rolePermissions, 'navigator_path'));
+            return Permission::deleteAll(['identity' => $this->id]);
         }
         // 查询当前用户拥有的权限，进行去重、删除以剔除权限
-        $currPermissions = ArrayHelper::getColumn($this->adminPermissions, 'navigator_path');
-        $newPermissions = array_diff($newPermissions, $currPermissions);
-        $deletePermission = array_diff($currPermissions, $newPermissions);
+        $newPermissions = array_diff($permissions, $this->permissionSelector);
+        $deletePermission = array_diff($this->permissionSelector, $newPermissions);
         if(count($deletePermission) > 0) {
-            if( ! AdminPermission::deleteAll(['identity' => $this->id, 'navigator_path' => $deletePermission])) {
+            if( ! Permission::deleteAll(['identity' => $this->id, 'controller' => $deletePermission])) {
                 return false;
             }
         }
         if(count($newPermissions) > 0) {
-            if( ! AdminPermission::batchInsert($this->id, $newPermissions)) {
+            if( ! Permission::batchInsert($this->id, $newPermissions)) {
                 return false;
             }
         }
         return true;
-    }
-    
-    /**
-     * @name 剔除选中权限中的特定权限
-     * @param $permissions array navigator's controller name
-     * @param $permission string controller name which need remove
-     * @return array
-     */
-    private function removePermission($permissions, $permission)
-    {
-        // 超级权限
-        if($permission == 'super') {
-            $permissions = [];
-        }
-        // 剔除子菜单（不包括自身）
-        if(preg_match("/~$/", $permission)) {
-            foreach($permissions as $navigator_path => $t) {
-                if(strpos($navigator_path, $permission) !== false && ($navigator_path != $permission)) {
-                    unset($permissions[$navigator_path]);
-                }
-            }
-        }
-        // 剔除自身 从选中权限中剔除 此权限
-        if(isset($permissions[$permission])) {
-            unset($permissions[$permission]);
-        }
-        return $permissions;
     }
     
     /**
@@ -248,7 +216,7 @@ class Admin extends ActiveRecord {
      * @param bool $checkValid boolean wether check param valid
      * @return bool
      */
-    public function setAttributesByKey($param, $tbKey = null, $checkValid = true)
+    public function loadAttributes($param, $tbKey = null, $checkValid = true)
     {
         // 如果密码不存在重置密码
         if(isset($tbKey['password']) && empty($param['password'])) {
@@ -257,20 +225,20 @@ class Admin extends ActiveRecord {
         }
 
         // call parent function
-        return parent::setAttributesByKey($param, $tbKey, $checkValid);
+        return parent::loadAttributes($param, $tbKey, $checkValid);
     }
     
     /**
      * @name 校验数据是否存在/允许编辑
      * @param $id int admin's id 需要校验的数据编号
-     * @return bool | object
+     * @return bool|static
      */
     public static function finder($id, $condition = [])
     {
         // id 为必填项，判断数据存在状态
         if($id == 1) {
             // 参数异常，渲染错误页面
-            // return false;
+            return false;
         }
         return parent::finder($id, $condition);
     }
@@ -288,17 +256,16 @@ class Admin extends ActiveRecord {
     public static function checkPermission($controller, $action, $identity = null)
     {
         // 组织权限验证规则
-        $navigator_path = ['super', $controller, $controller .'/'. $action];
-        if( ! $identity && ! Yii::$app->isLogin()) {
+        $controllers = ['super', $controller, $controller .'/'. $action];
+        if(empty($identity) && ! Yii::$app->isLogin()) {
             return false;
         }
         // 组织需要校验的身份信息
-        if( ! $identity) {
-            $identity = [Yii::$app->admin['id']];
-            Yii::$app->admin['adminRole'] && $identity[] = Yii::$app->admin['adminRole']['identity'];
+        if(empty($identity)) {
+            $identity = array_merge([Yii::$app->admin['id']], Yii::$app->admin->identities);
         }
-        // echo '<pre>'; print_r(Yii::$app->admin['adminRole']); die;
+        // echo '<pre>'; print_r(Yii::$app->admin->identities); die;
         // 返回是否存在权限
-        return AdminPermission::find()->where(['controller' => $navigator_path, 'identity' => $identity])->exists();
+        return Permission::find()->where(['controller' => $controllers, 'identity' => $identity])->exists();
     }
 }

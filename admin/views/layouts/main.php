@@ -52,7 +52,7 @@ use yii\helpers\Html;
 <div id="right-panel">
     <div class="wrap">
         <ol class="breadcrumb">
-            <li><i class="fa fa-home fa-fw"></i><a href="/site/index'"><?= $this->context->module->name ?></a></li>
+            <li><i class="fa fa-home fa-fw"></i><a href="/site/index"><?= $this->context->module->name ?></a></li>
             <?php if( ! empty($this->crumbs)) {
                 foreach($this->crumbs as $crumbs) {
                     if($crumbs['url']) {

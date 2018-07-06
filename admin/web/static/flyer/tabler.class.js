@@ -6,7 +6,7 @@
 // 2017-04-02 20:00:00
 
 if(typeof(template) === 'undefined') {
-    jQuery.getScript('/static/art-template/template.js', function() {
+    jQuery.getScript('/static/art.template/template.js', function() {
         // 引入模板类
         template.helper("dateShow", dateShow);
         template.helper("dayShow", dayShow);
@@ -318,7 +318,8 @@ var tabler = function() {
             // 加载信息异常提示
             error: function() {
                 tablerClass.loaded();
-                layer.msg('search program error', { shift: 6 });
+                BootstrapDialog.alert({ message: 'search program error' });
+                // layer.msg('search program error', { shift: 6 });
                 tablerClass.showError('search program error');
             },
             // 数据加载成功处理方法
@@ -346,7 +347,8 @@ var tabler = function() {
                     }
                 }
                 else {
-                    layer.msg(data.message, { shift: 6 });
+                    BootstrapDialog.show({ message: data.message });
+                    // layer.msg(data.message, { shift: 6 });
                     tablerClass.showError(data.message);
                 }
                 // 请求前函数调用

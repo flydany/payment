@@ -5,7 +5,7 @@ namespace common\models;
 use Yii;
 use yii\helpers\ArrayHelper;
 
-class AdminRole extends ActiveRecord {
+class PermissionGroup extends ActiveRecord {
     
     // only define rules for those attributes that
     // will receive user inputs.
@@ -58,7 +58,11 @@ class AdminRole extends ActiveRecord {
      */
     public function getRolePermissions()
     {
-        return $this->hasMany(AdminPermission::className(), ['identity' => 'identity']);
+        return $this->hasMany(Permission::className(), ['identity' => 'identity']);
+    }
+    public function permissionSelector()
+    {
+        return ArrayHelper::map($this->rolePermissions, 'id', 'controller');
     }
     
     // @name 修改admin_role.identity时
@@ -68,7 +72,8 @@ class AdminRole extends ActiveRecord {
     public function onChange($old_identity)
     {
         if($this->identity && ($this->identity != $old_identity)) {
-            return AdminPermission::updateAll(['identity' => $this->identity], ['identity' => $old_identity]);
+            Permission::updateAll(['identity' => $this->identity], ['identity' => $old_identity]);
+            AdminGroup::updateAll(['identity' => $this->identity], ['identity' => $old_identity]);
         }
         return true;
     }
@@ -81,33 +86,19 @@ class AdminRole extends ActiveRecord {
     public function setPermissions($permissions)
     {
         if(empty($permissions)) {
-            return AdminPermission::deleteAll(['identity' => $this->identity]);
-        }
-        // 搜索当前选中的权限
-        $newPermissions = [];
-        $navigators = Navigator::find()->where(['id' => $permissions])->with('parent')->orderBy('id ASC')->all();
-        if(empty($navigators)) {
-            return false;
-        }
-        foreach($navigators as $navigator) {
-            if($navigator->parent_id == 0) {
-                $newPermissions[] = $navigator->controller .'~';
-            }
-            else if( ! in_array($navigator->parent->controller .'~', $newPermissions)) {
-                $newPermissions[] = $navigator->parent->controller .'~'. $navigator->controller;
-            }
+            return Permission::deleteAll(['identity' => $this->identity]);
         }
         // 查询当前权组拥有的权限，进行去重、删除以剔除权限
         $currPermissions = ArrayHelper::getColumn($this->rolePermissions, 'controller');
-        $deletePermissions = array_diff($currPermissions, $newPermissions);
-        $newPermissions = array_diff($newPermissions, $currPermissions);
+        $deletePermissions = array_diff($currPermissions, $permissions);
+        $newPermissions = array_diff($permissions, $currPermissions);
         if(count($deletePermissions) > 0) {
-            if( ! AdminPermission::deleteAll(['identity' => $this->identity, 'controller' => $deletePermissions])) {
+            if( ! Permission::deleteAll(['identity' => $this->identity, 'controller' => $deletePermissions])) {
                 return false;
             }
         }
         if(count($newPermissions) > 0) {
-            if( ! AdminPermission::batchInsert($newPermissions)) {
+            if( ! Permission::batchInsert($this->identity, $newPermissions)) {
                 return false;
             }
         }
@@ -118,6 +109,21 @@ class AdminRole extends ActiveRecord {
     // @return array relation of[id => title]
     public static function identitySelector()
     {
-        return ArrayHelper::map(static::find()->select('id, title')->orderBy('id ASC')->asArray()->all(), 'id', 'title');
+        return ArrayHelper::map(static::find()->select('identity, title')->orderBy('id ASC')->asArray()->all(), 'identity', 'title');
+    }
+    
+    /**
+     * @name 校验数据是否存在/允许编辑
+     * @param $id int admin's id 需要校验的数据编号
+     * @return bool|static
+     */
+    public static function finder($id, $condition = [])
+    {
+        // id 为必填项，判断数据存在状态
+        if($id == 1) {
+            // 参数异常，渲染错误页面
+            return false;
+        }
+        return parent::finder($id, $condition);
     }
 }

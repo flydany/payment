@@ -14,12 +14,12 @@ class AppAsset extends AssetBundle {
     public $baseUrl = '@web/static';
     
     public $depends = [
-        'yii\web\YiiAsset',
         'admin\assets\BootstrapAsset',
     ];
     
     public $css = [
         'font.awesome/css/font-awesome.css',
+        // 'css/theme.css',
         'css/site.css',
     ];
     public $cssOptions = [
@@ -27,7 +27,8 @@ class AppAsset extends AssetBundle {
     ];
     
     public $js = [
-        'layer/layer.js',
+        // 'layer/layer.js',
+        'bootstrap.dialog/js/bootstrap-dialog.min.js',
         'js/common.js',
     ];
     public $jsOptions = [

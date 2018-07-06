@@ -754,6 +754,14 @@ function checker_username(value, format) {
 function checker_password(value, format) {
     return /^.{4,}$/.test(value) ? true : 'formatting error';
 }
+// @name 校验状态格式是否正确
+function checker_status(value, format) {
+    return /^[\w-_@\.]+$/.test(value) ? true : 'formatting error';
+}
+// @name 校验控制器格式是否正确
+function checker_controller(value, format) {
+    return /^[\w-_\/]+$/.test(value) ? true : 'formatting error';
+}
 // @name 校验身份证格式是否正确
 function checker_idcard(value, format) {
     return (

@@ -53,7 +53,7 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
         // 初始化表格异步加载事件
         (new tabler).init({
             // 请求地址
-            url: '/admin/role-list',
+            url: '/admin/group-list',
             // 数据渲染配置
             table: '#info-table', page: '#info-page', template: 'info-template', search: '#info-search', button: '#search-button',
             // 全选、反选按钮、页面加载完毕自动loading
@@ -64,12 +64,6 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
                 tableHandler.renderCategory({ category: $(param.tabler).find('.role'), select: 'role_id' });
                 // 初始化 删除按钮事件
                 tableHandler.requestSingle({ button: $(param.tabler).find('.delete-data'), url: $('.delete-mult:first').data('href'), isKeep: false });
-                // 初始化 权限修改按钮事件
-                tableHandler.alertDialog({
-                    button: $(param.tabler).find('.edit-permission'),
-                    title: '<i class="fa fa-superpowers"></i>Set Power Group\'s Permission', area: ['90%', '90%'],
-                    src: '/admin/role-permissions'
-                });
             }
         });
     });
@@ -81,8 +75,8 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
         <td>{{info.title}}</td>
         <td>{{info.remark}}</td>
         <td>
-            <a class="label label-primary" href="/admin/role-detail?id={{info.id}}"><i class="fa fa-edit fa-fw"></i>edit</a>
-            <a class="edit-permission label label-success" href="/admin/role-permission?id={{info.id}}" target="dialog"><i class="fa fa-superpowers fa-fw"></i>permission</a>
+            <a class="label label-primary" href="/admin/group-detail?id={{info.id}}"><i class="fa fa-edit fa-fw"></i>edit</a>
+            <a class="label label-success" href="/admin/group-permissions?id={{info.id}}"><i class="fa fa-superpowers fa-fw"></i>permission</a>
             <a class="delete-data label label-danger" href="javascript:;"><i class="fa fa-trash fa-fw"></i>delete</a>
         </td>
     </tr>
