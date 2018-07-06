@@ -12,6 +12,9 @@ $this->registerJavascript('@static/flyer/checker.class.js');
 $this->registerJavascript('@static/flyer/tableHandler.class.js');
 
 $this->registerCss('
+    .checkbox-margin {
+        margin-bottom:15px;
+    }
     .checkbox-margin label {
         margin:5px 0;
     }
@@ -35,7 +38,7 @@ $this->registerCss('
                 foreach($navigators[$id] as $sid => $navigator) {
                     ?>
                     <div class="checkbox-margin" id="sid-<?= $sid ?>" data-toggle="buttons">
-                        <label class="btn btn-primary col-lg-12 text-left">
+                        <label class="btn btn-primary col-xs-12 text-left">
                             <i class="fa fa-<?= $navigator['icon_class'] ?> fa-fw"></i><input type="checkbox" autocomplete="off"> <?= $navigator['title'] ?>
                         </label>
                         <?php
