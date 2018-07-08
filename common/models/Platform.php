@@ -12,12 +12,12 @@ class Platform extends ActiveRecord {
     const PlatformBaofoo = 3;
     const PlatformReapal = 4;
     const PlatformFuiou = 5;
-    public static $stateSelector = [
-        self::PlatformYeepay => ['title' => '易宝', 'status' => 'green'],
-        self::PlatformAllin => ['title' => '通联', 'status' => 'blue'],
-        self::PlatformBaofoo => ['title' => '宝付', 'status' => 'red'],
-        self::PlatformReapal => ['title' => '融宝', 'status' => 'blue'],
-        self::PlatformFuiou => ['title' => '富友', 'status' => 'green'],
+    public static $platformSelector = [
+        self::PlatformYeepay => '易宝',
+        self::PlatformAllin => '通联',
+        self::PlatformBaofoo => '宝付',
+        self::PlatformReapal => '融宝',
+        self::PlatformFuiou => '富友',
     ];
 
     // 支付类型常量
@@ -27,10 +27,9 @@ class Platform extends ActiveRecord {
     const PaytypeDebit = 3;
     const PaytypeAgreement = 4;
     public static $paytypeSelector = [
-        self::PaytypeFitAll => ['title' => '全适用', 'status' => 'gray'],
-        self::PaytypeRecharge => ['title' => '充值', 'status' => 'blue'],
-        self::PaytypeWithdarw => ['title' => '提现', 'status' => 'red'],
-        self::PaytypeDebit => ['title' => '代扣', 'status' => 'purple'],
-        self::PaytypeAgreement => ['title' => '协议支付', 'status' => 'green'],
+        self::PaytypeRecharge => '充值',
+        self::PaytypeWithdarw => '提现',
+        self::PaytypeDebit => '代扣',
+        self::PaytypeAgreement => '协议支付',
     ];
 }

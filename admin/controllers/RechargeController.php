@@ -3,31 +3,30 @@
 namespace admin\controllers;
 
 use common\helpers\Checker;
-use common\helpers\Pager;
+use common\helpers\Render;
+use common\models\Platform;
 use common\models\Recharge;
 use common\models\RechargeLog;
 
 class RechargeController extends Controller {
 
-    public $parent = 'finance';
-
     /**
      * @name showing recharge order list
      * @return string
      */
-    public function actionRechargeList()
+    public function actionList()
     {
-        if( ! $this->request->isAjax) {
-            return $this->render('recharge-list');
-        }
         $params = $this->request->post();
+        if($this->request->isGet) {
+            return $this->render('list', ['params' => $params]);
+        }
         $rules = [
             'param' => [
-                'user_id' => ['用户编号', ['int']],
-                'type' => ['充值方式', ['inkey' => Recharge::$platformSelector]],
-                'start' => ['开始时间', ['date' => 'Y-m-d']],
-                'end' => ['结束时间', ['date' => 'Y-m-d']],
-                'status' => ['状态', ['int']],
+                'bind_id' => ['bind_number', ['int']],
+                'platform_id' => ['platform', ['in' => array_keys(Platform::$platformSelector)]],
+                'start' => ['start time', ['date' => 'Y-m-d H:i:s']],
+                'end' => ['end time', ['date' => 'Y-m-d H:i:s']],
+                'status' => ['status', ['int']],
             ],
         ];
         $checker = Checker::authentication($rules, $params);
@@ -41,8 +40,9 @@ class RechargeController extends Controller {
         }
         $params['deleted_at'] = 0;
         $query = Recharge::filterConditions(Recharge::initCondition(['user_id', 'type', ['created_at', '>=', 'start'], ['created_at', '<=', 'end'], 'status', 'deleted_at'], $params));
-        $data['page'] = Pager::page(['page_count' => 20, 'total_count' => $query->count()]);
-        $data['infos'] = $query->orderBy('id desc')->with('user')->offset(Pager::offset())->limit(Pager::limit())->asArray()->all();
+        $pagination = Render::pagination((clone $query)->count());
+        $data['infos'] = $query->orderBy('id desc')->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
+        $data['page'] = Render::pager($pagination);
         return $this->json($data);
     }
 

@@ -8,6 +8,7 @@
 namespace admin\controllers;
 
 use Yii;
+use yii\base\Model;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 
@@ -42,7 +43,7 @@ class Controller extends \yii\web\Controller {
     }
 
     // exit with json data
-    // 支持
+    // 支持方式
     // code.string message.string data.array
     // data.array (success)
     // data.array['code', 'message', 'data'] (error)
@@ -160,11 +161,14 @@ class Controller extends \yii\web\Controller {
         }
         return $this->redirect([Url::to('@web/welcome/skip'), 'message' => $message, 'skip' => $skip]);
     }
-    // @name 获取model错误描述
-    // @return string
-    public function buildModelError($model)
+    /**
+     * 获取model错误描述
+     * @param Model $model 实例化的模型
+     * @return string
+     */
+    public function modelMessage($model)
     {
-        return implode('。', ArrayHelper::getColumn($model->getErrors(), '0')).'（Param Error）';
+        return implode('. ', ArrayHelper::getColumn($model->getErrors(), '0'));
     }
     
     

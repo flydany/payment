@@ -1,6 +1,6 @@
 <?php
 
-/* @var $this \yii\web\View */
+/* @var $this \admin\components\View */
 /* @var $content string */
 
 use yii\helpers\Url;

@@ -109,7 +109,7 @@ class ActiveRecord extends \yii\db\ActiveRecord {
      * @param $param array 填充的数组
      * @param $tbKey array 需要转换键名称的对应关系
      * @param $checkValid boolean 是否需要检测值有效性
-     * @return boolean
+     * @return static
      */
     public function loadAttributes($param, $tbKey = null, $checkValid = false)
     {

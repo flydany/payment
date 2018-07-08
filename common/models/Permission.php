@@ -4,9 +4,10 @@ namespace common\models;
 
 use Yii;
 use yii\db\Query;
+use yii\helpers\ArrayHelper;
 
-class Permission extends ActiveRecord
-{
+class Permission extends ActiveRecord {
+    
     // only define rules for those attributes that
     // will receive user inputs.
     public function rules()
@@ -33,7 +34,7 @@ class Permission extends ActiveRecord
     public function getControllerTitle()
     {
         if(strpos($this->controller, '/') >= 0) {
-            return explode('/', $this->controller)[0];
+            return preg_replace("/\/[\w-_]+$/", '', $this->controller);
         }
         else {
             return '';
@@ -46,8 +47,8 @@ class Permission extends ActiveRecord
     public function getActionTitle()
     {
         $path = explode('/', $this->controller);
-        if(count($path) == 2) {
-            return $path[1];
+        if(count($path) >= 2) {
+            return array_pop($path);
         }
         else {
             return '';
@@ -58,7 +59,6 @@ class Permission extends ActiveRecord
      * check power For
      * 'user': 属于用户
      * 'role': 属于权组
-     *
      * return 'user' || 'role' object
      */
     public function getOwner()
@@ -72,67 +72,65 @@ class Permission extends ActiveRecord
     }
     
     /**
+     * 设置权限
+     * @param string $identity 标识
+     * @param array $permissions 权限列表
+     * @param array $currentPermissions 当前已有的权限列表
+     * @return boolean|integer
+     */
+    public static function setPermissions($identity, $permissions, $currentPermissions)
+    {
+        if(empty($identity)) {
+            return false;
+        }
+        if(empty($permissions)) {
+            static::deleteAll(['identity' => $identity]);
+            return true;
+        }
+        // 查询当前用户拥有的权限，进行去重、删除以剔除权限
+        $newPermissions = array_diff($permissions, $currentPermissions);
+        $deletePermission = array_diff($currentPermissions, $permissions);
+        if(count($deletePermission) > 0) {
+            static::deleteAll(['identity' => $identity, 'controller' => $deletePermission]);
+        }
+        if(count($newPermissions) > 0) {
+            static::batchInsert($identity, $newPermissions);
+        }
+        return true;
+    }
+    
+    /**
      * 批量插入导航权限
+     * @param  string $identity 标识
      * @param array $permissions 导航权限列表
      * @return boolean
      */
     public static function batchInsert($identity, $permissions)
     {
-        if(empty($permissions)) {
+        if(empty($identity) || empty($permissions)) {
             return false;
         }
         $time = time();
         foreach($permissions as $controller) {
             $param[] = [$identity, $controller, $time, $time];
         }
-        return Yii::$app->db->createCommand()->batchInsert('admin_permission', ['identity', 'controller', 'created_at', 'updated_at'], $param)->execute();
+        return Yii::$app->db->createCommand()->batchInsert(static::tableName(), [
+            'identity', 'controller', 'created_at', 'updated_at'
+        ], $param)->execute();
     }
     
     /**
-     * 获取权限组、用户的所有权限 JOIN TABLE navigator FIND navigator id
-     * 顶级栏目：【子栏目：true】 仅有某个子栏目的权限
-     * 顶级栏目：super 有当前顶级栏目下的所有权限
-     * super 有当前系统的所有权限
-     * return {"1":{"11":true},"4":{"super":true}}
+     * 根据标识获取权限
+     * @param string|array $identity 标识
+     * @return array
      */
-    public static function permissionSelector($identity)
+    public static function identityPermissions($identity)
     {
-        $permissions = (new Query)->select(['admin_permission.id', 'admin_permission.controller', 'admin_permission.identity', 'controller.id controller_id', 'method.id method_id', 'method.parent_id _controller_id'])
-            ->from('admin_permission')
-            ->leftJoin('navigator controller', 'controller.parent_id = 0 and controller.controller = substring_index(admin_permission.controller, \'~\', 1)')
-            ->leftJoin('navigator method', 'method.controller = replace(admin_permission.controller, \'~\', \'/\') or (method.parent_id = controller.id and method.controller = substring_index(admin_permission.controller, \'~\', -1))')
-            ->where(['admin_permission.identity' => $identity])->all();
-        
-        $data = [];
-        if(count($permissions)) {
-            foreach($permissions as $permission) {
-                $controller_id = $permission['controller_id'];
-                if( ! $controller_id) {
-                    $controller_id = $permission['_controller_id'];
-                }
-                $method_id = $permission['method_id'];
-                // 超级管理员
-                if($permission['controller'] == 'super') {
-                    $data = ['super' => true];
-                    break;
-                }
-                else {
-                    // 子系统 超级管理员
-                    if( ! $method_id) {
-                        $data[$controller_id] = ['super' => true];
-                    }
-                    else {
-                        if(isset($data[$controller_id]['super'])) {
-                            continue;
-                        }
-                        // 普通管理员
-                        else {
-                            $data[$controller_id][$method_id] = true;
-                        }
-                    }
-                }
-            }
-        }
-        return $data;
+        return array_map(function($data) {
+            return array_values($data);
+        }, ArrayHelper::map(
+            Permission::find()->select('id, identity, controller')->where(['identity' => $identity])->asArray()->all(),
+            'id', 'controller', 'identity'
+        ));
     }
 }

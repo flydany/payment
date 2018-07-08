@@ -1,12 +1,14 @@
 <?php
 
-/* @var $this yii\web\View */
+/* @var $this \admin\components\View */
 
 use yii\helpers\ArrayHelper;
 use common\models\Navigator;
 
 $this->title = 'Administrator Group Permissions';
 $this->addCrumbs('System');
+$this->addCrumbs('Administrator Group List', 'admin/group-list');
+$this->addCrumbs('Update Administrator Group', 'admin/group-detail?id='.$role->id);
 $this->setActiveNavigator('admin/group-list');
 
 $this->registerJavascript('@static/flyer/checker.class.js');
@@ -15,12 +17,12 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
 
 <div class="alert alert-info mt" role="alert">
     <p><strong>Heads up!</strong></p>
-    <p>set permission group：<i class="icon-group"></i> <?= $role->title ?> 's permission.</p>
+    <p>set permission group: <i class="fa fa-superpowers fa-fw"></i><?= $role->title ?> 's permission.</p>
     <p>1. when selecting a column, all permissions under the current column are included, including other rights that may be extended later.</p>
 </div>
 <form id="info-detail" action="/admin/group-permissions?id=<?= $role->id ?>" method="post">
     <?php
-    $already = $role->permissionSelector();
+    $already = $role->permissionSelector;
     $navigators = require(Yii::getAlias('@admin/config/navigator.php'));
     foreach($navigators[0] as $id => $part) {
         ?>

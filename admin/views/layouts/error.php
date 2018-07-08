@@ -1,6 +1,6 @@
 <?php
 
-/* @var $this yii\web\View */
+/* @var $this \admin\components\View */
 
 use yii\helpers\Html;
 

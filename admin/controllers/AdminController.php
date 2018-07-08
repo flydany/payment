@@ -102,13 +102,13 @@ class AdminController extends Controller {
      */
     public function actionDelete()
     {
-        if( ! (($ids = $this->request->post('id')) || ($ids = $this->request->post('ids')))) {
+        if( ! ($ids = $this->request->post('id'))) {
             return $this->json('invalid.param', 'you must choice at least one administrator.');
         }
-        else if(false && ('1' == $ids || (is_array($ids) && in_array('1', $ids)))) {
+        if('1' == $ids || (is_array($ids) && in_array('1', $ids))) {
             return $this->json('invalid.param', 'system administrator can\'t be modify.');
         }
-        else if(Admin::trashAll(['id' => $ids])) {
+        if(Admin::trashAll(['id' => $ids])) {
             return $this->json(SuccessCode, 'administrator delete successful.');
         }
         return $this->json('system.error', 'administrator delete failed.');
@@ -130,7 +130,7 @@ class AdminController extends Controller {
         // update admin's permission
         $rule = [
             'param' => [
-                'role' => ['permission groups', ['int', 'required']],
+                'identities' => ['permission groups', ['status', 'required']],
                 'permissions' => ['permissions', ['controller']],
             ],
         ];
@@ -139,7 +139,7 @@ class AdminController extends Controller {
         if($checker['code'] != Checker::SuccessCode) {
             return $this->error($checker['message'], 'admin/group-permissions?id='.$admin->id);
         }
-        if($admin->setPermissions($param['permissions'])) {
+        if($admin->setPermissions($param['identities'], $param['permissions'])) {
             return $this->success('administrator ('.$admin->username.') permission update successful.', [
                 ['title' => 'go to administrator list page', 'url' => 'admin/group-list'],
                 ['title' => 'edit administrator page', 'url' => 'admin/detail?id='.$admin->id],
@@ -236,7 +236,7 @@ class AdminController extends Controller {
      */
     public function actionGroupDelete()
     {
-        if( ! (($ids = $this->request->post('id')) || ($ids = $this->request->post('ids')))) {
+        if( ! ($ids = $this->request->post('id'))) {
             return $this->json('invalid.param', 'you must choice at least one permission group.');
         }
         if('1' == $ids || (is_array($ids) && in_array('1', $ids))) {
@@ -281,24 +281,5 @@ class AdminController extends Controller {
             ]);
         }
         return $this->error('permission group ('.$adminRole->title.') permission update failed.', 'admin/group-permissions?id='.$adminRole->id);
-    }
-
-    /**
-     * role permission detail
-     * 顶级栏目：子栏目：true 仅有子栏目权限
-     * 顶级栏目：super 有当前子栏目下的所有权限
-     * super 有当前系统的所有权限
-     * return {"infos":{"1":{"11":true},"4":{"super":true}},"code":200,"msg":""}
-     */
-    public function actionPermissionDetail()
-    {
-        if( ! $id = $this->request->post('id')) {
-            return $this->json('invalid.param', 'you must choice at least one administrator or permission group.');
-        }
-        $admin = false;
-        if(is_numeric($id)) {
-            $admin = Admin::find()->select('id, role_id')->where(['id' => $id])->asArray()->one();
-        }
-        return $this->json(['infos' => Permission::permissionSelector($id), 'admin' => $admin]);
     }
 }

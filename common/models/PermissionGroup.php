@@ -13,14 +13,13 @@ class PermissionGroup extends ActiveRecord {
     {
         return [
             [['title', 'identity'], 'required'],
-            [['sort', 'deleted_at'], 'integer'],
+            [['deleted_at'], 'integer'],
             [['title', 'identity'], 'string', 'max' => 128],
-            [['identity'], 'match', 'pattern' => "/^[\w\-\_\.]+$/"],
             [['remark'], 'string', 'max' => 255]
         ];
     }
     /**
-     * @name 字段名称
+     * 字段名称
      * @return array
      */
     public function attributeLabels()
@@ -28,14 +27,13 @@ class PermissionGroup extends ActiveRecord {
         return [
             'title' => 'administrator group title',
             'identity' => 'identity',
-            'sort' => 'sort',
             'remark' => 'remark',
             'deleted_at' => 'deleted at',
         ];
     }
     
     /**
-     * @name update & insert data check config for html
+     * update & insert data check config for html
      * @param $type string 页面操作类型
      * @param $encodeJson boolean 是否转成json串
      * @return string | array
@@ -45,7 +43,7 @@ class PermissionGroup extends ActiveRecord {
         $rule = [
             'param' => [
                 'title' => ['administrator group title', ['maxlength' => 128, 'required']],
-                'identity' => ['identity', ['preg' => '/^[\w\-_\.]{1,}$/', 'required']],
+                'identity' => ['identity', ['status', 'required']],
                 'remark' => ['remark', ['maxlength' => 255]],
             ]
         ];
@@ -53,19 +51,19 @@ class PermissionGroup extends ActiveRecord {
     }
 
     /**
-     * @name find permissions list
+     * find permissions list
      * @return object list
      */
-    public function getRolePermissions()
+    public function getPermissions()
     {
         return $this->hasMany(Permission::className(), ['identity' => 'identity']);
     }
-    public function permissionSelector()
+    public function getPermissionSelector()
     {
-        return ArrayHelper::map($this->rolePermissions, 'id', 'controller');
+        return array_column($this->permissions, 'controller');
     }
     
-    // @name 修改admin_role.identity时
+    // 修改admin_role.identity时
     // @describe 需要更新admin_permission的identity字段
     // @param $old_identity string 老的权限标识
     // @rturn boolean
@@ -73,47 +71,30 @@ class PermissionGroup extends ActiveRecord {
     {
         if($this->identity && ($this->identity != $old_identity)) {
             Permission::updateAll(['identity' => $this->identity], ['identity' => $old_identity]);
-            AdminGroup::updateAll(['identity' => $this->identity], ['identity' => $old_identity]);
+            AdminPermissionGroup::updateAll(['identity' => $this->identity], ['identity' => $old_identity]);
         }
         return true;
     }
     
     /**
-     * @name change admin's permission
-     * @param $permissions array  - permission details (navigator's id)
-     * @return array [code, message]
+     * change admin's permission
+     * @param array $permissions permission details (navigator's id)
+     * @return boolean
      */
     public function setPermissions($permissions)
     {
-        if(empty($permissions)) {
-            return Permission::deleteAll(['identity' => $this->identity]);
-        }
-        // 查询当前权组拥有的权限，进行去重、删除以剔除权限
-        $currPermissions = ArrayHelper::getColumn($this->rolePermissions, 'controller');
-        $deletePermissions = array_diff($currPermissions, $permissions);
-        $newPermissions = array_diff($permissions, $currPermissions);
-        if(count($deletePermissions) > 0) {
-            if( ! Permission::deleteAll(['identity' => $this->identity, 'controller' => $deletePermissions])) {
-                return false;
-            }
-        }
-        if(count($newPermissions) > 0) {
-            if( ! Permission::batchInsert($this->identity, $newPermissions)) {
-                return false;
-            }
-        }
-        return true;
+        return Permission::setPermissions($this->identity, $permissions, $this->permissionSelector);
     }
     
-    // @name for select use
-    // @return array relation of[id => title]
+    // for select use
+    // @return array relation of[identity => title]
     public static function identitySelector()
     {
         return ArrayHelper::map(static::find()->select('identity, title')->orderBy('id ASC')->asArray()->all(), 'identity', 'title');
     }
     
     /**
-     * @name 校验数据是否存在/允许编辑
+     * 校验数据是否存在/允许编辑
      * @param $id int admin's id 需要校验的数据编号
      * @return bool|static
      */

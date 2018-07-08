@@ -1,14 +1,11 @@
 <?php
 
-/* @var $this \yii\web\View */
-/* @var $content string */
+/* @var $this \admin\components\View */
 
 use yii\helpers\ArrayHelper;
 use common\helpers\Render;
 
-?>
-
-<style>
+$this->registerCss('
     #website-name {
         height:57px;
         line-height:57px;
@@ -158,8 +155,8 @@ use common\helpers\Render;
         padding: 8px;
         color:rgba(255,255,255,.75);
     }
-</style>
-<script>
+');
+$this->registerJs("
     jQuery(document).ready(function() {
         jQuery('#sidebar-menu .side-menu > li > a').bind('click', function() {
             var li = jQuery(this).parent('li');
@@ -172,7 +169,9 @@ use common\helpers\Render;
             }
         });
     });
-</script>
+");
+?>
+
 <div class="clearfix">
     <div class="clearfix" id="website-name">
         <a href="/index.php"><i class="fa fa-paw"></i> <span><?= $this->context->module->name ?></span></a>

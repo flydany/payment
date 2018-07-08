@@ -14,16 +14,19 @@ class Navigator extends \common\models\ActiveRecord {
     // @name 设置导航功能类型
     const TypeFunction = 0;
     const TypeNavigator = 1;
-    const TypeSublime = 2;
+    public static $typeSelector = [
+        self::TypeFunction => '功能',
+        self::TypeNavigator => '菜单',
+    ];
     
     // @name 地址跳转方式
-    const TargetBlank = '_blank';
-    const TargetStatic = '_static';
-    const TargetSelf = '_self';
+    const TargetStatic = 0;
+    const TargetSelf = 1;
+    const TargetBlank = 2;
     public static $targetSelector = [
-        self::TargetBlank => ['title' => '新窗口', 'status' => 'red'],
-        self::TargetStatic => ['title' => '默认', 'status' => 'blue'],
-        self::TargetSelf => ['title' => '当前窗口', 'status' => 'green'],
+        self::TargetStatic => '_static',
+        self::TargetSelf => '_self',
+        self::TargetBlank => '_blank',
     ];
     
     // only define rules for those attributes that
@@ -32,8 +35,8 @@ class Navigator extends \common\models\ActiveRecord {
     {
         return [
             [['title', 'parent_id', 'top_id', 'controller'], 'required'],
-            [['parent_id', 'top_id', 'type', 'sort', 'flag', 'type', 'deleted_at'], 'integer'],
-            [['path', 'target', 'icon_class'], 'string', 'max' => 64],
+            [['parent_id', 'top_id', 'type', 'target', 'sort', 'status', 'deleted_at'], 'integer'],
+            [['path', 'icon_class'], 'string', 'max' => 64],
             [['type'], 'default', 'value' => static::TypeFunction],
             [['remark'], 'string', 'max' => 255]
         ];
@@ -45,18 +48,18 @@ class Navigator extends \common\models\ActiveRecord {
     public function attributeLabels()
     {
         return [
-            'title' => '标题',
-            'parent_id' => '父栏目',
-            'top_id' => '顶级父栏',
-            'path' => '路径',
-            'type' => '栏目类型',
-            'controller' => '控制器',
-            'target' => '打开方式',
-            'sort' => '排序',
-            'flag' => '是否显示',
-            'icon_class' => '图标',
-            'deleted_at' => '删除时间',
-            'remark' => '备注',
+            'title' => 'title',
+            'parent_id' => 'parent navigator number',
+            'top_id' => 'top navigator number',
+            'path' => 'navigator path',
+            'type' => 'navigator type',
+            'controller' => 'controller',
+            'target' => 'target',
+            'sort' => 'sort',
+            'icon_class' => 'icon class',
+            'remark' => 'remark',
+            'status' => 'status',
+            'deleted_at' => 'deleted at',
         ];
     }
     /**
@@ -69,18 +72,18 @@ class Navigator extends \common\models\ActiveRecord {
     {
         $rule = [
             'param' => [
-                'title' => ['菜单标题', ['maxlength' => 128, 'required']],
-                'controller' => ['控制器', ['preg' => '/^[\w\-\_\/]+$/', 'required']],
-                'icon_class' => ['小图标', ['preg' => '/^[\w\-\_]+$/']],
-                'type' => ['菜单类型', ['int', 'default' => '0']],
-                'target' => ['是否打开新窗口', ['preg' => '/^\_(static|blank)$/', 'default' => '_static']],
-                'sort' => ['排序', ['int', 'required']],
-                'remark' => ['备注', ['maxlength' => 255]],
+                'title' => ['title', ['maxlength' => 128, 'required']],
+                'controller' => ['controller', ['controller', 'required']],
+                'icon_class' => ['icon class', ['maxlength' => 64]],
+                'type' => ['navigator type', ['int', 'default' => '0']],
+                'target' => ['target', ['in' => array_keys(static::$targetSelector), 'default' => '_static']],
+                'sort' => ['sort', ['int', 'required']],
+                'remark' => ['remark', ['maxlength' => 255]],
             ]
         ];
         if($type == 'insert') {
-            $rule['param']['parent_id'] = ['所属菜单', ['int', 'required']];
-            $rule['param']['top_id'] = ['顶级父栏目', ['int', 'required']];
+            $rule['param']['parent_id'] = ['parent navigator number', ['int', 'required']];
+            $rule['param']['top_id'] = ['top navigator number', ['int', 'required']];
         }
         return $rule;
     }
@@ -93,12 +96,17 @@ class Navigator extends \common\models\ActiveRecord {
         // 插入前 对 path 赋值
         if(parent::beforeSave($insert) && $this->isNewRecord) {
             // 初始化路径
-            $this->path = $this->getPath();
+            $this->path = $this->initPath();
         }
         return true;
     }
     
-    // 修改navigator.controller时，需要更新admin_navigator的navigator_path字段
+    /**
+     * 保存导航时，调用导航的onChange事件
+     * @param boolean $insert 更新的数据
+     * @param array $changedAttributes 改变的属性
+     * @return boolean|integer|void
+     */
     public function afterSave($insert, $changedAttributes)
     {
         // echo $changedAttributes['controller'];
@@ -108,22 +116,22 @@ class Navigator extends \common\models\ActiveRecord {
         return true;
     }
     
-    // @name 修改navigator.controller时
-    // @describe 需要更新admin_permission的navigator_path字段
-    // @param array $changedAttributes 修改的数据
-    // @rturn boolean
+    /**
+     * 控制器改变时，修改关联表
+     * @param string $oldController 原控制器名称
+     * @return boolean|integer
+     */
     public function onChange($oldController)
     {
         if($this->isNewRecord || ($oldController == $this->controller)) {
             return true;
         }
-        // $sql = "update admin_permission set controller = replace(controller, '{$oldController}~', '{$this->controller}~') where controller like '{$oldController}~%'";
-        // return Yii::$app->db->createCommand($sql)->execute();
         return Permission::updateAll(['controller' => $this->controller], ['controller' => $oldController]);
     }
 
     /**
-     * find init path
+     * find top navigator
+     * @return static
      */
     public function getTop()
     {
@@ -131,7 +139,8 @@ class Navigator extends \common\models\ActiveRecord {
     }
     
     /**
-     * find init path
+     * find parent navigator
+     * @return static
      */
     public function getParent()
     {
@@ -139,12 +148,13 @@ class Navigator extends \common\models\ActiveRecord {
     }
     
     /**
-     * find init path
+     * build controller path
+     * @return string
      */
-    public function getPath()
+    public function initPath()
     {
-        if($navigator = $this->getParent()->one()) {
-            return $navigator->path.$this->parent_id.',';
+        if($this->parent) {
+            return $this->parent->path.$this->parent_id.',';
         }
         else {
             return ',0,';
@@ -152,7 +162,16 @@ class Navigator extends \common\models\ActiveRecord {
     }
     
     /**
-     * 控制器列表
+     * 导航列表结构
+     * @return array
+     */
+    public static function controllers()
+    {
+        return ArrayHelper::index(Navigator::find()->orderBy('sort asc')->asArray()->all(), 'id', 'parent_id');
+    }
+    
+    /**
+     * 导航列表结构简洁版
      * @return array
      */
     public static function controllerSelector()

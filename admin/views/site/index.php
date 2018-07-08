@@ -4,7 +4,7 @@
 use common\helpers\Render;
 use common\models\Admin;
 
-$this->title = '首页';
+$this->title = 'welcome';
 
 ?>
 

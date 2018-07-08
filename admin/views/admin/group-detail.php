@@ -6,7 +6,7 @@ use common\helpers\Render;
 use common\models\PermissionGroup;
 
 $this->addCrumbs('System');
-$this->addCrumbs('Administrator Group List', 'admin/role-list');
+$this->addCrumbs('Administrator Group List', 'admin/group-list');
 $this->title = (isset($data['id']) ? 'Update' : 'Insert'). ' Administrator Group';
 $this->setActiveNavigator('admin/group-list');
 

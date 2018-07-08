@@ -45,7 +45,7 @@ return [
         '009001002' => ['title' => 'Administrator Group', 'icon_class' => 'superpowers', 'controller' => 'admin/group-list'],
     ],
     '009002' => [
-        '009002001' => ['title' => 'Navigation List', 'icon_class' => 'navicon', 'controller' => 'navigator/index'],
+        '009002001' => ['title' => 'Navigation List', 'icon_class' => 'navicon', 'controller' => 'navigator/list'],
         '009002002' => ['title' => 'Maintain', 'icon_class' => 'home', 'controller' => 'system/index'],
     ],
 ];

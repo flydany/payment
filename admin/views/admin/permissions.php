@@ -1,13 +1,17 @@
 <?php
 
-/* @var $this yii\web\View */
+/* @var $this \admin\components\View */
+/* @var $admin \common\models\Admin */
 
 use yii\helpers\ArrayHelper;
+use common\models\Permission;
 use common\models\PermissionGroup;
 
 $this->title = 'Administrator Group Permissions';
 $this->addCrumbs('System');
-$this->setActiveNavigator('admin/role-list');
+$this->addCrumbs('Administrator List', 'admin/list');
+$this->addCrumbs('Update Administrator', 'admin/detail?id='.$admin->id);
+$this->setActiveNavigator('admin/list');
 
 $this->registerJavascript('@static/flyer/checker.class.js');
 $this->registerJavascript('@static/flyer/tableHandler.class.js');
@@ -15,7 +19,7 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
 
 <div class="alert alert-info mt" role="alert">
     <p><strong>Heads up!</strong></p>
-    <p>set administrator：<i class="icon-group"></i> <?= $admin->username ?> 's permission.</p>
+    <p>set administrator: <i class="fa fa-user fa-fw"></i><?= $admin->username ?> 's permission.</p>
     <p>1. when selecting a column, all permissions under the current column are included, including other rights that may be extended later.</p>
     <p>2. after set user's permission group, you also can make individual permission for this user individually.</p>
 </div>
@@ -27,7 +31,7 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
             foreach(PermissionGroup::identitySelector() as $identity => $title) {
                 ?>
                 <div class="checkbox">
-                    <input id="gid-<?= $identity ?>" type="checkbox" name="permissionGroups[]" value="<?= $identity ?>"<?= in_array($identity, $admin->identities) ? ' checked' : '' ?> autocomplete="off">
+                    <input class="permission-group" id="gid-<?= $identity ?>" type="checkbox" name="identities[]" value="<?= $identity ?>"<?= in_array($identity, $admin->identities) ? ' checked' : '' ?> autocomplete="off">
                     <label class="btn btn-default" for="gid-<?= $identity ?>" style="text-align:left;"><i class="fa fa-superpowers fa-fw"></i><?= $title ?></label>
                 </div>
                 <?php
@@ -36,7 +40,6 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
         </div>
     </div>
     <?php
-    $already = $admin->permissionSelector();
     $navigators = require(Yii::getAlias('@admin/config/navigator.php'));
     foreach($navigators[0] as $id => $part) {
         ?>
@@ -54,20 +57,16 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
                     </div>
                     <?php
                     if( ! empty($navigators[$sid])) {
-                        ?>
-                        <?php
                         foreach($navigators[$sid] as $tid => $subNavigator) {
                             ?>
                             <div class="checkbox">
-                                <input id="tid-<?= $tid ?>" type="checkbox" name="permissions[]" value="<?= $subNavigator['controller'] ?>"<?= in_array($subNavigator['controller'], $already) ? ' checked' : '' ?> autocomplete="off">
+                                <input class="permission" id="tid-<?= $tid ?>" type="checkbox" name="permissions[]" value="<?= $subNavigator['controller'] ?>"<?= $admin->hasPermission($subNavigator['controller']) ? ' checked' : '' ?><?= $admin->isGroupPermission($subNavigator['controller']) ? ' disabled' : '' ?> autocomplete="off">
                                 <label class="btn btn-default" for="tid-<?= $tid ?>">
                                     <i class="fa fa-<?= $subNavigator['icon_class'] ?> fa-fw"></i><?= $subNavigator['title'] ?>
                                 </label>
                             </div>
                             <?php
                         }
-                        ?>
-                        <?php
                     }
                     ?>
                 </div>
@@ -81,14 +80,32 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
     <button class="btn btn-primary" id="save-button"><i class="fa fa-save fa-fw"></i>save</button>
     <input type="hidden" name="_csrf" value="<?=Yii::$app->request->getCsrfToken() ?>">
 </form>
+<textarea id="group-permissions" style="display:none;"><?= json_encode(Permission::identityPermissions(array_keys(PermissionGroup::identitySelector()))) ?></textarea>
 
 <script>
     jQuery(document).ready(function() {
-        // 点选按钮
-        jQuery('.checkbox-group .checkbox input').bind(function() {
-            if(jQuery(this).is(':checked')) {
-
+        // 权限组选择事件
+        var groupPermissions = jQuery.parseJSON(jQuery('#group-permissions').val());
+        jQuery('.permission-group').bind('change', function() {
+            jQuery('.permission').removeAttr('disabled');
+            var already = [];
+            jQuery.each(jQuery('.permission-group'), function() {
+                if(jQuery(this).is(':checked')) {
+                    already.push.apply(already, groupPermissions[jQuery(this).val()]);
+                }
+            });
+            if(already.indexOf('super') >= 0) {
+                jQuery('.permission').attr('checked', true).attr('disabled', true);
+            }
+            else {
+                jQuery.each(jQuery('.permission'), function() {
+                    var controller = jQuery(this).val();
+                    if(already.indexOf(controller) >= 0) {
+                        jQuery(this).attr('checked', true).attr('disabled', true);
+                    }
+                });
             }
         });
+        
     });
 </script>

@@ -20,7 +20,7 @@ class Admin extends ActiveRecord {
         ];
     }
     /**
-     * @name 字段名称
+     * 字段名称
      * @return array
      */
     public function attributeLabels()
@@ -35,7 +35,7 @@ class Admin extends ActiveRecord {
         ];
     }
     /**
-     * @name update & insert data check config for html
+     * update & insert data check config for html
      * @param $type string 页面操作类型
      * @param $encodeJson boolean 是否转成JSON字符串
      * @return string | array
@@ -63,7 +63,7 @@ class Admin extends ActiveRecord {
     
     /**
      * admin's power detail
-     * @function getAdminGroups 获取权组数组
+     * @function getAdminPermissionGroups 获取权组数组
      * @function getRoleIdentity 获取权组标识数组
      * @function getPermissionGroups 获取权组数组
      * @function getAdminPermissions 获取用户权限数组
@@ -71,13 +71,13 @@ class Admin extends ActiveRecord {
      * @function getPermissions 获取用户所有权限数组
      * @function permissionSelector 获取用户所有权限数组
      */
-    public function getAdminGroups()
+    public function getAdminPermissionGroups()
     {
-        return $this->hasMany(AdminGroup::className(), ['admin_id' => 'id']);
+        return $this->hasMany(AdminPermissionGroup::className(), ['admin_id' => 'id']);
     }
     public function getIdentities()
     {
-        return array_column($this->adminGroups, 'identity');
+        return array_column($this->adminPermissionGroups, 'identity');
     }
     public function getPermissionGroups()
     {
@@ -95,12 +95,27 @@ class Admin extends ActiveRecord {
     {
         return array_merge($this->adminPermissions, $this->groupPermissions);
     }
-    public function permissionSelector()
+    public function getPermissionSelector()
     {
         return array_filter(array_column($this->permissions, 'controller'));
     }
+    // 判断是否超级
+    public function isSupper()
+    {
+        return in_array('super', $this->permissionSelector);
+    }
+    // 判断是否有权限
+    public function hasPermission($permission)
+    {
+        return $this->isSupper() || in_array($permission, $this->permissionSelector);
+    }
+    public function isGroupPermission($permission)
+    {
+        return $this->isSupper() || in_array($permission, array_column($this->groupPermissions, 'controller'));
+    }
+    
     /**
-     * @name do some thing before save this admin object
+     * do some thing before save this admin object
      * @param $insert boolean update params
      * @return boolean
      */
@@ -113,7 +128,7 @@ class Admin extends ActiveRecord {
         }
         return true;
     }
-    // @name create md5 password and set it to password_digest
+    // create md5 password and set it to password_digest
     public function hashPassword()
     {
         if($this->password_digest == $this->getOldAttribute('password_digest')) {
@@ -123,7 +138,7 @@ class Admin extends ActiveRecord {
         return true;
     }
     /**
-     * @name create md5 password
+     * create md5 password
      * @param $password string 密码
      * @return string md5串
      */
@@ -133,7 +148,7 @@ class Admin extends ActiveRecord {
     }
 
     /**
-     * @name check wether this admin password right
+     * check wether this admin password right
      * @return boolean
      */
     public function validatePassword($password)
@@ -142,7 +157,7 @@ class Admin extends ActiveRecord {
     }
     
     /**
-     * @name check wether this admin was out of time
+     * check wether this admin was out of time
      * @return boolean
      */
     public function valid()
@@ -151,7 +166,7 @@ class Admin extends ActiveRecord {
     }
 
     /**
-     * @name check wether this admin was out of time
+     * check wether this admin was out of time
      * @return boolean
      */
     public static function isValid($admin)
@@ -163,7 +178,7 @@ class Admin extends ActiveRecord {
     }
 
     /**
-     * @name 设置登陆态
+     * 设置登陆态
      * @return boolean
      */
     public function login()
@@ -176,60 +191,44 @@ class Admin extends ActiveRecord {
     }
     
     /**
-     * @name change admin's permission
-     * @param $permissions array  - permission details (navigator's id)
-     * @return array [code, message]
+     * change admin's permission
+     * @param array $identities permission groups
+     * @param array $permissions permission details (navigator's id)
+     * @return boolean
      */
-    public function setPermissions($roles, $permissions)
+    public function setPermissions($identities, $permissions)
     {
         // 如果用户所属组改变了，则此处更新所属组
-        if(implode(', ', $roles) != $this->roles) {
-            $this->adminGroups = implode(', ', $roles);
-            $this->updated_at = time();
-            if( ! $this->save()) {
-                return false;
-            }
+        if( ! AdminPermissionGroup::setPermissionGroups((string)$this->id, $identities, $this->identities)) {
+            return false;
         }
-        if(empty($permissions)) {
-            return Permission::deleteAll(['identity' => $this->id]);
-        }
-        // 查询当前用户拥有的权限，进行去重、删除以剔除权限
-        $newPermissions = array_diff($permissions, $this->permissionSelector);
-        $deletePermission = array_diff($this->permissionSelector, $newPermissions);
-        if(count($deletePermission) > 0) {
-            if( ! Permission::deleteAll(['identity' => $this->id, 'controller' => $deletePermission])) {
-                return false;
-            }
-        }
-        if(count($newPermissions) > 0) {
-            if( ! Permission::batchInsert($this->id, $newPermissions)) {
-                return false;
-            }
+        if( ! Permission::setPermissions((string)$this->id, $permissions, $this->permissionSelector)) {
+            return false;
         }
         return true;
     }
     
     /**
-     * @name 重写父类通过key设置属性方法，如果原始密码为空，剔除原始密码字段
+     * 重写父类通过key设置属性方法，如果原始密码为空，剔除原始密码字段
      * @param array $param array params set to this object
-     * @param null $tbKey array key which need transfered
+     * @param array $tableKey key which need transfered
      * @param bool $checkValid boolean wether check param valid
      * @return bool
      */
-    public function loadAttributes($param, $tbKey = null, $checkValid = true)
+    public function loadAttributes($param, $tableKey = null, $checkValid = true)
     {
         // 如果密码不存在重置密码
-        if(isset($tbKey['password']) && empty($param['password'])) {
+        if(isset($tableKey['password']) && empty($param['password'])) {
             // $tbKey['password'] = null;
-            unset($tbKey['password']);
+            unset($tableKey['password']);
         }
 
         // call parent function
-        return parent::loadAttributes($param, $tbKey, $checkValid);
+        return parent::loadAttributes($param, $tableKey, $checkValid);
     }
     
     /**
-     * @name 校验数据是否存在/允许编辑
+     * 校验数据是否存在/允许编辑
      * @param $id int admin's id 需要校验的数据编号
      * @return bool|static
      */
@@ -243,11 +242,11 @@ class Admin extends ActiveRecord {
         return parent::finder($id, $condition);
     }
     /**
-     * @name check admin's permission
+     * check admin's permission
      * @describe permission access by
      *   1、super
-     *   2、controller~
-     *   3、controller~action
+     *   2、controller
+     *   3、controller/action
      * @param $controller string 控制请名称
      * @param $action string action方法名称
      * @param $identity string 身份信息
