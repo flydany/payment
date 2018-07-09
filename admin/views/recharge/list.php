@@ -3,7 +3,7 @@
 /* @var $this admin\components\View */
 
 use common\helpers\Render;
-use common\models\PermissionGroup;
+use common\models\Recharge;
 
 $this->title = 'Recharge Record';
 $this->addCrumbs('Recharge');
@@ -14,13 +14,31 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
 ?>
 
 <div class="form-inline search" id="info-search">
-    <div class="input-group w-250px">
-        <span class="input-group-addon"><i class="fa fa-user fa-fw"></i>username</span>
-        <input type="text" class="form-control tabler" name="username" placeholder="username">
+    <div class="input-group w-180px">
+        <span class="input-group-addon">project</span>
+        <input type="text" class="form-control tabler" name="project_id" placeholder="number">
     </div>
-    <div class="input-group w-250px">
-        <span class="input-group-addon"><i class="fa fa-phone-square fa-fw"></i>mobile</span>
-        <input type="text" class="form-control tabler" name="mobile" placeholder="mobile">
+    <div class="input-group w-180px">
+        <span class="input-group-addon">merchant</span>
+        <input type="text" class="form-control tabler" name="merchant_id" placeholder="number">
+    </div>
+    <div class="input-group w-180px">
+        <span class="input-group-addon">order number</span>
+        <input type="text" class="form-control tabler" name="order_number" placeholder="order">
+    </div>
+    <div class="input-group w-180px">
+        <span class="input-group-addon">source order</span>
+        <input type="text" class="form-control tabler" name="source_order_number" placeholder="source">
+    </div>
+    <div class="input-group w-450px">
+        <span class="input-group-addon">time</span>
+        <input type="text" class="form-control tabler" name="star" placeholder="start time">
+        <span class="input-group-addon"><i class="fa fa-caret-right fa-fw"></i></span>
+        <input type="text" class="form-control tabler" name="end" placeholder="end time">
+    </div>
+    <div class="input-group w-180px">
+        <span class="input-group-addon">status</span>
+        <?= Render::select('status', Recharge::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler']) ?>
     </div>
     <button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button>
 </div>
@@ -28,17 +46,20 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
 <table class="table table-bordered table-striped" id="info-table">
     <thead>
     <tr>
-        <th><i class="fa fa-user fa-fw"></i>username</th>
-        <th><i class="fa fa-id-card fa-fw"></i>realname</th>
-        <th><i class="fa fa-phone-square fa-fw"></i>mobile</th>
-        <th><i class="fa fa-calendar-times-o fa-fw"></i>effect date</th>
+        <th><i class="fa fa-user fa-fw"></i>project</th>
+        <th><i class="fa fa-id-card fa-fw"></i>merchant</th>
+        <th><i class="fa fa-phone-square fa-fw"></i>order number</th>
+        <th><i class="fa fa-calendar-times-o fa-fw"></i>source number</th>
+        <th><i class="fa fa-bank fa-fw"></i>bank</th>
+        <th><i class="fa fa-cny fa-fw"></i>amount</th>
+        <th><i class="fa fa-check fa-fw"></i>status</th>
         <th><i class="fa fa-clock-o fa-fw"></i>created at</th>
         <th><i class="fa fa-gear fa-fw"></i>operation</th>
     </tr>
     </thead>
     <tbody>
     <tr>
-        <td colspan="6"><i class="fa fa-search fa-fw"></i>click on the search button to search data.</td>
+        <td colspan="9"><i class="fa fa-search fa-fw"></i>click on the search button to search data.</td>
     </tr>
     </tbody>
 </table>
@@ -76,14 +97,17 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
 <script id="info-template" type="text/html">
     {{each infos as info key}}
     <tr id="tr-{{info.id}}" data-id="{{info.id}}">
-        <td>{{info.username}}</td>
-        <td>{{info.realname}}</td>
-        <td>{{info.mobile}}</td>
-        <td>{{info.effect_date}}</td>
+        <td>{{info.project_id}}</td>
+        <td>{{info.project_merchant_id}}</td>
+        <td>{{info.order_number}}</td>
+        <td>{{info.source_order_number}}</td>
+        <td class="bank">{{info.bindCard.bank_id}}</td>
+        <td>{{info.amount | fmoney}}</td>
+        <td class="status">{{info.status}}</td>
         <td>{{info.created_at | dateShow: 'minute'}}</td>
         <td>
             <a class="label label-primary" href="/recharge/detail?id={{info.id}}"><i class="fa fa-edit fa-fw"></i>edit</a>
-            <a class="delete-data label label-danger" href="javascript:;"><i class="fa fa-trash fa-fw"></i>delete</a>
+            <span class="delete-data label label-danger" href="javascript:;"><i class="fa fa-trash fa-fw"></i>delete</span>
         </td>
     </tr>
     {{/each}}

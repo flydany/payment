@@ -14,10 +14,10 @@ class Card extends ActiveRecord {
     public function rules()
     {
         return [
-            [['bank_id', 'card_no', 'realname', 'id_card', 'mobile'], 'required'],
-            [['bank_id', 'card_no', 'mobile', 'deleted_at'], 'integer'],
+            [['project_id', 'bank_id', 'card_no', 'realname', 'id_card', 'mobile'], 'required'],
+            [['project_id', 'bank_id', 'card_no', 'mobile', 'deleted_at'], 'integer'],
             [['realname'], 'string', 'max' => 64],
-            [['card_no', 'mobile'], 'unique', 'targetAttribute' => ['card_no', 'mobile']],
+            [['project_id', 'mobile', 'card_no'], 'unique', 'targetAttribute' => ['project_id', 'mobile', 'card_no']],
         ];
     }
     /**
@@ -27,12 +27,13 @@ class Card extends ActiveRecord {
     public function attributeLabels()
     {
         return [
-            'bank_id' => '银行',
-            'card_no' => '卡号',
-            'realname' => '姓名',
-            'id_card' => '身份证',
-            'mobile' => '手机号',
-            'deleted_at' => '删除时间',
+            'project_id' => 'project number',
+            'bank_id' => 'bank number',
+            'card_no' => 'card number',
+            'realname' => 'real name',
+            'id_card' => 'id card',
+            'mobile' => 'mobile',
+            'deleted_at' => 'deleted at',
         ];
     }
 }

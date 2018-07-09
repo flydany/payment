@@ -21,15 +21,12 @@ class Platform extends ActiveRecord {
     ];
 
     // 支付类型常量
-    const PaytypeFitAll = 0;
     const PaytypeRecharge = 1;
     const PaytypeWithdarw = 2;
-    const PaytypeDebit = 3;
-    const PaytypeAgreement = 4;
+    const PaytypeAgreement = 3;
     public static $paytypeSelector = [
         self::PaytypeRecharge => '充值',
         self::PaytypeWithdarw => '提现',
-        self::PaytypeDebit => '代扣',
         self::PaytypeAgreement => '协议支付',
     ];
 }

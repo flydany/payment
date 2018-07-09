@@ -15,18 +15,10 @@ class Recharge extends ActiveRecord {
     const StatusSuccess = 2;
     const StatusFailed = 3;
     public static $statusSelector = [
-        self::StatusInit => ['title' => '待支付', 'status' => 'blue'],
-        self::StatusPaying => ['title' => '付款中', 'status' => 'orange'],
-        self::StatusSuccess => ['title' => '充值成功', 'status' => 'green'],
-        self::StatusFailed => ['title' => '充值失败', 'status' => 'red'],
-    ];
-
-    // User's role defined
-    const PlatformAlipay = 1;
-    const PlatformWeChat = 2;
-    public static $platformSelector = [
-        self::PlatformAlipay => ['title' => '支付宝', 'status' => 'blue'],
-        self::PlatformWeChat => ['title' => '微信', 'status' => 'green'],
+        self::StatusInit => 'wait',
+        self::StatusPaying => 'paying',
+        self::StatusSuccess => 'success',
+        self::StatusFailed => 'failed',
     ];
 
     // only define rules for those attributes that
@@ -34,12 +26,13 @@ class Recharge extends ActiveRecord {
     public function rules()
     {
         return [
-            [['user_id', 'platform', 'amount', 'fee', 'order_number', 'status', 'realname', 'mobile'], 'required'],
-            [['user_id', 'platform', 'amount', 'fee', 'success_at', 'deleted_at'], 'integer'],
-            [['mobile'], 'string', 'max' => 16],
-            [['order_number', 'realname'], 'string', 'max' => 32],
+            [['project_id', 'platform_id', 'project_merchant_id', 'amount', 'fee', 'order_number', 'source_order_number', 'status'], 'required'],
+            [['project_id', 'platform_id', 'project_merchant_id', 'amount', 'fee', 'success_at', 'deleted_at'], 'integer'],
+            [['order_number'], 'string', 'max' => 32],
             [['order_number'], 'unique'],
-            [['outer_order_number', 'account', 'remark'], 'string', 'max' => 128],
+            [['project_id', 'source_order_number'], 'unique', 'targetAttribute' => ['project_id', 'source_order_number']],
+            [['outer_order_number', 'source_order_number'], 'string', 'max' => 64],
+            [['pay_summary', 'remark'], 'string', 'max' => 255],
         ];
     }
     /**
@@ -49,50 +42,62 @@ class Recharge extends ActiveRecord {
     public function attributeLabels()
     {
         return [
-            'user_id' => '用户',
-            'order_number' => '订单号',
-            'platform' => '充值方式',
-            'amount' => '金额',
-            'fee' => '手续费',
-            'status' => '状态',
-            'success_at' => '成功时间',
-            'outer_order_number' => '第三方订单号',
-            'account' => '充值账号',
-            'remark' => '备注',
-            'deleted_at' => '删除时间',
+            'project_id' => 'project number',
+            'platform_id' => 'platform number',
+            'project_merchant_id' => 'project merchant',
+            'order_number' => 'order number',
+            'amount' => 'amount',
+            'fee' => 'fee',
+            'status' => 'status',
+            'success_date' => 'success date',
+            'success_at' => 'success at',
+            'source_order_number' => 'source order number',
+            'outer_order_number' => 'outer order number',
+            'pay_summary' => 'pay summary',
+            'remark' => 'remark',
+            'deleted_at' => 'deleted at',
         ];
     }
 
     /**
-     * 获取用户信息
-     * @return object
+     * 获取项目
+     * @return Project
      */
-    public function getUser()
+    public function getProject()
     {
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
+        return $this->hasOne(Project::className(), ['id' => 'project_id']);
     }
-    
+
     /**
-     * 获取用户账户信息
-     * @return object
+     * 获取项目商户配置
+     * @return ProjectMerchant
      */
-    public function getUserAccount()
+    public function getProjectMerchant()
     {
-        return $this->hasOne(UserAccount::className(), ['user_id' => 'user_id']);
+        return $this->hasOne(ProjectMerchant::className(), ['id' => 'project_merchant_id']);
     }
-    
+
     /**
-     * 充值是否完成
-     * @return boolean
+     * 获取商户配置
+     * @return Merchant
      */
-    public function complete()
+    public function getMerchant()
     {
-        return in_array($this->status, [static::StatusSuccess, static::StatusFailed]);
+        return Merchant::find()->where(['id' => $this->projectMerchant->merchant_id])->one();
+    }
+
+    /**
+     * 获取银行卡信息
+     * @return BindCard
+     */
+    public function getBindCard()
+    {
+        return $this->hasOne(BindCard::className(), ['id' => 'bind_card_id']);
     }
     
     /**
      * 设置充值成功
-     * @param string 备注
+     * @param string $remark 备注
      * @return boolean
      */
     public function success($remark = '')
@@ -107,28 +112,24 @@ class Recharge extends ActiveRecord {
         $this->status = static::StatusSuccess;
         $this->success_at = time();
         $this->updated_at = time();
-        return $this->transaction(function($db) {
-            if( ! $this->save()) {
+        return $this->transaction(function($db) use ($remark) {
+            if( ! $this->cSave(['status' => $this->status])) {
                 throw new \Exception('update recharge status error');
             }
             // 记录日志
-            if( ! $this->logger(RechargeLog::HandlerAdmin, '已完成充值操作')) {
+            if( ! $this->logger(RechargeLog::HandlerAdmin, '充值成功: '.$remark)) {
                 throw new \Exception('create recharge log error');
-            }
-            // 更新用户账户表
-            if( ! $this->userAccount->recharge($this->amount)) {
-                throw new Exception('change balance failed');
             }
             return true;
         });
     }
     
     /**
-     * 拒绝充值申请
-     * @param string 备注
+     * 充值失败
+     * @param string $remark 备注
      * @return boolean
      */
-    public function refuse($remark = '')
+    public function failed($remark = '')
     {
         if($this->deleted()) {
             return false;
@@ -136,12 +137,12 @@ class Recharge extends ActiveRecord {
         $this->remark = $remark;
         $this->status = static::StatusFailed;
         $this->updated_at = time();
-        return $this->transaction(function($db) {
-            if( ! $this->save()) {
+        return $this->transaction(function($db) use ($remark) {
+            if( ! $this->cSave(['status' => $this->status])) {
                 throw new \Exception('update recharge status error');
             }
             // 记录日志
-            if( ! $this->logger(RechargeLog::HandlerAdmin, '拒绝充值申请')) {
+            if( ! $this->logger(RechargeLog::HandlerAdmin, '充值失败: '.$remark)) {
                 throw new \Exception('create recharge log error');
             }
             return true;
@@ -162,22 +163,6 @@ class Recharge extends ActiveRecord {
             'recharge_id' => $this->id,
         ];
         return RechargeLog::logger($param);
-    }
-    
-    /**
-     * 创建充值订单
-     * @param $params array 订单参数
-     * @return mixed
-     */
-    public static function initialize($params)
-    {
-        if(empty($params)) {
-            return false;
-        }
-        $params['user_id'] = Yii::$app->user->id;
-        $params['order_number'] = static::generateOrderNumber();
-        $params['status'] = static::StatusInit;
-        return static::creator($params);
     }
     
     /**
@@ -206,6 +191,6 @@ class Recharge extends ActiveRecord {
      */
     public static function generateOrderNumber()
     {
-        return strtoupper('C'.base_convert((microtime(true) * 10000).rand(10000, 99999).rand(10000, 99999), 10, 36));
+        return strtoupper('R'.base_convert((microtime(true) * 10000).rand(10000, 99999).rand(10000, 99999), 10, 36));
     }
 }

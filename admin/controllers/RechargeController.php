@@ -22,8 +22,9 @@ class RechargeController extends Controller {
         }
         $rules = [
             'param' => [
-                'bind_id' => ['bind_number', ['int']],
+                'project_id' => ['project', ['int']],
                 'platform_id' => ['platform', ['in' => array_keys(Platform::$platformSelector)]],
+                'project_merchant_id' => ['merchant', ['int']],
                 'start' => ['start time', ['date' => 'Y-m-d H:i:s']],
                 'end' => ['end time', ['date' => 'Y-m-d H:i:s']],
                 'status' => ['status', ['int']],
@@ -34,14 +35,18 @@ class RechargeController extends Controller {
             return $this->json('Param.Error', $checker['message']);
         }
         foreach(['start', 'end'] as $key) {
-            if($params[$key]) {
+            if(isset($params[$key])) {
                 $params[$key] = strtotime($params[$key]);
             }
         }
         $params['deleted_at'] = 0;
-        $query = Recharge::filterConditions(Recharge::initCondition(['user_id', 'type', ['created_at', '>=', 'start'], ['created_at', '<=', 'end'], 'status', 'deleted_at'], $params));
+        $conditions = [
+            'project_id', 'project_merchant_id', 'order_number', 'source_order_number',
+            ['created_at', '>=', 'start'], ['created_at', '<=', 'end'], 'status', 'deleted_at',
+        ];
+        $query = Recharge::filterConditions(Recharge::initCondition($conditions, $params));
         $pagination = Render::pagination((clone $query)->count());
-        $data['infos'] = $query->orderBy('id desc')->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
+        $data['infos'] = $query->with('bindCard')->with('projectMerchant')->orderBy('id desc')->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
         $data['page'] = Render::pager($pagination);
         return $this->json($data);
     }

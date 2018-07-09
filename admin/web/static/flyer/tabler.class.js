@@ -70,6 +70,8 @@ function fmoney(s, n)
     if (!s) {
         s = 0;
     }
+    // 金额单位转换
+    s /= 100;
     s = parseFloat((s + "").replace(/[^\d\.-]/g, "")).toFixed(n) + "";
     var l = s.split(".")[0].split("").reverse(),
         r = s.split(".")[1];
