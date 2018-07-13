@@ -192,7 +192,7 @@ class AdminController extends Controller {
         $adminRole = new AdminRole();
         if ( ! $adminRole->loadAttributes($this->request->post())->validate()) {
             // 参数异常，渲染错误页面
-            return $this->error(implode('. ', ArrayHelper::getColumn($adminRole->getErrors(), '0')), 'admin/group-list');
+            return $this->error($adminRole->errors(), 'admin/group-list');
         }
         if ($adminRole->save()) {
             return $this->success('permission group ('.$adminRole->title.') insert success', [
@@ -216,7 +216,7 @@ class AdminController extends Controller {
         $oldIdentify = $adminRole->getOldAttribute('identity');
         if ( ! $adminRole->loadAttributes($this->request->post())->validate()) {
             // 参数异常，渲染错误页面
-            return $this->error(implode('. ', ArrayHelper::getColumn($adminRole->getErrors(), '0')), 'admin/group-detail?id='.$adminRole->id);
+            return $this->error($adminRole->errors(), 'admin/group-detail?id='.$adminRole->id);
         }
         if ($adminRole->save()) {
             // 绑定role change

@@ -100,7 +100,7 @@ class Controller extends \yii\web\Controller {
                 }
                 $web['url'] = Url::to('@web/'.$web['url']);
                 if( ! isset($web['title'])) {
-                    $web['title'] = '点击跳转';
+                    $web['title'] = 'jump?';
                 }
             }
         }
@@ -126,7 +126,7 @@ class Controller extends \yii\web\Controller {
                 }
                 $web['url'] = Url::to('@web/'.$web['url']);
                 if( ! isset($web['title'])) {
-                    $web['title'] = '点击跳转';
+                    $web['title'] = 'jump?';
                 }
             }
         }
@@ -152,7 +152,7 @@ class Controller extends \yii\web\Controller {
                 }
                 $web['url'] = Url::to('@web/'.$web['url']);
                 if( ! isset($web['title'])) {
-                    $web['title'] = '点击跳转';
+                    $web['title'] = 'jump?';
                 }
             }
         }
@@ -161,16 +161,6 @@ class Controller extends \yii\web\Controller {
         }
         return $this->redirect([Url::to('@web/welcome/skip'), 'message' => $message, 'skip' => $skip]);
     }
-    /**
-     * 获取model错误描述
-     * @param Model $model 实例化的模型
-     * @return string
-     */
-    public function modelMessage($model)
-    {
-        return implode('. ', ArrayHelper::getColumn($model->getErrors(), '0'));
-    }
-    
     
     // @name 设置当前选中的一级、二级菜单
     // @describe 可用于验证当前方法的权限

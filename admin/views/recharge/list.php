@@ -23,22 +23,22 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
         <input type="text" class="form-control tabler" name="merchant_id" placeholder="number">
     </div>
     <div class="input-group w-180px">
-        <span class="input-group-addon">order number</span>
+        <span class="input-group-addon">order</span>
         <input type="text" class="form-control tabler" name="order_number" placeholder="order">
     </div>
     <div class="input-group w-180px">
-        <span class="input-group-addon">source order</span>
-        <input type="text" class="form-control tabler" name="source_order_number" placeholder="source">
-    </div>
-    <div class="input-group w-450px">
-        <span class="input-group-addon">time</span>
-        <input type="text" class="form-control tabler" name="star" placeholder="start time">
-        <span class="input-group-addon"><i class="fa fa-caret-right fa-fw"></i></span>
-        <input type="text" class="form-control tabler" name="end" placeholder="end time">
+        <span class="input-group-addon">source</span>
+        <input type="text" class="form-control tabler" name="source_order_number" placeholder="order">
     </div>
     <div class="input-group w-180px">
         <span class="input-group-addon">status</span>
         <?= Render::select('status', Recharge::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler']) ?>
+    </div>
+    <div class="input-group w-400px">
+        <span class="input-group-addon">time</span>
+        <input type="text" class="form-control tabler" name="star" placeholder="start time">
+        <span class="input-group-addon"><i class="fa fa-caret-right fa-fw"></i></span>
+        <input type="text" class="form-control tabler" name="end" placeholder="end time">
     </div>
     <button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button>
 </div>
@@ -87,7 +87,7 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
             // param => tabler
             afterPost: function(param) {
                 // 所属权组名称显示
-                tableHandler.renderCategory({ category: $(param.tabler).find('.role'), select: 'role_id' });
+                tableHandler.renderCategory({ category: $(param.tabler).find('.status'), select: 'status' });
                 // 初始化 删除按钮事件
                 tableHandler.requestSingle({ button: $(param.tabler).find('.delete-data'), url: $('.delete-mult:first').data('href'), isKeep: false });
             }

@@ -9,7 +9,6 @@ use common\models\Navigator;
 
 class NavigatorController extends Controller {
     
-    
     /**
      * show navigation list
      * @describe this action showing navigator
@@ -30,7 +29,7 @@ class NavigatorController extends Controller {
         $navigator = new Navigator();
         if ( ! $navigator->loadAttributes($this->request->post())->validate()) {
             // 参数异常，渲染错误页面
-            return $this->json('Invalid.Param', $this->modelMessage($navigator));
+            return $this->json('Invalid.Param', $navigator->errors());
         }
         if ($navigator->save()) {
             return $this->json(SuccessCode, 'navigator update successful', ['id' => $navigator->id]);
@@ -50,7 +49,7 @@ class NavigatorController extends Controller {
         }
         if ( ! $navigator->loadAttributes($this->request->post())->validate()) {
             // 参数异常，渲染错误页面
-            return $this->json('Invalid.Param', $this->modelMessage($navigator));
+            return $this->json('Invalid.Param', $navigator->errors());
         }
         if ($navigator->save()) {
             return $this->json(SuccessCode, 'navigator update successful');
