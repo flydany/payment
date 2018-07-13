@@ -3,7 +3,7 @@
 /* @var $this admin\components\View */
 
 use common\helpers\Render;
-use common\models\PermissionGroup;
+use common\models\AdminRole;
 
 $this->title = 'Administrator List';
 $this->addCrumbs('System');

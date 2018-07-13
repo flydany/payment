@@ -8,8 +8,8 @@ use common\helpers\Render;
 use common\helpers\Checker;
 use common\models\Navigator;
 use common\models\Admin;
-use common\models\PermissionGroup;
-use common\models\Permission;
+use common\models\AdminRole;
+use common\models\AdminPermission;
 
 class AdminController extends Controller {
     
@@ -162,7 +162,7 @@ class AdminController extends Controller {
         }
         $params = $this->request->post();
         $params['deleted_at'] = '0';
-        $query = PermissionGroup::filterConditions(PermissionGroup::initCondition(['identity', ['title', 'like'], 'deleted_at'], $params));
+        $query = AdminRole::filterConditions(AdminRole::initCondition(['identity', ['title', 'like'], 'deleted_at'], $params));
         $pagination = Render::pagination((clone $query)->count());
         $data['infos'] = $query->orderBy('id desc')->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
         $data['page'] = Render::pager($pagination);
@@ -177,7 +177,7 @@ class AdminController extends Controller {
     {
         $adminRole = null;
         $roleId = $this->request->get('id');
-        if($roleId && ( ! $adminRole = PermissionGroup::finder($roleId))) {
+        if($roleId && ( ! $adminRole = AdminRole::finder($roleId))) {
             return $this->error('invalid administrator role', 'admin/group-list');
         }
         return $this->render('group-detail', ['data' => $adminRole]);
@@ -189,7 +189,7 @@ class AdminController extends Controller {
      */
     public function actionGroupInsert()
     {
-        $adminRole = new PermissionGroup();
+        $adminRole = new AdminRole();
         if ( ! $adminRole->loadAttributes($this->request->post())->validate()) {
             // 参数异常，渲染错误页面
             return $this->error(implode('. ', ArrayHelper::getColumn($adminRole->getErrors(), '0')), 'admin/group-list');
@@ -210,7 +210,7 @@ class AdminController extends Controller {
      */
     public function actionGroupUpdate()
     {
-        if( ! $adminRole = PermissionGroup::finder($this->request->get('id'))) {
+        if( ! $adminRole = AdminRole::finder($this->request->get('id'))) {
             return $this->error('invalid permission group', 'admin/group-list');
         }
         $oldIdentify = $adminRole->getOldAttribute('identity');
@@ -242,7 +242,7 @@ class AdminController extends Controller {
         if('1' == $ids || (is_array($ids) && in_array('1', $ids))) {
             return $this->json('invalid.param', 'system permission group can\'t be modify.');
         }
-        if(PermissionGroup::trashAll(['id' => $ids])) {
+        if(AdminRole::trashAll(['id' => $ids])) {
             return $this->json(SuccessCode, 'permission group delete successful.');
         }
         return $this->json('system.error', 'permission group delete failed.');
@@ -254,7 +254,7 @@ class AdminController extends Controller {
      */
     public function actionGroupPermissions()
     {
-        $adminRole = PermissionGroup::finder($this->request->get('id'));
+        $adminRole = AdminRole::finder($this->request->get('id'));
         // 参数异常，渲染错误页面
         if(empty($adminRole)) {
             return $this->error('invalid permission group', 'admin/group-list');

@@ -5,7 +5,7 @@ namespace common\models;
 use Yii;
 use yii\helpers\ArrayHelper;
 
-class PermissionGroup extends ActiveRecord {
+class AdminRole extends ActiveRecord {
     
     // only define rules for those attributes that
     // will receive user inputs.
@@ -56,7 +56,7 @@ class PermissionGroup extends ActiveRecord {
      */
     public function getPermissions()
     {
-        return $this->hasMany(Permission::className(), ['identity' => 'identity']);
+        return $this->hasMany(AdminPermission::className(), ['identity' => 'identity']);
     }
     public function getPermissionSelector()
     {
@@ -70,8 +70,8 @@ class PermissionGroup extends ActiveRecord {
     public function onChange($old_identity)
     {
         if($this->identity && ($this->identity != $old_identity)) {
-            Permission::updateAll(['identity' => $this->identity], ['identity' => $old_identity]);
-            AdminPermissionGroup::updateAll(['identity' => $this->identity], ['identity' => $old_identity]);
+            AdminPermission::updateAll(['identity' => $this->identity], ['identity' => $old_identity]);
+            AdminGroup::updateAll(['identity' => $this->identity], ['identity' => $old_identity]);
         }
         return true;
     }
@@ -83,7 +83,7 @@ class PermissionGroup extends ActiveRecord {
      */
     public function setPermissions($permissions)
     {
-        return Permission::setPermissions($this->identity, $permissions, $this->permissionSelector);
+        return AdminPermission::setPermissions($this->identity, $permissions, $this->permissionSelector);
     }
     
     // for select use

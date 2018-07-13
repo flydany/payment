@@ -36,12 +36,12 @@ class Permission extends \yii\base\ActionFilter {
         }
         if(Yii::$app->request->isAjax) {
             // json format数据需要返回数据到 response.data中
-            Yii::$app->getResponse()->data = $controller->json('Permission.Denied', '请先登录（Permission Denied）');
+            Yii::$app->getResponse()->data = $controller->json('AdminPermission.Denied', '请先登录（AdminPermission Denied）');
         }
         else {
             // html format数据直接返回数据到response.content中
             // $controller->layout = 'simple.php';
-            Yii::$app->getResponse()->content = $controller->error('请先登录（Permission Denied）', 'user/login');
+            Yii::$app->getResponse()->content = $controller->error('请先登录（AdminPermission Denied）', 'user/login');
         }
         // 发送response数据到页面
         Yii::$app->getResponse()->send();

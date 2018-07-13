@@ -126,7 +126,7 @@ class Navigator extends \common\models\ActiveRecord {
         if($this->isNewRecord || ($oldController == $this->controller)) {
             return true;
         }
-        return Permission::updateAll(['controller' => $this->controller], ['controller' => $oldController]);
+        return AdminPermission::updateAll(['controller' => $this->controller], ['controller' => $oldController]);
     }
 
     /**

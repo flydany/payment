@@ -4,8 +4,8 @@
 /* @var $admin \common\models\Admin */
 
 use yii\helpers\ArrayHelper;
-use common\models\Permission;
-use common\models\PermissionGroup;
+use common\models\AdminPermission;
+use common\models\AdminRole;
 
 $this->title = 'Administrator Group Permissions';
 $this->addCrumbs('System');
@@ -28,7 +28,7 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
         <h3><i class="fa fa-superpowers fa-fw"></i>set permission group</h3>
         <div class="checkbox-group">
             <?php
-            foreach(PermissionGroup::identitySelector() as $identity => $title) {
+            foreach(AdminRole::identitySelector() as $identity => $title) {
                 ?>
                 <div class="checkbox">
                     <input class="permission-group" id="gid-<?= $identity ?>" type="checkbox" name="identities[]" value="<?= $identity ?>"<?= in_array($identity, $admin->identities) ? ' checked' : '' ?> autocomplete="off">
@@ -80,7 +80,7 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
     <button class="btn btn-primary" id="save-button"><i class="fa fa-save fa-fw"></i>save</button>
     <input type="hidden" name="_csrf" value="<?=Yii::$app->request->getCsrfToken() ?>">
 </form>
-<textarea id="group-permissions" style="display:none;"><?= json_encode(Permission::identityPermissions(array_keys(PermissionGroup::identitySelector()))) ?></textarea>
+<textarea id="group-permissions" style="display:none;"><?= json_encode(AdminPermission::identityPermissions(array_keys(AdminRole::identitySelector()))) ?></textarea>
 
 <script>
     jQuery(document).ready(function() {

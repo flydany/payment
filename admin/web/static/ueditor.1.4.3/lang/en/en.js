@@ -397,7 +397,7 @@ UE.I18N['en'] = {
         'netError':'Network error',
         'failUpload':'Upload failed',
         'serverIOError':'Server IO error！',
-        'noAuthority':'No Permission！',
+        'noAuthority':'No AdminPermission！',
         'fileNumLimit':'Upload limit to the number',
         'failCheck':'Authentication fails, the upload is skipped!',
         'fileCanceling':'Cancel, please wait...',

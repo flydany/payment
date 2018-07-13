@@ -3,7 +3,7 @@
 /* @var $this \admin\components\View */
 
 use common\helpers\Render;
-use common\models\PermissionGroup;
+use common\models\AdminRole;
 
 $this->addCrumbs('System');
 $this->addCrumbs('Administrator Group List', 'admin/group-list');
@@ -31,7 +31,7 @@ $this->registerJavascript('@static/flyer/checker.class.js');
         <textarea class="form-control" name="remark" placeholder="email."><?= Render::value($data, 'remark') ?></textarea>
     </div>
     <button type="submit" class="btn btn-primary" id="save-button"><i class="fa fa-save fa-fw"></i>save</button>
-    <textarea id="info-detail-json" data-form="#info-detail" style="display:none;"><?= PermissionGroup::checker() ?></textarea>
+    <textarea id="info-detail-json" data-form="#info-detail" style="display:none;"><?= AdminRole::checker() ?></textarea>
     <input type="hidden" name="_csrf" value="<?=Yii::$app->request->getCsrfToken() ?>">
 </form>
 

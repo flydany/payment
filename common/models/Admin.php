@@ -73,7 +73,7 @@ class Admin extends ActiveRecord {
      */
     public function getAdminPermissionGroups()
     {
-        return $this->hasMany(AdminPermissionGroup::className(), ['admin_id' => 'id']);
+        return $this->hasMany(AdminGroup::className(), ['admin_id' => 'id']);
     }
     public function getIdentities()
     {
@@ -81,15 +81,15 @@ class Admin extends ActiveRecord {
     }
     public function getPermissionGroups()
     {
-        return PermissionGroup::find()->where(['identity' => $this->identities])->all();
+        return AdminRole::find()->where(['identity' => $this->identities])->all();
     }
     public function getAdminPermissions()
     {
-        return $this->hasMany(Permission::className(), ['identity' => 'id']);
+        return $this->hasMany(AdminPermission::className(), ['identity' => 'id']);
     }
     public function getGroupPermissions()
     {
-        return Permission::find()->where(['identity' => $this->identities])->all();
+        return AdminPermission::find()->where(['identity' => $this->identities])->all();
     }
     public function getPermissions()
     {
@@ -199,10 +199,10 @@ class Admin extends ActiveRecord {
     public function setPermissions($identities, $permissions)
     {
         // 如果用户所属组改变了，则此处更新所属组
-        if( ! AdminPermissionGroup::setPermissionGroups((string)$this->id, $identities, $this->identities)) {
+        if( ! AdminGroup::setPermissionGroups((string)$this->id, $identities, $this->identities)) {
             return false;
         }
-        if( ! Permission::setPermissions((string)$this->id, $permissions, $this->permissionSelector)) {
+        if( ! AdminPermission::setPermissions((string)$this->id, $permissions, $this->permissionSelector)) {
             return false;
         }
         return true;
@@ -265,6 +265,6 @@ class Admin extends ActiveRecord {
         }
         // echo '<pre>'; print_r(Yii::$app->admin->identities); die;
         // 返回是否存在权限
-        return Permission::find()->where(['controller' => $controllers, 'identity' => $identity])->exists();
+        return AdminPermission::find()->where(['controller' => $controllers, 'identity' => $identity])->exists();
     }
 }

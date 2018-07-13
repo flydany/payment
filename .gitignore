@@ -1,4 +1,3 @@
-
 # git 忽略文件
 
 /admin/runtime/*
@@ -7,5 +6,8 @@
 /.idea/*
 /vendor/*
 
-/website/controllers/DocumentController.php
+/website/controllers/AgreementController.php
+/website/controllers/DebitController.php
+/website/controllers/QpayController.php
+/website/controllers/WithdrawController.php
 

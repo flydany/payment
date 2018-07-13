@@ -2,7 +2,6 @@
 
 namespace admin\controllers;
 
-use common\models\Withdraw;
 use Yii;
 use yii\helpers\ArrayHelper;
 use common\helpers\Checker;

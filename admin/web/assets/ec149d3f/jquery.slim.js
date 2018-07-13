@@ -709,7 +709,7 @@ var i,
 
 	// Used for iframes
 	// See setDocument()
-	// Removing the function wrapper causes a "Permission Denied"
+	// Removing the function wrapper causes a "AdminPermission Denied"
 	// error in IE
 	unloadHandler = function() {
 		setDocument();

@@ -6,7 +6,7 @@ use Yii;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
 
-class Permission extends ActiveRecord {
+class AdminPermission extends ActiveRecord {
     
     // only define rules for those attributes that
     // will receive user inputs.
@@ -67,7 +67,7 @@ class Permission extends ActiveRecord {
             return $this->hasOne(Admin::className(), ['id' => 'identity']);
         }
         else {
-            return $this->hasOne(PermissionGroup::className(), ['id' => 'identity']);
+            return $this->hasOne(AdminRole::className(), ['id' => 'identity']);
         }
     }
     
@@ -129,7 +129,7 @@ class Permission extends ActiveRecord {
         return array_map(function($data) {
             return array_values($data);
         }, ArrayHelper::map(
-            Permission::find()->select('id, identity, controller')->where(['identity' => $identity])->asArray()->all(),
+            AdminPermission::find()->select('id, identity, controller')->where(['identity' => $identity])->asArray()->all(),
             'id', 'controller', 'identity'
         ));
     }

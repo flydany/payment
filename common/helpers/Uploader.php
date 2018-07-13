@@ -116,7 +116,7 @@ class Uploader {
         }        
         if( ! is_dir($root)) {
             if( ! mkdir($root, 0777, true)) {
-                return ['code' => 'Permission.Denied', 'message' => '创建目录失败（Permission Denied Of Make Dir）'];
+                return ['code' => 'AdminPermission.Denied', 'message' => '创建目录失败（AdminPermission Denied Of Make Dir）'];
             }
         }
         if($files->saveAs($root.$newName)) {

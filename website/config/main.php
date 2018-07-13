@@ -4,7 +4,7 @@ return [
     'id' => 'basic-website',
     'name' => 'Pay Point',
     'basePath' => dirname(__DIR__),
-    'defaultRoute' => 'welcome/index',
+    'defaultRoute' => 'site/index',
     'controllerNamespace' => 'website\controllers',
     'bootstrap' => ['log'],
     'components' => [
