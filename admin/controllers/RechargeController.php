@@ -41,12 +41,12 @@ class RechargeController extends Controller {
         }
         $params['deleted_at'] = 0;
         $conditions = [
-            'project_id', 'project_merchant_id', 'order_number', 'source_order_number',
+            'project_id', 'project_merchant_id', 'order_number', 'source_order_number', 'bank_id',
             ['created_at', '>=', 'start'], ['created_at', '<=', 'end'], 'status', 'deleted_at',
         ];
         $query = Recharge::filterConditions(Recharge::initCondition($conditions, $params));
         $pagination = Render::pagination((clone $query)->count());
-        $data['infos'] = $query->with('bindCard')->with('projectMerchant')->orderBy('id desc')->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
+        $data['infos'] = $query->orderBy('id desc')->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
         $data['page'] = Render::pager($pagination);
         return $this->json($data);
     }
@@ -56,7 +56,7 @@ class RechargeController extends Controller {
      * @param id int by get request
      * @return string
      */
-    public function actionRechargeDetail()
+    public function actionDetail()
     {
         if( ! $recharge = Recharge::finder($this->request->get('id'))) {
             return $this->error('无效的充值订单（Invalid Order）', 'recharge/recharge-list');

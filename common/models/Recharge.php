@@ -26,13 +26,13 @@ class Recharge extends ActiveRecord {
     public function rules()
     {
         return [
-            [['project_id', 'platform_id', 'project_merchant_id', 'amount', 'fee', 'order_number', 'source_order_number', 'status'], 'required'],
-            [['project_id', 'platform_id', 'project_merchant_id', 'amount', 'fee', 'success_at', 'deleted_at'], 'integer'],
+            [['project_id', 'platform_id', 'project_merchant_id', 'amount', 'fee', 'bind_card_id', 'bank_id', 'order_number', 'source_order_number', 'status'], 'required'],
+            [['project_id', 'platform_id', 'project_merchant_id', 'amount', 'fee', 'bind_card_id', 'bank_id', 'success_at', 'deleted_at'], 'integer'],
             [['order_number'], 'string', 'max' => 32],
-            [['order_number'], 'unique'],
-            [['project_id', 'source_order_number'], 'unique', 'targetAttribute' => ['project_id', 'source_order_number']],
             [['outer_order_number', 'source_order_number'], 'string', 'max' => 64],
             [['pay_summary', 'remark'], 'string', 'max' => 255],
+            [['order_number'], 'unique'],
+            [['project_id', 'source_order_number'], 'unique', 'targetAttribute' => ['project_id', 'source_order_number']],
         ];
     }
     /**
@@ -48,6 +48,8 @@ class Recharge extends ActiveRecord {
             'order_number' => 'order number',
             'amount' => 'amount',
             'fee' => 'fee',
+            'bind_card_id' => 'bind card number',
+            'bank_id' => 'bank number',
             'status' => 'status',
             'success_date' => 'success date',
             'success_at' => 'success at',

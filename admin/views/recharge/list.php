@@ -3,6 +3,7 @@
 /* @var $this admin\components\View */
 
 use common\helpers\Render;
+use common\models\Platform;
 use common\models\Recharge;
 
 $this->title = 'Recharge Record';
@@ -15,27 +16,31 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
 
 <div class="form-inline search" id="info-search">
     <div class="input-group w-180px">
-        <span class="input-group-addon">project</span>
+        <span class="input-group-addon"><i class="fa fa-cog fa-fw"></i>project</span>
         <input type="text" class="form-control tabler" name="project_id" placeholder="number">
     </div>
     <div class="input-group w-180px">
-        <span class="input-group-addon">merchant</span>
+        <span class="input-group-addon"><i class="fa fa-cog fa-fw"></i>merchant</span>
         <input type="text" class="form-control tabler" name="merchant_id" placeholder="number">
     </div>
     <div class="input-group w-180px">
-        <span class="input-group-addon">order</span>
+        <span class="input-group-addon"><i class="fa fa-barcode fa-fw"></i>order</span>
         <input type="text" class="form-control tabler" name="order_number" placeholder="order">
     </div>
     <div class="input-group w-180px">
-        <span class="input-group-addon">source</span>
+        <span class="input-group-addon"><i class="fa fa-thumb-tack fa-fw"></i>source</span>
         <input type="text" class="form-control tabler" name="source_order_number" placeholder="order">
     </div>
     <div class="input-group w-180px">
-        <span class="input-group-addon">status</span>
+        <span class="input-group-addon"><i class="fa fa-check fa-fw"></i>status</span>
         <?= Render::select('status', Recharge::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler']) ?>
     </div>
+    <div class="input-group w-180px">
+        <span class="input-group-addon"><i class="fa fa-bank fa-fw"></i>bank</span>
+        <?= Render::select('bank_id', Platform::$bankSelector, null, ['prompt' => '--', 'class' => 'tabler']) ?>
+    </div>
     <div class="input-group w-400px">
-        <span class="input-group-addon">time</span>
+        <span class="input-group-addon"><i class="fa fa-clock-o fa-fw"></i>time</span>
         <input type="text" class="form-control tabler" name="star" placeholder="start time">
         <span class="input-group-addon"><i class="fa fa-caret-right fa-fw"></i></span>
         <input type="text" class="form-control tabler" name="end" placeholder="end time">
@@ -46,20 +51,21 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
 <table class="table table-bordered table-striped" id="info-table">
     <thead>
     <tr>
-        <th><i class="fa fa-user fa-fw"></i>project</th>
-        <th><i class="fa fa-id-card fa-fw"></i>merchant</th>
-        <th><i class="fa fa-phone-square fa-fw"></i>order number</th>
-        <th><i class="fa fa-calendar-times-o fa-fw"></i>source number</th>
+        <th><i class="fa fa-list fa-fw"></i>id</th>
+        <th><i class="fa fa-cog fa-fw"></i>P&M</th>
+        <th><i class="fa fa-barcode fa-fw"></i>order number</th>
+        <th><i class="fa fa-thumb-tack fa-fw"></i>source number</th>
         <th><i class="fa fa-bank fa-fw"></i>bank</th>
         <th><i class="fa fa-cny fa-fw"></i>amount</th>
         <th><i class="fa fa-check fa-fw"></i>status</th>
+        <th><i class="fa fa-clock-o fa-fw"></i>success at</th>
         <th><i class="fa fa-clock-o fa-fw"></i>created at</th>
         <th><i class="fa fa-gear fa-fw"></i>operation</th>
     </tr>
     </thead>
     <tbody>
     <tr>
-        <td colspan="9"><i class="fa fa-search fa-fw"></i>click on the search button to search data.</td>
+        <td colspan="10"><i class="fa fa-search fa-fw"></i>click on the search button to search data.</td>
     </tr>
     </tbody>
 </table>
@@ -86,8 +92,9 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
             selectButton: '.select-all', reverseButton: '.reverse-all', readyCall: true,
             // param => tabler
             afterPost: function(param) {
-                // 所属权组名称显示
+                // 名称显示
                 tableHandler.renderCategory({ category: $(param.tabler).find('.status'), select: 'status' });
+                tableHandler.renderCategory({ category: $(param.tabler).find('.bank'), select: 'bank_id' });
                 // 初始化 删除按钮事件
                 tableHandler.requestSingle({ button: $(param.tabler).find('.delete-data'), url: $('.delete-mult:first').data('href'), isKeep: false });
             }
@@ -97,13 +104,14 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
 <script id="info-template" type="text/html">
     {{each infos as info key}}
     <tr id="tr-{{info.id}}" data-id="{{info.id}}">
-        <td>{{info.project_id}}</td>
-        <td>{{info.project_merchant_id}}</td>
+        <td>{{info.id}}</td>
+        <td>{{info.project_id}} / {{info.project_merchant_id}}</td>
         <td>{{info.order_number}}</td>
         <td>{{info.source_order_number}}</td>
-        <td class="bank">{{info.bindCard.bank_id}}</td>
+        <td class="bank">{{info.bank_id}}</td>
         <td>{{info.amount | fmoney}}</td>
         <td class="status">{{info.status}}</td>
+        <td>{{info.success_at | dateShow: 'minute'}}</td>
         <td>{{info.created_at | dateShow: 'minute'}}</td>
         <td>
             <a class="label label-primary" href="/recharge/detail?id={{info.id}}"><i class="fa fa-edit fa-fw"></i>edit</a>

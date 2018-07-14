@@ -322,7 +322,7 @@ var tabler = function() {
                 tablerClass.loaded();
                 BootstrapDialog.alert({ message: 'search program error' });
                 // layer.msg('search program error', { shift: 6 });
-                tablerClass.showError('search program error');
+                tablerClass.showError('search program error', 'fa fa-times');
             },
             // 数据加载成功处理方法
             success: function(ret) {
@@ -337,7 +337,7 @@ var tabler = function() {
                         tablerClass.renderTabler(_html);
                     }
                     else {
-                        tablerClass.showError('Nothing has been found');
+                        tablerClass.showError('nothing has been found', 'fa fa-ban-circle');
                     }
                     // 初始化表格相关
                     tablerClass.initTable();

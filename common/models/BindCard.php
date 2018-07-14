@@ -16,8 +16,9 @@ class BindCard extends ActiveRecord {
         return [
             [['project_id', 'platform_id', 'merchant_id', 'paytype', 'bank_id', 'card_no', 'user_id', 'realname', 'id_card', 'mobile'], 'required'],
             [['project_id', 'platform_id', 'paytype', 'bank_id', 'card_no', 'user_id', 'deleted_at'], 'integer'],
-            [['mobile'], 'string', 'max' => 32],
+            [['mobile'], 'string', 'max' => 16],
             [['realname', 'bind_number', 'protocol_number'], 'string', 'max' => 64],
+            [['extra', 'remark'], 'string', 'max' => 255],
             [['card_no', 'mobile'], 'unique', 'targetAttribute' => ['card_no', 'mobile']],
         ];
     }
@@ -40,6 +41,7 @@ class BindCard extends ActiveRecord {
             'user_id' => 'user number',
             'bind_number' => 'bind order number',
             'protocol_number' => 'protocol number',
+            'extra' => 'extra configure',
             'deleted_at' => 'deleted at',
         ];
     }
