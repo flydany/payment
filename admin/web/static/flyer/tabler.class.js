@@ -229,7 +229,7 @@ var tabler = function() {
     // @name 显示加载提示描述
     this.showMessage = function(message, icon) {
         if($(this.tabler)[0].tagName == 'TABLE') {
-            this.renderTabler('<tr><td colspan="' + $(this.tabler).find('thead th').length + '"><i class="' + icon + '"></i> ' + message + '</td></tr>');
+            this.renderTabler('<tr><td colspan="' + $(this.tabler).find('thead th').length + '"><i class="' + icon + ' fa-fw"></i> ' + message + '</td></tr>');
         }
         else {
             this.renderTabler('<i class="' + icon + '"></i> ' + message);
@@ -237,7 +237,7 @@ var tabler = function() {
     }
     // @name 显示加载异常信息描述
     this.showError = function(message) {
-        this.showMessage(message, 'fa fa-ban-circle');
+        this.showMessage(message, 'fa fa-times-circle');
     }
     // @name 表格数据加载中动画、隐藏搜索button
     this.loading = function() {
@@ -337,7 +337,7 @@ var tabler = function() {
                         tablerClass.renderTabler(_html);
                     }
                     else {
-                        tablerClass.showError('nothing has been found', 'fa fa-ban-circle');
+                        tablerClass.showError('nothing has been found', 'fa fa-times-circle');
                     }
                     // 初始化表格相关
                     tablerClass.initTable();
