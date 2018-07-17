@@ -6,7 +6,7 @@ use common\helpers\Render;
 use common\models\Admin;
 use common\models\AdminRole;
 
-$this->addCrumbs('System');
+$this->addCrumbs('Manager');
 $this->addCrumbs('Administrator List', 'admin/list');
 $this->title = (isset($data['id']) ? 'Update' : 'Insert'). ' Administrator';
 $this->setActiveNavigator('admin/list');

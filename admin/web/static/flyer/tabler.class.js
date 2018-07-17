@@ -402,7 +402,7 @@ var tabler = function() {
     }
     this.initPageClick = function() {
         var tablerClass = this;
-        $(this.pager).find('a').each(function() {
+        $(this.pager).find('.render a').each(function() {
             // $(this).attr('data-href', $(this).attr('href'));
             $(this).attr('href', 'javascript:;');
             $(this).bind('click', function() {

@@ -8,7 +8,7 @@ use common\models\AdminPermission;
 use common\models\AdminRole;
 
 $this->title = 'Administrator Group Permissions';
-$this->addCrumbs('Manager');
+$this->addCrumbs('System');
 $this->addCrumbs('Administrator List', 'admin/list');
 $this->addCrumbs('Update Administrator', 'admin/detail?id='.$admin->id);
 $this->setActiveNavigator('admin/list');

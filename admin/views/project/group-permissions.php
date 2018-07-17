@@ -6,7 +6,7 @@ use yii\helpers\ArrayHelper;
 use common\models\Navigator;
 
 $this->title = 'Administrator Group Permissions';
-$this->addCrumbs('Manager');
+$this->addCrumbs('System');
 $this->addCrumbs('Administrator Group List', 'admin/group-list');
 $this->addCrumbs('Update Administrator Group', 'admin/group-detail?id='.$role->id);
 $this->setActiveNavigator('admin/group-list');

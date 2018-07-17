@@ -9,17 +9,23 @@ use Yii;
  */
 class Project extends ActiveRecord {
 
+    const StatusNormal = 1;
+    const StatusForbidden = 2;
+    public static $statusSelector = [
+        self::StatusNormal =>  '正常',
+        self::StatusForbidden => '禁用',
+    ];
+
     // only define rules for those attributes that
     // will receive user inputs.
     public function rules()
     {
         return [
-            [['title', 'project_name', 'public_key', 'status'], 'required'],
+            [['title', 'effect_date', 'public_key', 'status'], 'required'],
             [['status', 'deleted_at'], 'integer'],
-            [['project_name'], 'string', 'max' => 64],
-            [['project_name'], 'unique'],
+            [['effect_date'], 'string', 'max' => 16],
             [['title', 'remark'], 'string', 'max' => 255],
-            [['public_key', 'effect_time'], 'string', 'max' => 1024],
+            [['public_key'], 'string', 'max' => 1024],
         ];
     }
     /**
@@ -30,9 +36,8 @@ class Project extends ActiveRecord {
     {
         return [
             'title' => 'title',
-            'project_name' => 'project name',
+            'effect_date' => 'effect date',
             'public_key' => 'rsa public',
-            'effect_time' => 'effect times',
             'status' => 'status',
             'remark' => 'remark',
             'deleted_at' => 'deleted at',
@@ -49,7 +54,7 @@ class Project extends ActiveRecord {
         $rule = [
             'param' => [
                 'title' => ['title', ['maxlength' => 255, 'required']],
-                'project_name' => ['project name', ['maxlength' => 64, 'required']],
+                'effect_date' => ['effect date', ['date' => 'Y-m-d', 'required']],
                 'public_key' => ['rsa public', ['maxlength' => 1024, 'required']],
                 'remark' => ['remark', ['maxlength' => 255, 'required']],
                 'status' => ['status', ['in' => array_keys(static::$statusSelector), 'required']],

@@ -6,7 +6,6 @@ use Yii;
 use yii\helpers\ArrayHelper;
 use common\helpers\Render;
 use common\helpers\Checker;
-use common\models\Navigator;
 use common\models\Admin;
 use common\models\AdminRole;
 use common\models\AdminPermission;

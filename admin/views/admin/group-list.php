@@ -3,7 +3,7 @@
 /* @var $this \admin\components\View */
 
 $this->title = 'Administrator Group List';
-$this->addCrumbs('System');
+$this->addCrumbs('Manager');
 
 $this->registerJavascript('@static/flyer/checker.class.js');
 $this->registerJavascript('@static/flyer/tabler.class.js');

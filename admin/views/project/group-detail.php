@@ -5,8 +5,8 @@
 use common\helpers\Render;
 use common\models\AdminRole;
 
-$this->addCrumbs('Manager');
-$this->addCrumbs('Administrator Group List', 'admin/group-list');
+$this->addCrumbs('Project');
+$this->addCrumbs('Project List', 'admin/group-list');
 $this->title = (isset($data['id']) ? 'Update' : 'Insert'). ' Administrator Group';
 $this->setActiveNavigator('admin/group-list');
 
