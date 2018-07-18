@@ -3,15 +3,15 @@
 
  Source Server         : localhost
  Source Server Type    : MySQL
- Source Server Version : 80011
+ Source Server Version : 50640
  Source Host           : localhost:3306
  Source Schema         : payment
 
  Target Server Type    : MySQL
- Target Server Version : 80011
+ Target Server Version : 50640
  File Encoding         : 65001
 
- Date: 12/07/2018 17:15:44
+ Date: 17/07/2018 18:58:40
 */
 
 SET NAMES utf8mb4;
@@ -29,7 +29,7 @@ CREATE TABLE `admin` (
   `realname` varchar(16) NOT NULL,
   `mobile` varchar(16) NOT NULL COMMENT '手机号码',
   `email` varchar(128) NOT NULL COMMENT '邮箱',
-  `end_date` varchar(16) NOT NULL DEFAULT '0000-00-00' COMMENT '帐号过期时间',
+  `effect_date` varchar(16) NOT NULL DEFAULT '0000-00-00' COMMENT '帐号过期时间',
   `deleted_at` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '删除时间',
   `created_at` int(11) unsigned NOT NULL COMMENT '添加时间',
   `updated_at` int(11) unsigned NOT NULL COMMENT '更新时间',
@@ -41,9 +41,9 @@ CREATE TABLE `admin` (
 -- Records of admin
 -- ----------------------------
 BEGIN;
-INSERT INTO `admin` VALUES (1, 'root', '$2y$13$G0CohVc8f.SzLAZ5UHZeIOHanKLmlR0R852yZNv3vc2IYU/iOPjTi', 1, '超级管理员', '13761665439', 'flydany@yeah.net', '2018-12-01', 0, 1481164840, 1481164840);
-INSERT INTO `admin` VALUES (2, 'admin', '$2y$13$QQgoPJTHKZPKzxVbKjVD4Oxn0b1S2Sh2DTY1.yh9CYSHqcDBzvr12', 1, '超级管理', '13761665439', 'flydany@qq.com', '2017-12-01', 0, 1481164840, 1484929400);
-INSERT INTO `admin` VALUES (3, 'flydany', '$2y$13$nPQRAKIbcNSZjfdAZ.HhhOt0JGqsH6oc.lj.otReZiOz.bQ158PAi', 2, '小刚', '13761665439', '841175841@qq.com', '2017-12-01', 0, 1481164840, 1484929395);
+INSERT INTO `admin` VALUES (1, 'root', '$2y$13$G0CohVc8f.SzLAZ5UHZeIOHanKLmlR0R852yZNv3vc2IYU/iOPjTi', 1, 'Super manager', '13761665439', 'flydany@yeah.net', '2018-12-01', 0, 1481164840, 1481164840);
+INSERT INTO `admin` VALUES (2, 'admin', '$2y$13$naC7Ga1i.YJmECNTfEuM5e6D07AnFsRpqYiSZyVxvQBp4RKdLE4Eq', 1, 'Ganganadi-valuka', '13761665437', 'flydany@qq.com', '2017-12-01', 0, 1481164840, 1531456105);
+INSERT INTO `admin` VALUES (3, 'flydany', '$2y$13$StfnlztfYA2Aaz5FhOitX.mlQLWk5.3f9XmhFUX9kUrrRqe/sBEPS', 2, 'Infinite number', '13761665438', '841175841@qq.com', '2017-12-01', 0, 1481164840, 1531456085);
 COMMIT;
 
 -- ----------------------------
@@ -58,7 +58,7 @@ CREATE TABLE `admin_group` (
   `updated_at` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `index_identify` (`identity`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='权组表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='权组表';
 
 -- ----------------------------
 -- Records of admin_group
@@ -88,7 +88,7 @@ DROP TABLE IF EXISTS `admin_permission`;
 CREATE TABLE `admin_permission` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
   `identity` varchar(64) NOT NULL COMMENT '管理编号',
-  `controller` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '菜单路径，格式->CONTROLLER~METHOD',
+  `controller` varchar(128) NOT NULL COMMENT '菜单路径，格式->CONTROLLER~METHOD',
   `created_at` int(11) unsigned NOT NULL COMMENT '添加时间',
   `updated_at` int(11) unsigned NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`),
@@ -100,8 +100,8 @@ CREATE TABLE `admin_permission` (
 -- ----------------------------
 BEGIN;
 INSERT INTO `admin_permission` VALUES (1, 'super', 'super', 1481164840, 1481164840);
-INSERT INTO `admin_permission` VALUES (43, 'system', 'system~admin/admin-list', 1514699131, 1514699131);
-INSERT INTO `admin_permission` VALUES (44, 'verify-borrow', 'member~', 1514699142, 1514699142);
+INSERT INTO `admin_permission` VALUES (43, 'system.keeper', 'system~admin/admin-list', 1514699131, 1514699131);
+INSERT INTO `admin_permission` VALUES (44, 'verify.borrow', 'member~', 1514699142, 1514699142);
 INSERT INTO `admin_permission` VALUES (45, '3', 'finance~cashin-list', 1514699299, 1514699299);
 INSERT INTO `admin_permission` VALUES (46, '3', 'finance~cashin-view', 1514699299, 1514699299);
 COMMIT;
@@ -127,10 +127,10 @@ CREATE TABLE `admin_role` (
 -- Records of admin_role
 -- ----------------------------
 BEGIN;
-INSERT INTO `admin_role` VALUES (1, '超级管理员', 'super', 0, 'I\'m Super dot', 0, 1481164840, 1529993565);
-INSERT INTO `admin_role` VALUES (2, '借款审核员', 'verify-borrow', 0, 'borrow order verify', 0, 1481164840, 1481164840);
-INSERT INTO `admin_role` VALUES (3, '征信管理员', 'credit-manager', 0, 'credit platform CURD', 0, 1481164840, 1481164840);
-INSERT INTO `admin_role` VALUES (4, '系统维护员', 'system', 0, 'system keeper', 0, 1481164840, 1481164840);
+INSERT INTO `admin_role` VALUES (1, 'super', 'super', 0, 'I\'m Super dot', 0, 1481164840, 1529993565);
+INSERT INTO `admin_role` VALUES (2, 'borrow verifyer', 'verify.borrow', 0, 'borrow order verify', 0, 1481164840, 1531456032);
+INSERT INTO `admin_role` VALUES (3, 'credit manager', 'credit.manager', 0, 'credit platform CURD', 0, 1481164840, 1531456010);
+INSERT INTO `admin_role` VALUES (4, 'system keeper', 'system.keeper', 0, 'system keeper', 0, 1481164840, 1531456017);
 COMMIT;
 
 -- ----------------------------
@@ -140,16 +140,21 @@ DROP TABLE IF EXISTS `bind_card`;
 CREATE TABLE `bind_card` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `project_merchant_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '项目商户号',
-  `card_id` int(11) unsigned NOT NULL COMMENT '商户号编号',
-  `paytype` tinyint(4) unsigned NOT NULL COMMENT '支付类型',
-  `order_number` varchar(32) DEFAULT NULL COMMENT '订单号',
-  `protocol_number` varchar(128) DEFAULT NULL COMMENT '协议号',
-  `success_at` int(11) unsigned DEFAULT '0' COMMENT '成功时间',
-  `remark` varchar(255) DEFAULT NULL,
+  `paytype` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '支付类型',
+  `bank_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '银行',
+  `card_no` varchar(32) NOT NULL DEFAULT '' COMMENT '卡号',
+  `realname` varchar(64) NOT NULL DEFAULT '' COMMENT '姓名',
+  `id_card` varchar(32) NOT NULL DEFAULT '' COMMENT '身份证',
+  `mobile` varchar(16) NOT NULL DEFAULT '' COMMENT '手机号',
+  `order_number` varchar(32) NOT NULL DEFAULT '' COMMENT '订单号',
+  `protocol_number` varchar(128) NOT NULL DEFAULT '' COMMENT '协议号',
+  `success_at` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '成功时间',
+  `extra` varchar(255) NOT NULL DEFAULT '' COMMENT '扩展参数',
+  `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
   `status` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '状态',
-  `deleted_at` int(11) unsigned DEFAULT '0' COMMENT '删除时间',
-  `created_at` int(11) unsigned DEFAULT NULL,
-  `updated_at` int(11) unsigned DEFAULT NULL,
+  `deleted_at` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '删除时间',
+  `created_at` int(11) unsigned NOT NULL DEFAULT '0',
+  `updated_at` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `index_project_merchant_paytype` (`project_merchant_id`,`paytype`),
   KEY `index_protocol_number` (`protocol_number`),
@@ -160,7 +165,7 @@ CREATE TABLE `bind_card` (
 -- Records of bind_card
 -- ----------------------------
 BEGIN;
-INSERT INTO `bind_card` VALUES (1, 1, 1, 1, NULL, '极速钱包宝付快捷支付', NULL, NULL, 0, 0, 1530164509, 1530164509);
+INSERT INTO `bind_card` VALUES (1, 1, 1, 4, '6217001210042615144', '孙标', '341222198911241433', '13761665439', 'B123445543', 'PT348689798572374', 1531475879, '', '', 90, 0, 1530164509, 1530164509);
 COMMIT;
 
 -- ----------------------------
@@ -413,21 +418,21 @@ DROP TABLE IF EXISTS `project`;
 CREATE TABLE `project` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL COMMENT '名称',
-  `identity` varchar(64) NOT NULL COMMENT '标识',
   `public_key` varchar(1024) NOT NULL COMMENT '公钥串',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
-  `status` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '状态',
-  `deleted_at` int(11) unsigned DEFAULT '0' COMMENT '删除时间',
-  `created_at` int(11) unsigned DEFAULT NULL,
-  `updated_at` int(11) unsigned DEFAULT NULL,
+  `effect_date` varchar(16) NOT NULL DEFAULT '' COMMENT '有效期',
+  `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
+  `status` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '状态',
+  `deleted_at` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '删除时间',
+  `created_at` int(11) unsigned NOT NULL DEFAULT '0',
+  `updated_at` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=100002 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of project
 -- ----------------------------
 BEGIN;
-INSERT INTO `project` VALUES (1, '极速钱包', 'jisuqianbao', '1', '极速钱包APP', 0, 0, 1530164509, 1530164509);
+INSERT INTO `project` VALUES (100001, 'speed purse', '1', '2200-01-01', 'speed purse app', 1, 0, 1530164509, 1531788394);
 COMMIT;
 
 -- ----------------------------
@@ -490,13 +495,14 @@ CREATE TABLE `recharge` (
   `project_id` int(11) unsigned NOT NULL COMMENT '项目',
   `project_merchant_id` int(11) unsigned NOT NULL COMMENT '项目商户号',
   `bind_card_id` int(11) unsigned NOT NULL COMMENT '绑卡记录',
+  `bank_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '银行',
   `amount` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '充值金额',
   `fee` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '手续费',
   `source_order_number` varchar(128) NOT NULL COMMENT '来源订单号',
   `outer_order_number` varchar(32) NOT NULL COMMENT '第三方订单号',
-  `success_date` date NOT NULL COMMENT '成功日期',
+  `success_date` varchar(16) NOT NULL DEFAULT '' COMMENT '成功日期',
   `success_at` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '充值完成时间',
-  `remark` varchar(128) NOT NULL COMMENT '备注',
+  `remark` varchar(128) NOT NULL DEFAULT '' COMMENT '备注',
   `status` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '状态',
   `deleted_at` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '删除时间',
   `created_at` int(11) unsigned NOT NULL DEFAULT '0',
@@ -505,7 +511,14 @@ CREATE TABLE `recharge` (
   KEY `index_order` (`order_number`) USING BTREE,
   KEY `index_user_created_at` (`project_id`,`created_at`) USING BTREE,
   KEY `index_created_at_user` (`created_at`,`project_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='充值记录表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='充值记录表';
+
+-- ----------------------------
+-- Records of recharge
+-- ----------------------------
+BEGIN;
+INSERT INTO `recharge` VALUES (1, '2345123441', 1, 1, 1, 4, 100000, 100, 'S1234441', 'O1234111', '', 0, '', 0, 0, 1531475879, 1531475879);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for recharge_log
