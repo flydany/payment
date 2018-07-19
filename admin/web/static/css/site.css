@@ -57,10 +57,15 @@ body {
 
 /* -------- search form ----- */
 .search {
-	margin-bottom:16px;
+	margin-bottom:10px;
 }
-div[class^="input-group"] {
-	padding:4px 5px 4px 0;
+.search div[class^="input-group"] {
+	padding:0 3px 5px 2px;
+	box-sizing:border-box;
+}
+.search .input-group[class*="col-"],
+.search button.btn {
+	float:left;
 }
 
 ul.pagination {

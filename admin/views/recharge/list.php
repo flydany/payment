@@ -15,33 +15,33 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
 ?>
 
 <div class="contenter">
-    <div class="form-inline search" id="info-search">
-        <div class="input-group col-md-3">
-            <span class="input-group-addon"><i class="fa fa-cog fa-fw"></i>project</span>
-            <input type="text" class="form-control tabler" name="project_id" placeholder="number">
-        </div>
-        <div class="input-group col-md-3">
-            <span class="input-group-addon"><i class="fa fa-cog fa-fw"></i>merchant</span>
-            <input type="text" class="form-control tabler" name="merchant_id" placeholder="number">
-        </div>
-        <div class="input-group col-md-3">
-            <span class="input-group-addon"><i class="fa fa-barcode fa-fw"></i>order</span>
-            <input type="text" class="form-control tabler" name="order_number" placeholder="order">
-        </div>
-        <div class="input-group col-md-3">
-            <span class="input-group-addon"><i class="fa fa-thumb-tack fa-fw"></i>source</span>
-            <input type="text" class="form-control tabler" name="source_order_number" placeholder="order">
+    <div class="form-inline search clearfix" id="info-search">
+        <div class="input-group col-md-2">
+            <span class="input-group-addon"><i class="fa fa-cog fa-fw"></i></span>
+            <input type="text" class="form-control tabler" name="project_id" placeholder="project">
         </div>
         <div class="input-group col-md-2">
-            <span class="input-group-addon"><i class="fa fa-check fa-fw"></i>status</span>
+            <span class="input-group-addon"><i class="fa fa-cog fa-fw"></i></span>
+            <input type="text" class="form-control tabler" name="merchant_id" placeholder="merchant">
+        </div>
+        <div class="input-group col-md-2">
+            <span class="input-group-addon"><i class="fa fa-barcode fa-fw"></i></span>
+            <input type="text" class="form-control tabler" name="order_number" placeholder="order">
+        </div>
+        <div class="input-group col-md-2">
+            <span class="input-group-addon"><i class="fa fa-thumb-tack fa-fw"></i></span>
+            <input type="text" class="form-control tabler" name="source_order_number" placeholder="source">
+        </div>
+        <div class="input-group col-md-2">
+            <span class="input-group-addon"><i class="fa fa-check fa-fw"></i></span>
             <?= Render::select('status', Recharge::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler']) ?>
         </div>
         <div class="input-group col-md-2">
-            <span class="input-group-addon"><i class="fa fa-bank fa-fw"></i>bank</span>
+            <span class="input-group-addon"><i class="fa fa-bank fa-fw"></i></span>
             <?= Render::select('bank_id', Platform::$bankSelector, null, ['prompt' => '--', 'class' => 'tabler']) ?>
         </div>
         <div class="input-group col-md-6">
-            <span class="input-group-addon"><i class="fa fa-clock-o fa-fw"></i>time</span>
+            <span class="input-group-addon"><i class="fa fa-clock-o fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="star" placeholder="start time">
             <span class="input-group-addon"><i class="fa fa-caret-right fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="end" placeholder="end time">
@@ -53,7 +53,7 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
         <thead>
         <tr>
             <th><i class="fa fa-list fa-fw"></i>id</th>
-            <th><i class="fa fa-cog fa-fw"></i>P&M</th>
+            <th><i class="fa fa-cog fa-fw"></i>pm</th>
             <th><i class="fa fa-barcode fa-fw"></i>order number</th>
             <th><i class="fa fa-thumb-tack fa-fw"></i>source number</th>
             <th><i class="fa fa-bank fa-fw"></i>bank</th>
