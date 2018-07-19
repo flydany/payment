@@ -155,6 +155,9 @@ $this->registerCss('
         padding: 8px;
         color:rgba(255,255,255,.75);
     }
+    #sidebar-control {
+        
+    }
 ');
 $this->registerJs("
     jQuery(document).ready(function() {
@@ -190,7 +193,7 @@ $this->registerJs("
     <!-- /menu profile quick info -->
     
     <!-- sidebar menu -->
-    <div id="sidebar-menu">
+    <div class="clearfix" id="sidebar-menu">
         <?php
         $navigators = require(Yii::getAlias('@admin/config/navigator.php'));
         foreach($navigators[0] as $id => $part) {
@@ -238,19 +241,11 @@ $this->registerJs("
     <!-- /sidebar menu -->
     
     <!-- /menu footer buttons -->
-    <div class="sidebar-footer hidden-small">
-        <a data-toggle="tooltip" data-placement="top" title="" data-original-title="Settings">
-            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-        </a>
-        <a data-toggle="tooltip" data-placement="top" title="" data-original-title="FullScreen">
-            <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
-        </a>
-        <a data-toggle="tooltip" data-placement="top" title="" data-original-title="Lock">
-            <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-        </a>
-        <a data-toggle="tooltip" data-placement="top" title="" href="login.html" data-original-title="Logout">
-            <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
-        </a>
+    <div id="sidebar-footer">
+        <div id="sidebar-control">
+            <span class="sidebar-show"><i class="fa fa-angle-double-left fa-fw"></i>Collapse sidebar</span>
+            <span><i class="fa fa-angle-double-right fa-fw"></i></span>
+        </div>
     </div>
     <!-- /menu footer buttons -->
 </div>
