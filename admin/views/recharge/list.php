@@ -14,68 +14,70 @@ $this->registerJavascript('@static/flyer/tabler.class.js');
 $this->registerJavascript('@static/flyer/tableHandler.class.js');
 ?>
 
-<div class="form-inline search" id="info-search">
-    <div class="input-group w-180px">
-        <span class="input-group-addon"><i class="fa fa-cog fa-fw"></i>project</span>
-        <input type="text" class="form-control tabler" name="project_id" placeholder="number">
+<div class="contenter">
+    <div class="form-inline search" id="info-search">
+        <div class="input-group col-md-3">
+            <span class="input-group-addon"><i class="fa fa-cog fa-fw"></i>project</span>
+            <input type="text" class="form-control tabler" name="project_id" placeholder="number">
+        </div>
+        <div class="input-group col-md-3">
+            <span class="input-group-addon"><i class="fa fa-cog fa-fw"></i>merchant</span>
+            <input type="text" class="form-control tabler" name="merchant_id" placeholder="number">
+        </div>
+        <div class="input-group col-md-3">
+            <span class="input-group-addon"><i class="fa fa-barcode fa-fw"></i>order</span>
+            <input type="text" class="form-control tabler" name="order_number" placeholder="order">
+        </div>
+        <div class="input-group col-md-3">
+            <span class="input-group-addon"><i class="fa fa-thumb-tack fa-fw"></i>source</span>
+            <input type="text" class="form-control tabler" name="source_order_number" placeholder="order">
+        </div>
+        <div class="input-group col-md-2">
+            <span class="input-group-addon"><i class="fa fa-check fa-fw"></i>status</span>
+            <?= Render::select('status', Recharge::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler']) ?>
+        </div>
+        <div class="input-group col-md-2">
+            <span class="input-group-addon"><i class="fa fa-bank fa-fw"></i>bank</span>
+            <?= Render::select('bank_id', Platform::$bankSelector, null, ['prompt' => '--', 'class' => 'tabler']) ?>
+        </div>
+        <div class="input-group col-md-6">
+            <span class="input-group-addon"><i class="fa fa-clock-o fa-fw"></i>time</span>
+            <input type="text" class="form-control tabler" name="star" placeholder="start time">
+            <span class="input-group-addon"><i class="fa fa-caret-right fa-fw"></i></span>
+            <input type="text" class="form-control tabler" name="end" placeholder="end time">
+        </div>
+        <button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button>
     </div>
-    <div class="input-group w-180px">
-        <span class="input-group-addon"><i class="fa fa-cog fa-fw"></i>merchant</span>
-        <input type="text" class="form-control tabler" name="merchant_id" placeholder="number">
-    </div>
-    <div class="input-group w-180px">
-        <span class="input-group-addon"><i class="fa fa-barcode fa-fw"></i>order</span>
-        <input type="text" class="form-control tabler" name="order_number" placeholder="order">
-    </div>
-    <div class="input-group w-180px">
-        <span class="input-group-addon"><i class="fa fa-thumb-tack fa-fw"></i>source</span>
-        <input type="text" class="form-control tabler" name="source_order_number" placeholder="order">
-    </div>
-    <div class="input-group w-180px">
-        <span class="input-group-addon"><i class="fa fa-check fa-fw"></i>status</span>
-        <?= Render::select('status', Recharge::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler']) ?>
-    </div>
-    <div class="input-group w-180px">
-        <span class="input-group-addon"><i class="fa fa-bank fa-fw"></i>bank</span>
-        <?= Render::select('bank_id', Platform::$bankSelector, null, ['prompt' => '--', 'class' => 'tabler']) ?>
-    </div>
-    <div class="input-group w-400px">
-        <span class="input-group-addon"><i class="fa fa-clock-o fa-fw"></i>time</span>
-        <input type="text" class="form-control tabler" name="star" placeholder="start time">
-        <span class="input-group-addon"><i class="fa fa-caret-right fa-fw"></i></span>
-        <input type="text" class="form-control tabler" name="end" placeholder="end time">
-    </div>
-    <button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button>
-</div>
 
-<table class="table table-bordered table-striped" id="info-table">
-    <thead>
-    <tr>
-        <th><i class="fa fa-list fa-fw"></i>id</th>
-        <th><i class="fa fa-cog fa-fw"></i>P&M</th>
-        <th><i class="fa fa-barcode fa-fw"></i>order number</th>
-        <th><i class="fa fa-thumb-tack fa-fw"></i>source number</th>
-        <th><i class="fa fa-bank fa-fw"></i>bank</th>
-        <th><i class="fa fa-cny fa-fw"></i>amount</th>
-        <th><i class="fa fa-check fa-fw"></i>status</th>
-        <th><i class="fa fa-clock-o fa-fw"></i>success at</th>
-        <th><i class="fa fa-clock-o fa-fw"></i>created at</th>
-        <th><i class="fa fa-gear fa-fw"></i>operation</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td colspan="10"><i class="fa fa-search fa-fw"></i>click on the search button to search data.</td>
-    </tr>
-    </tbody>
-</table>
-<div class="btn-toolbar" id="info-page">
-    <div class="btn-group" role="group">
-        <button type="button" class="btn btn-default"><i class="fa fa-check-square fa-fw"></i>check all</button>
-        <button type="button" class="btn btn-default"><i class="fa fa-minus-square fa-fw"></i>inverse</button>
-        <button type="button" class="btn btn-default"><i class="fa fa-trash fa-fw"></i>batch delete</button>
+    <table class="table table-bordered table-striped" id="info-table">
+        <thead>
+        <tr>
+            <th><i class="fa fa-list fa-fw"></i>id</th>
+            <th><i class="fa fa-cog fa-fw"></i>P&M</th>
+            <th><i class="fa fa-barcode fa-fw"></i>order number</th>
+            <th><i class="fa fa-thumb-tack fa-fw"></i>source number</th>
+            <th><i class="fa fa-bank fa-fw"></i>bank</th>
+            <th><i class="fa fa-cny fa-fw"></i>amount</th>
+            <th><i class="fa fa-check fa-fw"></i>status</th>
+            <th><i class="fa fa-clock-o fa-fw"></i>success at</th>
+            <th><i class="fa fa-clock-o fa-fw"></i>created at</th>
+            <th><i class="fa fa-gear fa-fw"></i>operation</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td colspan="10"><i class="fa fa-search fa-fw"></i>click on the search button to search data.</td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="btn-toolbar" id="info-page">
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-default"><i class="fa fa-check-square fa-fw"></i>check all</button>
+            <button type="button" class="btn btn-default"><i class="fa fa-minus-square fa-fw"></i>inverse</button>
+            <button type="button" class="btn btn-default"><i class="fa fa-trash fa-fw"></i>batch delete</button>
+        </div>
+        <div class="btn-group render" role="group"></div>
     </div>
-    <div class="btn-group render" role="group"></div>
 </div>
 
 <script>

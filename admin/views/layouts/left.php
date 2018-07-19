@@ -17,6 +17,11 @@ $this->registerCss('
         color:#ECF0F1;
         text-decoration:none;
     }
+    #website-name i {
+        border: 1px solid #EAEAEA;
+        padding: 5px 6px;
+        border-radius: 50%;
+    }
     #admin-name .photo {
         width:35%;
         float:left;
@@ -155,8 +160,13 @@ $this->registerCss('
         padding: 8px;
         color:rgba(255,255,255,.75);
     }
-    #sidebar-control {
-        
+    @media (max-width: 991px) {
+        #left-panel {
+            width:70px;
+        }
+        #right-panel {
+            margin-left:70px;
+        }
     }
 ');
 $this->registerJs("
@@ -239,13 +249,4 @@ $this->registerJs("
         ?>
     </div>
     <!-- /sidebar menu -->
-    
-    <!-- /menu footer buttons -->
-    <div id="sidebar-footer">
-        <div id="sidebar-control">
-            <span class="sidebar-show"><i class="fa fa-angle-double-left fa-fw"></i>Collapse sidebar</span>
-            <span><i class="fa fa-angle-double-right fa-fw"></i></span>
-        </div>
-    </div>
-    <!-- /menu footer buttons -->
 </div>

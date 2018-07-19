@@ -2,8 +2,6 @@
 
 namespace admin\assets;
 
-use common\components\View;
-
 /**
  * Main backend application asset bundle.
  */

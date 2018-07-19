@@ -10,40 +10,42 @@ $this->registerJavascript('@static/flyer/tabler.class.js');
 $this->registerJavascript('@static/flyer/tableHandler.class.js');
 ?>
 
-<div class="form-inline search" id="info-search">
-    <div class="input-group w-250px">
-        <span class="input-group-addon"><i class="fa fa-superpowers fa-fw"></i>identity</span>
-        <input type="text" class="form-control tabler" name="identity" placeholder="identity">
+<div class="contenter">
+    <div class="form-inline search" id="info-search">
+        <div class="input-group w-250px">
+            <span class="input-group-addon"><i class="fa fa-superpowers fa-fw"></i>identity</span>
+            <input type="text" class="form-control tabler" name="identity" placeholder="identity">
+        </div>
+        <div class="input-group w-250px">
+            <span class="input-group-addon"><i class="fa fa-book fa-fw"></i>title</span>
+            <input type="text" class="form-control tabler" name="title" placeholder="title">
+        </div>
+        <button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button>
     </div>
-    <div class="input-group w-250px">
-        <span class="input-group-addon"><i class="fa fa-book fa-fw"></i>title</span>
-        <input type="text" class="form-control tabler" name="title" placeholder="title">
-    </div>
-    <button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button>
-</div>
 
-<table class="table table-bordered table-striped" id="info-table">
-    <thead>
-    <tr>
-        <th><i class="fa fa-superpowers fa-fw"></i>identity</th>
-        <th><i class="fa fa-book fa-fw"></i>title</th>
-        <th><i class="fa fa-bookmark-o fa-fw"></i>remark</th>
-        <th><i class="fa fa-gear fa-fw"></i>operation</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td colspan="7"><i class="fa fa-search fa-fw"></i>click on the search button to search data.</td>
-    </tr>
-    </tbody>
-</table>
-<div class="btn-toolbar" id="info-page">
-    <div class="btn-group" role="group">
-        <button type="button" class="btn btn-default"><i class="fa fa-check-square fa-fw"></i>check all</button>
-        <button type="button" class="btn btn-default"><i class="fa fa-minus-square fa-fw"></i>inverse</button>
-        <button type="button" class="btn btn-default"><i class="fa fa-trash fa-fw"></i>batch delete</button>
+    <table class="table table-bordered table-striped" id="info-table">
+        <thead>
+        <tr>
+            <th><i class="fa fa-superpowers fa-fw"></i>identity</th>
+            <th><i class="fa fa-book fa-fw"></i>title</th>
+            <th><i class="fa fa-bookmark-o fa-fw"></i>remark</th>
+            <th><i class="fa fa-gear fa-fw"></i>operation</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td colspan="7"><i class="fa fa-search fa-fw"></i>click on the search button to search data.</td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="btn-toolbar" id="info-page">
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-default"><i class="fa fa-check-square fa-fw"></i>check all</button>
+            <button type="button" class="btn btn-default"><i class="fa fa-minus-square fa-fw"></i>inverse</button>
+            <button type="button" class="btn btn-default"><i class="fa fa-trash fa-fw"></i>batch delete</button>
+        </div>
+        <div class="btn-group render" role="group"></div>
     </div>
-    <div class="btn-group render" role="group"></div>
 </div>
 
 <script>

@@ -14,6 +14,7 @@ use yii\helpers\ArrayHelper;
 
 class Controller extends \yii\web\Controller {
 
+    public $layout = 'main.php';
     // page status
     public $isAlert = false;
     public $status = ['code' => SuccessCode, 'message' => ''];

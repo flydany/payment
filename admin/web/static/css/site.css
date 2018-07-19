@@ -45,11 +45,14 @@ select {
 	box-sizing: border-box;
 }
 body {
-    min-width:1200px;
+    min-width:900px;
 	margin:0;
 	color:#73879C;
 	font-weight:400;
     font:14px/20px 'MontserratRegular', Helvetica, Arial, sans-serif;
+}
+.table tbody {
+	font-size:12px;
 }
 
 /* -------- search form ----- */

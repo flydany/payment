@@ -35,14 +35,29 @@ use yii\helpers\Html;
     }
     #right-panel {
         margin-left:230px;
-        padding:10px 20px 0;
         min-height:3200px;
         background-color:#FFF;
     }
+    #right-panel .contenter {
+        padding:0 15px;
+    }
+    #top-panel {
+        background: #EDEDED;
+        border-bottom: 1px solid #D9DEE4;
+        margin-bottom: 15px;
+        padding:10px 0;
+        width: 100%;
+    }
+    #sidebar-toggle {
+        float:left;
+        font-size:26px;
+        padding:4px 15px 0 15px;
+        cursor:pointer;
+    }
     .breadcrumb {
-        padding:8px 0;
-        background:none;
-        margin-bottom:10px;
+        font-size:16px;
+        background-color:#EDEDED;
+        margin-bottom:0;
     }
 </style>
 <div class="col-md-3" id="left-panel">
@@ -50,9 +65,10 @@ use yii\helpers\Html;
 </div>
 
 <div id="right-panel">
-    <div class="wrap">
+    <div class="wrap" id="top-panel">
+        <span id="sidebar-toggle"><i class="fa fa-bars"></i></span>
         <ol class="breadcrumb">
-            <li><i class="fa fa-home fa-fw"></i><a href="/site/index"><?= $this->context->module->name ?></a></li>
+            <li><a href="/site/index"><?= $this->context->module->name ?></a></li>
             <?php if( ! empty($this->crumbs)) {
                 foreach($this->crumbs as $crumbs) {
                     if($crumbs['url']) {

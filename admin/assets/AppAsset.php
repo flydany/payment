@@ -15,11 +15,10 @@ class AppAsset extends AssetBundle {
     
     public $depends = [
         'admin\assets\BootstrapAsset',
+        'admin\assets\FontAwesomeAsset',
     ];
     
     public $css = [
-        'font.awesome/css/font-awesome.css',
-        // 'css/theme.css',
         'css/site.css',
     ];
     public $cssOptions = [
@@ -27,7 +26,6 @@ class AppAsset extends AssetBundle {
     ];
     
     public $js = [
-        // 'layer/layer.js',
         'bootstrap.dialog/js/bootstrap-dialog.min.js',
         'js/common.js',
     ];
