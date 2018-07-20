@@ -748,7 +748,7 @@ function checker_email(value, format) {
 }
 // @name 校验用户名格式是否正确
 function checker_username(value, format) {
-    return /^[\w-_\.]{4,}$/.test(value) ? true : 'formatting error';
+    return /^[\w-_@\.]{4,}$/.test(value) ? true : 'formatting error';
 }
 // @name 校验密码格式是否正确
 function checker_password(value, format) {

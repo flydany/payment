@@ -40,6 +40,7 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
     </table>
     <div class="btn-toolbar" id="info-page">
         <div class="btn-group" role="group">
+            <a type="button" class="btn btn-default" href="/admin/group-detail"><i class="fa fa-plus fa-fw"></i>insert</a>
             <button type="button" class="btn btn-default"><i class="fa fa-check-square fa-fw"></i>check all</button>
             <button type="button" class="btn btn-default"><i class="fa fa-minus-square fa-fw"></i>inverse</button>
             <button type="button" class="btn btn-default"><i class="fa fa-trash fa-fw"></i>batch delete</button>
