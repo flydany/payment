@@ -448,7 +448,8 @@ var checker = function() {
         // console.log(this.getMessage());
         // 判断是否校验通过
         if(this.isError()) {
-            layer.msg(this.getMessage().join('。'), { shift: 6 });
+            // layer.msg(this.getMessage().join('。'), { shift: 6 });
+            BootstrapDialog.alert({ message: this.getMessage().join('。') });
             $(this.getErrorDom()[0]).focus();
             return false;
         }
@@ -706,7 +707,12 @@ function checker_eq(value, format) {
 }
 // @name 校验两字符串/数字是否 = 特定值
 function checker_in(value, format) {
-    return (format && format.indexOf(value) >= 0) ? true : 'value error';
+    if(format) {
+        if(format.indexOf(value) >= 0 || (checker_int(value) && format.indexOf(parseInt(value)))) {
+            return true;
+        }
+    }
+    return 'value error';
 }
 // @name 校验两字符串/数字是否 = 特定值
 function checker_inkey(value, format) {

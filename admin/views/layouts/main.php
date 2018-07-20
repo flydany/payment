@@ -23,9 +23,6 @@ use yii\helpers\Html;
 <?php $this->beginBody() ?>
 
 <style>
-    body {
-        background-color:#2A3F54;
-    }
     #left-panel {
         position:absolute;
         display:flex;
@@ -55,7 +52,6 @@ use yii\helpers\Html;
         cursor:pointer;
     }
     .breadcrumb {
-        font-size:16px;
         background-color:#EDEDED;
         margin-bottom:0;
     }

@@ -9,8 +9,8 @@ use Yii;
  */
 class ProjectMerchant extends ActiveRecord {
     
-    const StatusUsable = 0;
-    const StatusForbidden = 1;
+    const StatusUsable = '0';
+    const StatusForbidden = '1';
     public static $statusSelector = [
         self::StatusUsable => ['title' => '可用', 'status' => 'green'],
         self::StatusForbidden => ['title' => '禁用', 'status' => 'red'],

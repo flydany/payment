@@ -30,7 +30,7 @@ return [
     ],
     '002001' => [
         '002001001' => ['title' => 'Project List', 'icon_class' => 'book', 'controller' => 'project/list'],
-        '002001002' => ['title' => 'Project Contacts', 'icon_class' => 'address-book', 'controller' => 'project/contacts'],
+        '002001002' => ['title' => 'Project Contacts', 'icon_class' => 'address-book', 'controller' => 'project/contacts-list'],
     ],
     '002002' => [
         '002002001' => ['title' => 'Merchant List', 'icon_class' => 'home', 'controller' => 'platform/merchant-list'],

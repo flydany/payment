@@ -10,10 +10,10 @@ use Yii;
 class Recharge extends ActiveRecord {
 
     // Cash's status defined
-    const StatusInit = 0;
-    const StatusPaying = 1;
-    const StatusSuccess = 2;
-    const StatusFailed = 3;
+    const StatusInit = '0';
+    const StatusPaying = '1';
+    const StatusSuccess = '2';
+    const StatusFailed = '3';
     public static $statusSelector = [
         self::StatusInit => 'wait',
         self::StatusPaying => 'paying',

@@ -13,9 +13,9 @@ class Application extends \yii\web\Application {
     // @name return admin object
     public function getAdmin()
     {
-        $this->admin = Admin::findOne(1);
+        $this->admin = Admin::findOne(3);
         return $this->admin;
-        
+
         if(empty($this->admin)) {
             $admin = $this->session->get('admin');
             if(empty($admin)) {

@@ -46,16 +46,6 @@ class ActiveRecord extends \yii\db\ActiveRecord {
     }
 
     /**
-     * 执行原生SQL语句
-     * @param $sql string SQL语句
-     * @return boolean
-     */
-    public function executeQuery($sql)
-    {
-        return $this->db()->createCommand($sql)->execute();
-    }
-
-    /**
      * 加上下面这行，数据库中的created_at和updated_at会自动在创建和修改时设置为当时时间戳
      * @inheritdoc
      */
@@ -133,7 +123,6 @@ class ActiveRecord extends \yii\db\ActiveRecord {
         //         isset($param[$key]) && $setParams[$key] = $param[$key];
         //     }
         // }
-        // echo '<pre>'; print_r($param); die;
         parent::setAttributes($param, $checkValid);
         return $this;
     }
@@ -175,13 +164,16 @@ class ActiveRecord extends \yii\db\ActiveRecord {
 
     /**
      * 更新数据追加前置条件
-     * @param array $conditions 前置条件数组
+     * @param array $keys 前置条件数组
      * @return integer
      */
-    public function cSave($conditions = [])
+    public function cSave($keys)
     {
         $conditions['id'] = $this->id;
         $conditions['created_at'] = $this->created_at;
+        foreach($keys as $key) {
+            $conditions[$key] = $this->{$key};
+        }
         return static::updateAll($this->attributes, $conditions);
     }
 
@@ -297,8 +289,12 @@ class ActiveRecord extends \yii\db\ActiveRecord {
     // @describe $tableKey like ['attribute' => 'value', ['operate', 'attribute', 'value']]
     // @describe $tableKey like ['attribute' => 'value', ['attribute' => 'value'], ['operate', 'attribute', 'value']]
     // @return object
-    public static function bulidCondition($conditions = [], $tableKey = [])
+    public static function buliders($tabkey, $params = null)
     {
+        if($params === null) {
+            $params = Yii::$app->getRequest()->post();
+        }
+        $conditions = static::initCondition($tabkey, $params);
         $query = static::find();
         if(empty($conditions)) {
             return $query;
@@ -323,8 +319,12 @@ class ActiveRecord extends \yii\db\ActiveRecord {
     // compatible ['attribute' => 'value', ['operate', 'attribute', 'value']]
     // ['attribute' => 'value', ['attribute' => 'value'], ['operate', 'attribute', 'value']]
     // @return object
-    public static function filterConditions($conditions = [], $tableKey = [])
+    public static function filters($tabkey, $params = null)
     {
+        if($params === null) {
+            $params = Yii::$app->getRequest()->post();
+        }
+        $conditions = static::initCondition($tabkey, $params);
         $query = static::find();
         if(empty($conditions)) {
             return $query;

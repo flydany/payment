@@ -25,25 +25,27 @@ $this->title = 'Successful Operation';
     }
 </style>
 
-<div class="container-fluid alert alert-success" role="alert">
-    <!-- page content -->
-    <div class="text-center">
-        <h1 class="success-number">SUCCESS</h1>
-        <p><?= Html::encode($message) ?></p>
-        <?php
-        if($skip) {
-            echo '<p>';
-            if(is_array($skip)) {
-                foreach($skip as $k => $web) {
-                    echo $k ? '　　' : '';
-                    echo '<a href="'.$web['url'].'"><i class="fa fa-hand-pointer-o fa-fw"></i>'.$web['title'].'</a>';
+<div class="contenter">
+    <div class="container-fluid alert alert-success" role="alert">
+        <!-- page content -->
+        <div class="text-center">
+            <h1 class="success-number">Success</h1>
+            <p><?= Html::encode($message) ?></p>
+            <?php
+            if($skip) {
+                echo '<p>';
+                if(is_array($skip)) {
+                    foreach($skip as $k => $web) {
+                        echo $k ? '　　' : '';
+                        echo '<a href="'.$web['url'].'"><i class="fa fa-hand-pointer-o fa-fw"></i>'.$web['title'].'</a>';
+                    }
                 }
-            }
-            else {
-                echo 'the page will automatically jump after 3 seconds, <a href="'.$skip.'"><i class="fa fa-hand-pointer-o fa-fw"></i>click here</a>';
-            }
-            echo '</p>';
-        } ?>
+                else {
+                    echo 'the page will automatically jump after 3 seconds, <a href="'.$skip.'"><i class="fa fa-hand-pointer-o fa-fw"></i>click here</a>';
+                }
+                echo '</p>';
+            } ?>
+        </div>
+        <!-- /page content -->
     </div>
-    <!-- /page content -->
 </div>

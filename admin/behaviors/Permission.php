@@ -46,12 +46,12 @@ class Permission extends \yii\base\ActionFilter {
         if( ! Yii::$app->isLogin()) {
             if(Yii::$app->request->isAjax) {
                 // json format数据需要返回数据到 response.data中
-                Yii::$app->getResponse()->data = $controller->json('AdminPermission.Denied', '请先登录（AdminPermission Denied）');
+                Yii::$app->getResponse()->data = $controller->json('Permission.Denied', 'please log in first');
             }
             else {
                 // html format数据直接返回数据到response.content中
-                $controller->layout = 'simple.php';
-                Yii::$app->getResponse()->content = $controller->error('请先登录（AdminPermission Denied）', 'welcome/login');
+                $controller->layout = 'dap.php';
+                Yii::$app->getResponse()->content = $controller->error('please log in first', 'site/login');
             }
             // 发送response数据到页面
             Yii::$app->getResponse()->send();
@@ -67,12 +67,12 @@ class Permission extends \yii\base\ActionFilter {
         if( ! Admin::checkPermission($controller->navigator['controller'], $controller->navigator['action'])) {
             if(Yii::$app->request->isAjax) {
                 // json format数据需要返回数据到 response.data中
-                Yii::$app->getResponse()->data = $controller->json('AdminPermission.Denied', '无页面访问权限（AdminPermission Denied）');
+                Yii::$app->getResponse()->data = $controller->json('Permission.Denied', 'non page access permissions');
             }
             else {
                 // html format数据直接返回数据到response.content中
-                $controller->layout = 'simple.php';
-                Yii::$app->getResponse()->content = $controller->error('无效的访问权限（AdminPermission Denied）');
+                // $controller->layout = 'dap.php';
+                Yii::$app->getResponse()->content = $controller->error('non page access permissions', 'javascript:history.go(-1);');
             }
             // 发送response数据到页面
             Yii::$app->getResponse()->send();

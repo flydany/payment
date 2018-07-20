@@ -11,10 +11,10 @@ use common\helpers\Util;
 class RechargeLog extends ActiveRecord {
 
     // @name 日志操作人类型定义
-    const HandlerUser = 0;
-    const HandlerAdmin = 1;
-    const HandlerSystem = 2;
-    const HandlerOuter = 3;
+    const HandlerUser = '0';
+    const HandlerAdmin = '1';
+    const HandlerSystem = '2';
+    const HandlerOuter = '3';
     public static $handlerSelector = [
         self::HandlerUser => ['title' => '用户', 'status' => 'green'],
         self::HandlerAdmin => ['title' => '管理员', 'status' => 'purple'],

@@ -99,14 +99,14 @@ class Controller extends \yii\web\Controller {
                     unset($skip[$k]);
                     continue;
                 }
-                $web['url'] = Url::to('@web/'.$web['url']);
+                $web['url'] = strpos($web['url'], 'javascript') == 0 ? $skip : Url::to('@web/'.$web['url']);
                 if( ! isset($web['title'])) {
                     $web['title'] = 'jump?';
                 }
             }
         }
         else {
-            $skip = $skip ? Url::to('@web/'.$skip) : false;
+            $skip = $skip ? (strpos($skip, 'javascript') == 0 ? $skip : Url::to('@web/'.$skip)) : false;
         }
         return $this->render('/layouts/error', ['message' => $message, 'skip' => $skip]);
     }
@@ -125,14 +125,14 @@ class Controller extends \yii\web\Controller {
                     unset($skip[$k]);
                     continue;
                 }
-                $web['url'] = Url::to('@web/'.$web['url']);
+                $web['url'] = strpos($web['url'], 'javascript') == 0 ? $skip : Url::to('@web/'.$web['url']);
                 if( ! isset($web['title'])) {
                     $web['title'] = 'jump?';
                 }
             }
         }
         else {
-            $skip = $skip ? Url::to('@web/'.$skip) : false;
+            $skip = $skip ? (strpos($skip, 'javascript') == 0 ? $skip : Url::to('@web/'.$skip)) : false;
         }
         return $this->render('/layouts/success', ['message' => $message, 'skip' => $skip]);
     }

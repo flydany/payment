@@ -11,10 +11,10 @@ use yii\db\Exception;
 class Withdraw extends ActiveRecord {
 
     // @name 状态
-    const StatusInit = 0;
-    const StatusWithdrawing = 1;
-    const StatusSuccess = 2;
-    const StatusFailed = 3;
+    const StatusInit = '0';
+    const StatusWithdrawing = '1';
+    const StatusSuccess = '2';
+    const StatusFailed = '3';
     public static $statusSelector = [
         self::StatusInit => ['title' => '待审核', 'status' => 'blue'],
         self::StatusWithdrawing => ['title' => '提现中', 'status' => 'orange'],
@@ -23,8 +23,8 @@ class Withdraw extends ActiveRecord {
     ];
 
     // @name 类型
-    const PlatformAlipay = 1;
-    const PlatformWeChat = 2;
+    const PlatformAlipay = '1';
+    const PlatformWeChat = '2';
     public static $platformSelector = [
         self::PlatformAlipay => ['title' => '支付宝', 'status' => 'blue'],
         self::PlatformWeChat => ['title' => '微信', 'status' => 'green'],

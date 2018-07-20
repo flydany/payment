@@ -12,8 +12,8 @@ use yii\helpers\ArrayHelper;
 class Navigator extends \common\models\ActiveRecord {
     
     // @name 设置导航功能类型
-    const TypeFunction = 0;
-    const TypeNavigator = 1;
+    const TypeFunction = '0';
+    const TypeNavigator = '1';
     public static $typeSelector = [
         self::TypeFunction => '功能',
         self::TypeNavigator => '菜单',

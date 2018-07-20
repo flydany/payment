@@ -8,18 +8,18 @@ use yii\db\Exception;
 class Message extends \common\models\ActiveRecord {
 
     // 消息类型
-    const TypeMessage = 0;
-    const TypeRecharge = 1;
-    const TypeRechargeRefuse = 11;
-    const TypeWithdraw = 2;
-    const TypeWithdrawApply = 21;
-    const TypeWithdrawRefuse = 22;
-    const TypeEmploymentApplicant = 3;
-    const TypeEmploymentRecruit = 31;
-    const TypeEmploymentPay = 32;
-    const TypeEarn = 4;
-    const TypeBondPay = 51;
-    const TypeReturnBondPay = 51;
+    const TypeMessage = '0';
+    const TypeRecharge = '1';
+    const TypeRechargeRefuse = '11';
+    const TypeWithdraw = '2';
+    const TypeWithdrawApply = '21';
+    const TypeWithdrawRefuse = '22';
+    const TypeEmploymentApplicant = '3';
+    const TypeEmploymentRecruit = '31';
+    const TypeEmploymentPay = '32';
+    const TypeEarn = '4';
+    const TypeBondPay = '51';
+    const TypeReturnBondPay = '51';
     public static $typeSelector = [
         self::TypeMessage => ['title' => '消息', 'status' => 'blue'],
         self::TypeRecharge => ['title' => '充值', 'status' => 'green'],

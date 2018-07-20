@@ -2,11 +2,12 @@
 
 namespace admin\controllers;
 
+use common\models\AdminResource;
 use Yii;
-use yii\helpers\ArrayHelper;
 use common\helpers\Render;
 use common\helpers\Checker;
 use common\models\Project;
+use common\models\ProjectContacts;
 
 class ProjectController extends Controller {
     
@@ -22,7 +23,7 @@ class ProjectController extends Controller {
         }
         $params = $this->request->post();
         $params['deleted_at'] = '0';
-        $query = Project::filterConditions(Project::initCondition(['project_id', ['title', 'like'], 'status', 'deleted_at'], $params));
+        $query = Project::filters(['id', ['title', 'like'], 'status', 'deleted_at'], $params)->filterResource(AdminResource::TypeProject);
         $pagination = Render::pagination((clone $query)->count());
         $data['infos'] = $query->orderBy('id desc')->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
         $data['page'] = Render::pager($pagination);
@@ -40,6 +41,9 @@ class ProjectController extends Controller {
         $projectId = $this->request->get('id');
         if($projectId && ( ! $project = Project::finder($projectId))) {
             return $this->error('invalid project', 'project/list');
+        }
+        if($project && empty($project->hasPermission)) {
+            return $this->error('permission forbidden', 'project/list');
         }
         return $this->render('detail', ['data' => $project]);
     }
@@ -69,11 +73,14 @@ class ProjectController extends Controller {
      */
     public function actionUpdate()
     {
-        /* @var $project project */
+        /* @var $project Project */
         // id 为必填项，判断管理员存在状态
         // 未得到，渲染错误页面
         if( ! $project = Project::finder($this->request->get('id'))) {
             return $this->error('invalid project', 'project/list');
+        }
+        if($project && empty($project->hasPermission)) {
+            return $this->error('permission forbidden', 'project/list');
         }
         if ( ! $project->loadAttributes($this->request->post())->validate()) {
             // 参数异常，渲染错误页面
@@ -94,11 +101,10 @@ class ProjectController extends Controller {
      */
     public function actionDelete()
     {
+        return $this->json('system.error', 'it is not allowed to delete.');
+
         if( ! ($ids = $this->request->post('id'))) {
             return $this->json('invalid.param', 'you must choice at least one project.');
-        }
-        if('1' == $ids || (is_array($ids) && in_array('1', $ids))) {
-            return $this->json('invalid.param', 'system project can\'t be modify.');
         }
         if(Project::trashAll(['id' => $ids])) {
             return $this->json(SuccessCode, 'project delete successful.');
@@ -115,7 +121,10 @@ class ProjectController extends Controller {
     {
         $project = Project::finder($projectId ? $projectId : $this->request->get('id'));
         if(empty($project)) {
-            return $this->error('invalid permission group', 'project/group-list');
+            return $this->error('invalid resource', 'project/list');
+        }
+        if($project && empty($project->hasPermission)) {
+            return $this->error('permission forbidden', 'project/list');
         }
         if($this->request->isGet) {
             return $this->render('permissions', ['project' => $project]);
@@ -123,57 +132,130 @@ class ProjectController extends Controller {
         // update project's permission
         $rule = [
             'param' => [
-                'identities' => ['permission groups', ['status', 'required']],
-                'permissions' => ['permissions', ['controller']],
+                'identities' => ['identities', ['status', 'required']],
+                'resources' => ['resource data', ['controller']],
             ],
         ];
         $param = $this->request->getparams($rule['param'], 'post');
         $checker = Checker::authentication($rule, $param);
         if($checker['code'] != Checker::SuccessCode) {
-            return $this->error($checker['message'], 'project/group-permissions?id='.$project->id);
+            return $this->error($checker['message'], 'project/permissions?id='.$project->id);
         }
-        if($project->setPermissions($param['identities'], $param['permissions'])) {
+        if($project->setResources($param['identities'], $param['resources'])) {
             return $this->success('project ('.$project->title.') permission update successful.', [
-                ['title' => 'go to project list page', 'url' => 'project/group-list'],
+                ['title' => 'go to project list page', 'url' => 'project/list'],
                 ['title' => 'edit project page', 'url' => 'project/detail?id='.$project->id],
-                ['title' => 'edit project permissions again', 'url' => 'project/permissions?id='.$project->id],
+                ['title' => 'edit project permission again', 'url' => 'project/permissions?id='.$project->id],
             ]);
         }
         return $this->error('project ('.$project->title.') permission update failed.', 'project/permissions?id='.$project->id);
     }
+
     /**
-     * set project role's permission
-     * @param id int  - role id by get request
+     * this action showing project contacts list
+     * @param request type request->isAjax?
+     * @return html|json
+     */
+    public function actionContactsList()
+    {
+        if( ! $this->request->isAjax) {
+            return $this->render('contacts-list');
+        }
+        $params = $this->request->post();
+        $query = ProjectContacts::filters(['project_id', 'name', 'mobile', 'identity', 'email'], $params)->filterResource(AdminResource::TypeProject);
+        $pagination = Render::pagination((clone $query)->count());
+        $data['infos'] = $query->with('project')->orderBy('id desc')->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
+        $data['page'] = Render::pager($pagination);
+        return $this->json($data);
+    }
+
+    /**
+     * show project detail
+     * @param id int  - project id by get request
      * @return string
      */
-    public function actionGroupPermissions()
+    public function actionContactsDetail()
     {
-        $projectRole = projectRole::finder($this->request->get('id'));
-        // 参数异常，渲染错误页面
-        if(empty($projectRole)) {
-            return $this->error('invalid permission group', 'project/group-list');
+        $contacts = null;
+        $contactsId = $this->request->get('id');
+        if($contactsId && ( ! $contacts = ProjectContacts::finder($contactsId))) {
+            return $this->error('invalid project contacts', 'project/contacts-list');
         }
-        if($this->request->isGet) {
-            return $this->render('group-permissions', ['role' => $projectRole]);
+        if($contacts && empty($contacts->project->hasPermission)) {
+            return $this->error('permission forbidden', 'project/contacts-list');
         }
-        // update project role's permission
-        $rule = [
-            'param' => [
-                'permissions' => ['permissions', ['controller']],
-            ],
-        ];
-        $param = $this->request->post();
-        $checker = Checker::authentication($rule, $param);
-        if($checker['code'] != Checker::SuccessCode) {
-            return $this->error($checker['message'], 'project/group-permissions?id='.$projectRole->id);
+        return $this->render('contacts-detail', ['data' => $contacts]);
+    }
+    /**
+     * insert project
+     */
+    public function actionContactsInsert()
+    {
+        $project = Project::finder($this->request->post('project_id'));
+        if(empty($project)) {
+            return $this->error('unknown project', 'project/contacts-list');
         }
-        if($projectRole->setPermissions($param['permissions'])) {
-            return $this->success('permission group ('.$projectRole->title.') permission update successful.', [
-                ['title' => 'go to permission group list page', 'url' => 'project/group-list'],
-                ['title' => 'edit permission group page', 'url' => 'project/group-detail?id='.$projectRole->id],
-                ['title' => 'edit permission group permissions again', 'url' => 'project/group-permissions?id='.$projectRole->id],
+        if(empty($project->hasPermission)) {
+            return $this->error('permission forbidden', 'project/contacts-list');
+        }
+        $contacts = new ProjectContacts();
+        if ( ! $contacts->loadAttributes($this->request->post())->validate()) {
+            // 参数异常，渲染错误页面
+            return $this->error($contacts->errors(), 'project/contacts-detail');
+        }
+        if ($contacts->save()) {
+            // 保存成功
+            return $this->success('project contacts ('.$contacts->name.') insert successful', [
+                ['title' => 'go to project contacts list page', 'url' => 'project/contacts-list'],
+                ['title' => 'edit project contacts again', 'url' => 'project/contacts-detail?id='.$contacts->id]
             ]);
         }
-        return $this->error('permission group ('.$projectRole->title.') permission update failed.', 'project/group-permissions?id='.$projectRole->id);
+        // 参数异常，渲染错误页面
+        return $this->error('project contacts ('.$contacts->name.') insert failed, please try again', 'project/contacts-detail');
+    }
+    /**
+     * project detail show / update
+     * use get(id) to find project
+     */
+    public function actionContactsUpdate()
+    {
+        /* @var $contacts ProjectContacts */
+        // id 为必填项，判断管理员存在状态
+        // 未得到，渲染错误页面
+        if( ! $contacts = ProjectContacts::finder($this->request->get('id'))) {
+            return $this->error('invalid project contacts', 'project/contacts-list');
+        }
+        if ( ! $contacts->loadAttributes($this->request->post())->validate()) {
+            // 参数异常，渲染错误页面
+            return $this->error($contacts->errors(), 'project/contacts-detail?id='.$contacts->id);
+        }
+        if(empty($contacts->project)) {
+            return $this->error('unknown project', 'project/contacts-list');
+        }
+        if(empty($contacts->project->hasPermission)) {
+            return $this->error('permission forbidden', 'project/contacts-list');
+        }
+        if ($contacts->save()) {
+            // 保存成功
+            return $this->success('project ('.$contacts->name.') update successful', [
+                ['title' => 'go to project contacts list page', 'url' => 'project/contacts-list'],
+                ['title' => 'edit project contacts again', 'url' => 'project/contacts-detail?id='.$contacts->id],
+            ]);
+        }
+        // 参数异常，渲染错误页面
+        return $this->error('project contacts ('.$contacts->name.') update failed, please try again.', 'project/contacts-detail?id='.$contacts->id);
+    }
+    /**
+     * delete project
+     */
+    public function actionContactsDelete()
+    {
+        if( ! ($ids = $this->request->post('id'))) {
+            return $this->json('invalid.param', 'you must choice at least one project contacts.');
+        }
+        if(ProjectContacts::trashAll(['id' => $ids])) {
+            return $this->json(SuccessCode, 'project contacts delete successful.');
+        }
+        return $this->json('system.error', 'project contacts delete failed.');
     }
 }

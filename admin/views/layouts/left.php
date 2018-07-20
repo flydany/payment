@@ -5,7 +5,22 @@
 use yii\helpers\ArrayHelper;
 use common\helpers\Render;
 
-$this->registerCss('
+$this->registerJs("
+    jQuery(document).ready(function() {
+        jQuery('#sidebar-menu .side-menu > li > a').bind('click', function() {
+            var li = jQuery(this).parent('li');
+            if(jQuery(li).hasClass('active')) {
+                jQuery(li).removeClass('active');
+            }
+            else {
+                jQuery('#sidebar-menu .side-menu > li.active').removeClass('active');
+                jQuery(li).addClass('active');
+            }
+        });
+    });
+");
+?>
+<style>
     #website-name {
         height:57px;
         line-height:57px;
@@ -21,6 +36,9 @@ $this->registerCss('
         border: 1px solid #EAEAEA;
         padding: 5px 6px;
         border-radius: 50%;
+    }
+    #admin-name {
+        margin-top:5px;
     }
     #admin-name .photo {
         width:35%;
@@ -54,7 +72,7 @@ $this->registerCss('
     }
 
     #sidebar-menu {
-        margin-top:20px;
+        margin-top:30px;
     }
     #sidebar-menu .fa {
         width: 26px;
@@ -65,7 +83,7 @@ $this->registerCss('
         font-size: 18px;
     }
     #sidebar-menu .menu-section {
-        margin-bottom: 20px
+        margin-bottom: 30px
     }
     #sidebar-menu .menu-section h3 {
         padding-left: 15px;
@@ -88,7 +106,7 @@ $this->registerCss('
         cursor: pointer;
     }
     #sidebar-menu .side-menu > li.active {
-        border-right:4px solid #1ABB9C;
+        border-right:3px solid #1ABB9C;
     }
     #sidebar-menu .side-menu > li > a {
         display: block;
@@ -108,7 +126,7 @@ $this->registerCss('
         text-decoration: none;
         background: 0 0;
     }
-    #sidebar-menu .side-menu li a span.fa {
+    #sidebar-menu .side-menu li a .toggle {
         float: right;
         text-align: center;
         margin-top: 5px;
@@ -116,7 +134,7 @@ $this->registerCss('
         min-width: inherit;
         color: #C4CFDA;
     }
-    #sidebar-menu .side-menu li.active a span.fa {
+    #sidebar-menu .side-menu li.active a .toggle {
         text-align: right !important;
         margin-right: 3px;
     }
@@ -160,36 +178,74 @@ $this->registerCss('
         padding: 8px;
         color:rgba(255,255,255,.75);
     }
-    @media (max-width: 991px) {
+    @media (max-width: 1193px) {
+        #left-panel,
+        #website-name,
+        #admin-name,
+        #sidebar-menu {
+            width:80px;
+            text-align:center;
+        }
         #left-panel {
-            width:70px;
+            z-index:10;
         }
         #right-panel {
-            margin-left:70px;
+            margin-left:80px;
+        }
+        #website-name span,
+        #admin-name,
+        #sidebar-menu .menu-section > h3,
+        #sidebar-menu .toggle,
+        #sidebar-menu li.active > ul.child-menu {
+            display:none;
+        }
+        #website-name {
+            padding-left:0;
+        }
+        #sidebar-menu .fa {
+            width:auto;
+            font-size:32px;
+        }
+        #sidebar-menu .menu-section {
+            margin-bottom:0;
+        }
+        #sidebar-menu .side-menu a {
+            font-size:12px;
+        }
+        #sidebar-menu .side-menu a i:first-child {
+            display:block;
+            margin-bottom:5px;
+        }
+        #left-panel .side-menu {
+            position:relative;
+        }
+        #sidebar-menu .child-menu {
+            position:absolute;
+            top:0;
+            left:77px;
+            width:230px;
+            border-left: 3px solid #1ABB9C;
+            background-color:#2A3F54;
+            text-align:left;
+            border-radius:0 5px 5px 0;
+        }
+        #sidebar-menu li:hover > ul.child-menu {
+            display:block;
+        }
+        #sidebar-menu .side-menu > li:hover {
+            border-right: 3px solid #1ABB9C;
+        }
+        #sidebar-menu .side-menu > li > a {
+            padding:10px 0;
         }
     }
-');
-$this->registerJs("
-    jQuery(document).ready(function() {
-        jQuery('#sidebar-menu .side-menu > li > a').bind('click', function() {
-            var li = jQuery(this).parent('li');
-            if(jQuery(li).hasClass('active')) {
-                jQuery(li).removeClass('active');
-            }
-            else {
-                jQuery('#sidebar-menu .side-menu > li.active').removeClass('active');
-                jQuery(li).addClass('active');
-            }
-        });
-    });
-");
-?>
+</style>
 
 <div class="clearfix">
-    <div class="clearfix" id="website-name">
-        <a href="/index.php"><i class="fa fa-paw"></i> <span><?= $this->context->module->name ?></span></a>
+    <div  id="website-name">
+        <a href="/index.php"><i class="fa fa-paw"></i><span> <?= $this->context->module->name ?></span></a>
     </div>
-    
+
     <!-- menu profile quick info -->
     <div class="clearfix" id="admin-name">
         <div class="photo">
@@ -201,9 +257,9 @@ $this->registerJs("
         </div>
     </div>
     <!-- /menu profile quick info -->
-    
+
     <!-- sidebar menu -->
-    <div class="clearfix" id="sidebar-menu">
+    <div id="sidebar-menu">
         <?php
         $navigators = require(Yii::getAlias('@admin/config/navigator.php'));
         foreach($navigators[0] as $id => $part) {
@@ -221,7 +277,7 @@ $this->registerJs("
                         }
                         ?>
                         <li<?= $active ?> id="sid-<?= $sid ?>">
-                            <a><i class="fa fa-<?= $navigator['icon_class'] ?> fa-fw"></i> <?= $navigator['title'] ?> <span class="fa fa-chevron-down"></span></a>
+                            <a><i class="fa fa-<?= $navigator['icon_class'] ?> fa-fw"></i><?= $navigator['title'] ?><i class="fa fa-chevron-down toggle"></i></a>
                             <?php
                             if( ! empty($navigators[$sid])) {
                                 ?>

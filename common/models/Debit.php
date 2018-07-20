@@ -10,10 +10,10 @@ use Yii;
 class Debit extends ActiveRecord {
 
     // Debit's status defined
-    const StatusInit = 0;
-    const StatusPaying = 91;
-    const StatusSuccess = 90;
-    const StatusFailed = 92;
+    const StatusInit = '0';
+    const StatusPaying = '91';
+    const StatusSuccess = '90';
+    const StatusFailed = '92';
     public static $statusSelector = [
         self::StatusInit => ['title' => '待扣款', 'status' => 'blue'],
         self::StatusPaying => ['title' => '扣款中', 'status' => 'purple'],

@@ -5,12 +5,12 @@ namespace common\models;
 use Yii;
 use yii\helpers\ArrayHelper;
 
-class AdminItem extends ActiveRecord {
+class AdminResource extends ActiveRecord {
     
     // 数据源常量定义
-    const TypeProject = 1;
+    const TypeProject = '1';
     public $typeSelector = [
-        self::TypeProject => ['title' => '项目', 'status' => 'blue'],
+        self::TypeProject => 'project',
     ];
     
     // only define rules for those attributes that
@@ -31,9 +31,9 @@ class AdminItem extends ActiveRecord {
     public function attributeLabels()
     {
         return [
-            'type' => '数据源',
-            'identity' => '标识',
-            'item_id' => '数据源编号',
+            'type' => 'resource type',
+            'identity' => 'identity',
+            'item_id' => 'resource number',
         ];
     }
     
@@ -47,9 +47,9 @@ class AdminItem extends ActiveRecord {
     {
         $rule = [
             'param' => [
-                'type' => ['数据源', ['int', 'required']],
-                'identity' => ['标识', ['preg' => '/^[\w\-_\.]{1,}$/', 'required']],
-                'item_id' => ['数据源编号', ['int', 'required']],
+                'type' => ['resource type', ['int', 'required']],
+                'identity' => ['identity', ['preg' => '/^[\w\-_\.]{1,}$/', 'required']],
+                'item_id' => ['resource number', ['int', 'required']],
             ]
         ];
         return $rule;

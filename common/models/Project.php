@@ -9,8 +9,8 @@ use Yii;
  */
 class Project extends ActiveRecord {
 
-    const StatusNormal = 1;
-    const StatusForbidden = 2;
+    const StatusNormal = '1';
+    const StatusForbidden = '2';
     public static $statusSelector = [
         self::StatusNormal =>  '正常',
         self::StatusForbidden => '禁用',
@@ -83,6 +83,18 @@ class Project extends ActiveRecord {
     {
         return $this->getProjectMerchants()->where(['paytype' => Platform::PaytypeAgreement]);
     }
+
+    /**
+     * 判断当前用户是否有此项目的权限
+     * @return boolean
+     */
+    public function getHasPermission()
+    {
+        if(Yii::$app->admin->isSupper) {
+            return true;
+        }
+        return AdminResource::find()->where(['item_id' => $this->id, 'identity' => array_merge(Yii::$app->admin->identities, [Yii::$app->admin->id]), 'type' => AdminResource::TypeProject])->exists();
+    }
     
     /**
      * 获取项目联系人
@@ -90,6 +102,10 @@ class Project extends ActiveRecord {
      */
     public function getContacts()
     {
-        return $this->hasOne(ProjectContact::className(), ['project_id' => 'id']);
+        return $this->hasOne(ProjectContacts::className(), ['project_id' => 'id']);
+    }
+    public function saveContacts($contacts)
+    {
+
     }
 }

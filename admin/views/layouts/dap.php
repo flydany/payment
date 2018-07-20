@@ -24,6 +24,13 @@ use common\helpers\Render;
 <body>
 <?php $this->beginBody() ?>
 
+<style>
+    .alert-danger {
+        color: #73879C;
+        background-color: #2A3F54;
+        border-color: #2A3F54;
+    }
+</style>
 <div id="wrap">
     <?= $content ?>
 </div>

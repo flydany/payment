@@ -100,9 +100,9 @@ class Admin extends ActiveRecord {
         return array_filter(array_column($this->permissions, 'controller'));
     }
     // 判断是否超级
-    public function isSupper()
+    public function getIsSupper()
     {
-        return in_array('super', $this->permissionSelector);
+        return in_array('super', $this->identities);
     }
     // 判断是否有权限
     public function hasPermission($permission)
@@ -112,6 +112,21 @@ class Admin extends ActiveRecord {
     public function isGroupPermission($permission)
     {
         return $this->isSupper() || in_array($permission, array_column($this->groupPermissions, 'controller'));
+    }
+
+    /**
+     * 资源权限相关
+     *
+     */
+    public function getResources($type = '')
+    {
+        return AdminResource::find()->where(['identity' => array_merge($this->identities, [$this->id])])->andFilterWhere(['type' => $type])->all();
+    }
+    public function getResourceNumbers($type = '')
+    {
+        return array_map(function($resource) {
+            return $resource->item_id;
+        }, $this->getResources($type));
     }
     
     /**

@@ -44,7 +44,7 @@ class RechargeController extends Controller {
             'project_id', 'project_merchant_id', 'order_number', 'source_order_number', 'bank_id',
             ['created_at', '>=', 'start'], ['created_at', '<=', 'end'], 'status', 'deleted_at',
         ];
-        $query = Recharge::filterConditions(Recharge::initCondition($conditions, $params));
+        $query = Recharge::filters($conditions, $params);
         $pagination = Render::pagination((clone $query)->count());
         $data['infos'] = $query->orderBy('id desc')->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
         $data['page'] = Render::pager($pagination);

@@ -3,7 +3,7 @@
 namespace common\components;
 
 use Yii;
-use common\models\Project;
+use common\models\AdminResource;
 
 class ActiveQuery extends \yii\db\ActiveQuery {
     
@@ -12,14 +12,21 @@ class ActiveQuery extends \yii\db\ActiveQuery {
      * @param string $id 编号
      * @return $this
      */
-    public function filter($type)
+    public function filterResource($type = AdminResource::TypeProject)
     {
-        if(Yii::$app->admin->role->identity != 'super') {
-            if($this instanceof Project) {
-                $id = 'id';
-            }
-            $this->andWhere([$id => Yii::$app->admin->power()]);
+        if(Yii::$app->admin->isSupper) {
+            return $this;
         }
+        switch($type) {
+            case AdminResource::TypeProject: {
+                $id = 'project_id';
+                if($this->modelClass == 'common\models\Project') {
+                    $id = 'id';
+                }
+            }
+            break;
+        }
+        $this->andWhere([$this->modelClass::tableName().'.'.$id => Yii::$app->admin->getResourceNumbers($type)]);
         return $this;
     }
 }

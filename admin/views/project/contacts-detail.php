@@ -9,6 +9,7 @@ use common\models\ProjectContacts;
 
 $this->addCrumbs('Project');
 $this->addCrumbs('Project List', 'project/list');
+$this->addCrumbs('Project Contacts List', 'project/contacts-list');
 $this->title = (isset($data['id']) ? 'Update' : 'Insert'). ' Project';
 $this->setActiveNavigator('project/list');
 
@@ -21,28 +22,26 @@ $this->registerJavascript('@static/flyer/checker.class.js');
         <p><?= $this->modifyNotice(Render::value($data, 'id')) ?></p>
         <p>1. the account will be disabled after the expiration date.</p>
     </div>
-    <form id="info-detail" method="post" action="/project/<?= isset($data['id']) ? 'update?id='.$data['id'] : 'insert' ?>">
+    <form id="info-detail" method="post" action="/project/contacts-<?= isset($data['id']) ? 'update?id='.$data['id'] : 'insert' ?>">
         <div class="form-group checker">
-            <label>title</label>
-            <input class="form-control" type="text" name="title" value="<?= Render::value($data, 'title') ?>" placeholder="project name.">
-        </div>
-        <div class="form-row">
-            <div class="form-group col-md-6 checker">
-                <label>effect date</label>
-                <input class="form-control" type="text" name="effect_date" value="<?= Render::value($data, 'effect_date') ?>" placeholder="effect date.">
-            </div>
-            <div class="form-group col-md-6 checker">
-                <label>status</label>
-                <?= Render::select('status', Project::$statusSelector, Render::value($data, 'status')) ?>
-            </div>
+            <label>project number</label>
+            <input class="form-control" type="text" name="project_id" value="<?= Render::value($data, 'project_id') ?>" placeholder="project number">
         </div>
         <div class="form-group checker">
-            <label>public key</label>
-            <textarea class="form-control" name="public_key" placeholder="public key."><?= Render::value($data, 'public_key') ?></textarea>
+            <label>identity</label>
+            <?= Render::select('identity', ProjectContacts::$identitySelector, Render::value($data, 'identity')) ?>
         </div>
         <div class="form-group checker">
-            <label>remark</label>
-            <textarea class="form-control" name="remark" placeholder="remark."><?= Render::value($data, 'remark') ?></textarea>
+            <label>name</label>
+            <input class="form-control" type="text" name="name" value="<?= Render::value($data, 'name') ?>" placeholder="name">
+        </div>
+        <div class="form-group checker">
+            <label>mobile</label>
+            <input class="form-control" type="text" name="mobile" value="<?= Render::value($data, 'mobile') ?>" placeholder="mobile">
+        </div>
+        <div class="form-group checker">
+            <label>email</label>
+            <input class="form-control" type="text" name="email" value="<?= Render::value($data, 'email') ?>" placeholder="email">
         </div>
         <button type="submit" class="btn btn-primary" id="save-button"><i class="fa fa-save fa-fw"></i>save</button>
         <textarea id="info-detail-json" data-form="#info-detail" style="display:none;"><?= ProjectContacts::checker() ?></textarea>
