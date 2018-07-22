@@ -11,7 +11,7 @@
  Target Server Version : 50640
  File Encoding         : 65001
 
- Date: 17/07/2018 18:58:40
+ Date: 22/07/2018 15:33:59
 */
 
 SET NAMES utf8mb4;
@@ -42,8 +42,8 @@ CREATE TABLE `admin` (
 -- ----------------------------
 BEGIN;
 INSERT INTO `admin` VALUES (1, 'root', '$2y$13$G0CohVc8f.SzLAZ5UHZeIOHanKLmlR0R852yZNv3vc2IYU/iOPjTi', 1, 'Super manager', '13761665439', 'flydany@yeah.net', '2018-12-01', 0, 1481164840, 1481164840);
-INSERT INTO `admin` VALUES (2, 'admin', '$2y$13$naC7Ga1i.YJmECNTfEuM5e6D07AnFsRpqYiSZyVxvQBp4RKdLE4Eq', 1, 'Ganganadi-valuka', '13761665437', 'flydany@qq.com', '2017-12-01', 0, 1481164840, 1531456105);
-INSERT INTO `admin` VALUES (3, 'flydany', '$2y$13$StfnlztfYA2Aaz5FhOitX.mlQLWk5.3f9XmhFUX9kUrrRqe/sBEPS', 2, 'Infinite number', '13761665438', '841175841@qq.com', '2017-12-01', 0, 1481164840, 1531456085);
+INSERT INTO `admin` VALUES (2, 'admin', '$2y$13$naC7Ga1i.YJmECNTfEuM5e6D07AnFsRpqYiSZyVxvQBp4RKdLE4Eq', 1, 'Ganganadi-valuka', '13761665437', 'flydany@qq.com', '2018-12-01', 0, 1481164840, 1531456105);
+INSERT INTO `admin` VALUES (3, 'flydany', '$2y$13$StfnlztfYA2Aaz5FhOitX.mlQLWk5.3f9XmhFUX9kUrrRqe/sBEPS', 2, 'Infinite number', '13761665438', '841175841@qq.com', '2018-12-01', 0, 1481164840, 1531456085);
 COMMIT;
 
 -- ----------------------------
@@ -54,32 +54,19 @@ CREATE TABLE `admin_group` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `admin_id` int(11) unsigned NOT NULL COMMENT '管理员',
   `identity` varchar(128) NOT NULL COMMENT '权组标识',
-  `created_at` int(11) unsigned NOT NULL,
-  `updated_at` int(11) unsigned NOT NULL,
+  `created_at` int(11) unsigned NOT NULL DEFAULT '0',
+  `updated_at` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `index_identify` (`identity`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='权组表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='权组表';
 
 -- ----------------------------
 -- Records of admin_group
 -- ----------------------------
 BEGIN;
 INSERT INTO `admin_group` VALUES (1, 1, 'super', 1531440000, 1531440000);
+INSERT INTO `admin_group` VALUES (2, 3, 'system.keeper', 1531440000, 1531440000);
 COMMIT;
-
--- ----------------------------
--- Table structure for admin_item
--- ----------------------------
-DROP TABLE IF EXISTS `admin_item`;
-CREATE TABLE `admin_item` (
-  `id` int(11) unsigned NOT NULL,
-  `type` int(11) unsigned NOT NULL COMMENT '数据源类型',
-  `identity` varchar(64) NOT NULL COMMENT '标识',
-  `item_id` int(11) unsigned NOT NULL COMMENT '数据源编号',
-  `updated_at` int(11) unsigned DEFAULT NULL,
-  `created_at` int(11) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for admin_permission
@@ -89,21 +76,51 @@ CREATE TABLE `admin_permission` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
   `identity` varchar(64) NOT NULL COMMENT '管理编号',
   `controller` varchar(128) NOT NULL COMMENT '菜单路径，格式->CONTROLLER~METHOD',
-  `created_at` int(11) unsigned NOT NULL COMMENT '添加时间',
-  `updated_at` int(11) unsigned NOT NULL COMMENT '更新时间',
+  `created_at` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
+  `updated_at` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   PRIMARY KEY (`id`),
   KEY `index_identify_navigator_path_admin_permission` (`identity`,`controller`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8 COMMENT='权限详细表';
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='权限详细表';
 
 -- ----------------------------
 -- Records of admin_permission
 -- ----------------------------
 BEGIN;
 INSERT INTO `admin_permission` VALUES (1, 'super', 'super', 1481164840, 1481164840);
-INSERT INTO `admin_permission` VALUES (43, 'system.keeper', 'system~admin/admin-list', 1514699131, 1514699131);
-INSERT INTO `admin_permission` VALUES (44, 'verify.borrow', 'member~', 1514699142, 1514699142);
-INSERT INTO `admin_permission` VALUES (45, '3', 'finance~cashin-list', 1514699299, 1514699299);
-INSERT INTO `admin_permission` VALUES (46, '3', 'finance~cashin-view', 1514699299, 1514699299);
+INSERT INTO `admin_permission` VALUES (2, 'system.keeper', 'admin', 1514699131, 1514699131);
+INSERT INTO `admin_permission` VALUES (3, 'verify.borrow', 'recharge', 1514699142, 1514699142);
+INSERT INTO `admin_permission` VALUES (4, '3', 'project', 1514699299, 1514699299);
+INSERT INTO `admin_permission` VALUES (5, '3', 'recharge/list', 1514699299, 1514699299);
+INSERT INTO `admin_permission` VALUES (6, '3', 'admin-resource', 1514699299, 1514699299);
+INSERT INTO `admin_permission` VALUES (7, '3', 'platform', 1514699299, 1514699299);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for admin_resource
+-- ----------------------------
+DROP TABLE IF EXISTS `admin_resource`;
+CREATE TABLE `admin_resource` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `type` int(11) unsigned NOT NULL COMMENT '数据源类型',
+  `identity` varchar(64) NOT NULL COMMENT '标识',
+  `item_id` int(11) unsigned NOT NULL COMMENT '数据源编号',
+  `updated_at` int(11) unsigned DEFAULT NULL,
+  `created_at` int(11) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of admin_resource
+-- ----------------------------
+BEGIN;
+INSERT INTO `admin_resource` VALUES (9, 1, 'credit.manager', 100001, 1532099258, 1532099258);
+INSERT INTO `admin_resource` VALUES (10, 1, 'system.keeper', 100001, 1532099258, 1532099258);
+INSERT INTO `admin_resource` VALUES (11, 1, '2', 100001, 1532099258, 1532099258);
+INSERT INTO `admin_resource` VALUES (12, 1, '1', 100001, 1532099258, 1532099258);
+INSERT INTO `admin_resource` VALUES (13, 1, 'super', 100001, 1532128636, 1532128636);
+INSERT INTO `admin_resource` VALUES (14, 1, 'verify.borrow', 100001, 1532128636, 1532128636);
+INSERT INTO `admin_resource` VALUES (15, 1, '3', 100001, 1532128636, 1532128636);
+INSERT INTO `admin_resource` VALUES (16, 2, '3', 1, 1532128636, 1532128636);
 COMMIT;
 
 -- ----------------------------
@@ -203,10 +220,10 @@ INSERT INTO `card` VALUES (1, 1, 7, '6217001210042615144', '孙标', '3412221989
 COMMIT;
 
 -- ----------------------------
--- Table structure for platform
+-- Table structure for merchant
 -- ----------------------------
-DROP TABLE IF EXISTS `platform`;
-CREATE TABLE `platform` (
+DROP TABLE IF EXISTS `merchant`;
+CREATE TABLE `merchant` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL DEFAULT '' COMMENT '标题',
   `platform_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '通道',
@@ -232,10 +249,10 @@ CREATE TABLE `platform` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='商户号配置表';
 
 -- ----------------------------
--- Records of platform
+-- Records of merchant
 -- ----------------------------
 BEGIN;
-INSERT INTO `platform` VALUES (1, '极速钱包宝付快捷支付商户号', 3, '1161195', 1, 'http://www.baofoo.com/api/tnz/api', NULL, '', '', NULL, NULL, '0', '0', '100', '0', '', 0, 0, 1530164509, 1530164509);
+INSERT INTO `merchant` VALUES (1, '极速钱包宝付快捷支付商户号', 3, '1161195', 1, 'http://www.baofoo.com/api/tnz/api', NULL, '', '', NULL, NULL, '0', '0', '100', '0', '', 0, 0, 1530164509, 1530164509);
 COMMIT;
 
 -- ----------------------------
@@ -432,14 +449,14 @@ CREATE TABLE `project` (
 -- Records of project
 -- ----------------------------
 BEGIN;
-INSERT INTO `project` VALUES (100001, 'speed purse', '1', '2200-01-01', 'speed purse app', 1, 0, 1530164509, 1531788394);
+INSERT INTO `project` VALUES (100001, 'speed purse', '1', '2200-01-01', 'speed purse app', 1, 0, 1530164509, 1532128916);
 COMMIT;
 
 -- ----------------------------
--- Table structure for project_contact
+-- Table structure for project_contacts
 -- ----------------------------
-DROP TABLE IF EXISTS `project_contact`;
-CREATE TABLE `project_contact` (
+DROP TABLE IF EXISTS `project_contacts`;
+CREATE TABLE `project_contacts` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `project_id` int(11) unsigned NOT NULL COMMENT '项目编号',
   `identity` tinyint(4) unsigned NOT NULL DEFAULT '1' COMMENT '身份类型',
@@ -450,13 +467,14 @@ CREATE TABLE `project_contact` (
   `updated_at` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_project` (`project_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of project_contact
+-- Records of project_contacts
 -- ----------------------------
 BEGIN;
-INSERT INTO `project_contact` VALUES (1, 1, 1, '孙标', '13761665439', 'sunbiao@koudailc.com', 1530164509, 1530164509);
+INSERT INTO `project_contacts` VALUES (1, 100001, 2, 'Mr.sun', '13761665439', 'sunbiao@koudailc.com', 1530164509, 1532163969);
+INSERT INTO `project_contacts` VALUES (4, 100001, 1, 'Ms.sun', '13651702353', 'sun@koudailc.com', 1532128950, 1532163962);
 COMMIT;
 
 -- ----------------------------
