@@ -113,45 +113,6 @@ class ProjectController extends Controller {
     }
 
     /**
-     * set project's permission
-     * @param integer $projectId project Number
-     * @return json
-     */
-    public function actionPermissions($projectId = '')
-    {
-        $project = Project::finder($projectId ? $projectId : $this->request->get('id'));
-        if(empty($project)) {
-            return $this->error('invalid resource', 'project/list');
-        }
-        if($project && empty($project->hasPermission)) {
-            return $this->error('permission forbidden', 'project/list');
-        }
-        if($this->request->isGet) {
-            return $this->render('permissions', ['project' => $project]);
-        }
-        // update project's permission
-        $rule = [
-            'param' => [
-                'identities' => ['identities', ['status', 'required']],
-                'resources' => ['resource data', ['controller']],
-            ],
-        ];
-        $param = $this->request->getparams($rule['param'], 'post');
-        $checker = Checker::authentication($rule, $param);
-        if($checker['code'] != Checker::SuccessCode) {
-            return $this->error($checker['message'], 'project/permissions?id='.$project->id);
-        }
-        if($project->setResources($param['identities'], $param['resources'])) {
-            return $this->success('project ('.$project->title.') permission update successful.', [
-                ['title' => 'go to project list page', 'url' => 'project/list'],
-                ['title' => 'edit project page', 'url' => 'project/detail?id='.$project->id],
-                ['title' => 'edit project permission again', 'url' => 'project/permissions?id='.$project->id],
-            ]);
-        }
-        return $this->error('project ('.$project->title.') permission update failed.', 'project/permissions?id='.$project->id);
-    }
-
-    /**
      * this action showing project contacts list
      * @param request type request->isAjax?
      * @return html|json

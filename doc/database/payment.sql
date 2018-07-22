@@ -203,10 +203,10 @@ INSERT INTO `card` VALUES (1, 1, 7, '6217001210042615144', '孙标', '3412221989
 COMMIT;
 
 -- ----------------------------
--- Table structure for merchant
+-- Table structure for platform
 -- ----------------------------
-DROP TABLE IF EXISTS `merchant`;
-CREATE TABLE `merchant` (
+DROP TABLE IF EXISTS `platform`;
+CREATE TABLE `platform` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL DEFAULT '' COMMENT '标题',
   `platform_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '通道',
@@ -232,10 +232,10 @@ CREATE TABLE `merchant` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='商户号配置表';
 
 -- ----------------------------
--- Records of merchant
+-- Records of platform
 -- ----------------------------
 BEGIN;
-INSERT INTO `merchant` VALUES (1, '极速钱包宝付快捷支付商户号', 3, '1161195', 1, 'http://www.baofoo.com/api/tnz/api', NULL, '', '', NULL, NULL, '0', '0', '100', '0', '', 0, 0, 1530164509, 1530164509);
+INSERT INTO `platform` VALUES (1, '极速钱包宝付快捷支付商户号', 3, '1161195', 1, 'http://www.baofoo.com/api/tnz/api', NULL, '', '', NULL, NULL, '0', '0', '100', '0', '', 0, 0, 1530164509, 1530164509);
 COMMIT;
 
 -- ----------------------------

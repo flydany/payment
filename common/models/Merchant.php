@@ -4,7 +4,7 @@ namespace common\models;
 
 use Yii;
 
-class Merchant extends FlyerActiveRecord {
+class Merchant extends ActiveRecord {
     
     // 私钥格式
     const PrivateTypePFX = 'pfx';
@@ -22,13 +22,11 @@ class Merchant extends FlyerActiveRecord {
     ];
     
     // 配置状态
-    const StatusInit = 0;
-    const StatusOnline = 90;
-    const StatusForbidden = 92;
-    public static $stateSelector = [
-        self::StatusInit => '初始化',
-        self::StatusOnline => '已上线',
-        self::StatusClose => '已停用',
+    const StatusNormal = '0';
+    const StatusForbidden = '1';
+    public static $statusSelector = [
+        self::StatusNormal =>  '正常',
+        self::StatusForbidden => '禁用',
     ];
     
     /**
@@ -51,23 +49,23 @@ class Merchant extends FlyerActiveRecord {
     public function attributeLabels()
     {
         return [
-            'title' => '标题',
-            'platform_id' => '通道号',
-            'merchant_id' => '商户号',
-            'paytype' => '支付类型',
-            'request_uri' => '请求地址',
-            'private_key' => '商户私钥串',
-            'private_password' => '私钥密码',
-            'private_type' => '私钥格式',
-            'public_key' => '通道公钥串',
-            'configuration' => '其他',
-            'rate' => '费率',
-            'min' => '最低费用',
-            'max' => '费用上限',
-            'base_fee' => '基础费用',
-            'status' => '状态',
-            'deleted_at' => '删除时间',
-            'remark' => '备注',
+            'title' => 'title',
+            'platform_id' => 'platform number',
+            'merchant_id' => 'merchant number',
+            'paytype' => 'pay type',
+            'request_uri' => 'request domain',
+            'private_key' => 'private key',
+            'private_password' => 'private key password',
+            'private_type' => 'private key type',
+            'public_key' => 'public key',
+            'configuration' => 'configurations',
+            'rate' => 'rate',
+            'min' => 'min fee',
+            'max' => 'max fee',
+            'base_fee' => 'base fee',
+            'status' => 'status',
+            'deleted_at' => 'deleted at',
+            'remark' => 'remark',
         ];
     }
     /**
@@ -79,26 +77,47 @@ class Merchant extends FlyerActiveRecord {
     {
         $rule = [
             'param' => [
-                'title' => ['标题', ['maxlength' => 255, 'required']],
-                'platform_id' => ['通道号', ['inkey' => Platform::$platformSelector, 'required']],
-                'merchant_id' => ['商户号', ['maxlength' => 64, 'required']],
-                'paytype' => ['支付类型', ['inkey' => Platform::$paytypeSelector, 'required']],
-                'request_uri' => ['请求地址', ['url', 'required']],
-                'private_key' => ['商户私钥串', ['maxlength' => 65535]],
-                'private_password' => ['私钥密码', ['maxlength' => 64]],
-                'private_type' => ['私钥格式', ['inkey' => static::$privateTypeSelector]],
-                'public_key' => ['通道公钥串', ['maxlength' => 65535]],
+                'title' => ['title', ['maxlength' => 255, 'required']],
+                'platform_id' => ['platform number', ['inkey' => Platform::$platformSelector, 'required']],
+                'merchant_id' => ['merchant number', ['maxlength' => 64, 'required']],
+                'paytype' => ['pay type', ['inkey' => Platform::$paytypeSelector, 'required']],
+                'request_uri' => ['request domain', ['url', 'required']],
+                'private_key' => ['private key', ['maxlength' => 65535]],
+                'private_password' => ['private key password', ['maxlength' => 64]],
+                'private_type' => ['private key type', ['inkey' => static::$privateTypeSelector]],
+                'public_key' => ['public key', ['maxlength' => 65535]],
                 // 'name' => ['其他参数KEY', ['maxlength' => 64]],
                 // 'value' => ['其他参数VALUE', ['maxlength' => 1024]],
-                'remark' => ['备注', ['maxlength' => 255]],
-                'rate' => ['费率', ['maxlength' => 255]],
-                'min' => ['最低费用', ['maxlength' => 255]],
-                'max' => ['费用上限', ['maxlength' => 255]],
-                'base_fee' => ['基础费用', ['maxlength' => 255]],
-                'status' => ['状态', ['inkey' => static::$statusSelector]],
+                'remark' => ['remark', ['maxlength' => 255]],
+                'rate' => ['rate', ['maxlength' => 255]],
+                'min' => ['min fee', ['maxlength' => 255]],
+                'max' => ['max fee', ['maxlength' => 255]],
+                'base_fee' => ['base fee', ['maxlength' => 255]],
+                'status' => ['status', ['inkey' => static::$statusSelector]],
             ],
         ];
         return $rule;
+    }
+
+    /**
+     * 获取项目已存在的负责人
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return AdminResource::find()->select('identity')->where(['item_id' => $this->id, 'type' => AdminResource::TypeMerchant])->column();
+    }
+
+    /**
+     * 判断当前用户是否有此项目的权限
+     * @return boolean
+     */
+    public function getHasPermission()
+    {
+        if(Yii::$app->admin->isSupper) {
+            return true;
+        }
+        return AdminResource::find()->where(['item_id' => $this->id, 'identity' => array_merge(Yii::$app->admin->identities, [Yii::$app->admin->id]), 'type' => AdminResource::TypeMerchant])->exists();
     }
 
     /**
@@ -108,7 +127,7 @@ class Merchant extends FlyerActiveRecord {
      * @param integer $paytype 配置类型
      * @return array
      */
-    public static function finder($route, $merchant, $paytype = Platform::PaytypeDebit)
+    public static function configer($route, $merchant, $paytype = Platform::PaytypeDebit)
     {
         $paytypes = [$paytype, Platform::PaytypeFitAll];
         $configuration = static::find()->where(['platform_id' => $route, 'paytype' => $paytypes, 'merchant_id' => $merchant])

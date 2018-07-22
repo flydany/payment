@@ -279,6 +279,7 @@ class Admin extends ActiveRecord {
             $identity = array_merge([Yii::$app->admin['id']], Yii::$app->admin->identities);
         }
         // echo '<pre>'; print_r(Yii::$app->admin->identities); die;
+        // echo '<pre>'; print_r(AdminPermission::find()->where(['controller' => $controllers, 'identity' => $identity])->exists()); die;
         // 返回是否存在权限
         return AdminPermission::find()->where(['controller' => $controllers, 'identity' => $identity])->exists();
     }

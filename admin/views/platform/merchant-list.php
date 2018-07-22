@@ -3,12 +3,11 @@
 /* @var $this admin\components\View */
 
 use common\helpers\Render;
-use common\models\ProjectContacts;
+use common\models\Platform;
+use common\models\Merchant;
 
-$this->title = 'Project Contacts List';
-$this->addCrumbs('Project');
-$this->addCrumbs('Project List', 'project/list');
-$this->setActiveNavigator('project/list');
+$this->title = 'Merchant List';
+$this->addCrumbs('Platform');
 
 $this->registerJavascript('@static/flyer/tabler.class.js');
 $this->registerJavascript('@static/flyer/tableHandler.class.js');
@@ -18,23 +17,19 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
     <div class="form-inline search clearfix" id="info-search">
         <div class="input-group col-md-2">
             <span class="input-group-addon"><i class="fa fa-list fa-fw"></i></span>
-            <input type="text" class="form-control tabler" name="project_id" value="<?= Yii::$app->request->get('id') ?>" placeholder="project number">
+            <input type="text" class="form-control tabler" name="id" placeholder="id">
+        </div>
+        <div class="input-group col-md-3">
+            <span class="input-group-addon"><i class="fa fa-book fa-fw"></i></span>
+            <input type="text" class="form-control tabler" name="title" placeholder="title">
         </div>
         <div class="input-group col-md-2">
-            <span class="input-group-addon"><i class="fa fa-user-circle fa-fw"></i></span>
-            <?= Render::select('identity', ProjectContacts::$identitySelector, null, ['prompt' => '--', 'class' => 'tabler']) ?>
+            <span class="input-group-addon"><i class="fa fa-check fa-fw"></i></span>
+            <?= Render::select('paytype', Platform::$paytypeSelector, null, ['prompt' => '--', 'class' => 'tabler']) ?>
         </div>
         <div class="input-group col-md-2">
-            <span class="input-group-addon"><i class="fa fa-address-card fa-fw"></i></span>
-            <input type="text" class="form-control tabler" name="name" placeholder="name">
-        </div>
-        <div class="input-group col-md-2">
-            <span class="input-group-addon"><i class="fa fa-phone-square fa-fw"></i></span>
-            <input type="text" class="form-control tabler" name="mobile" placeholder="mobile">
-        </div>
-        <div class="input-group col-md-2">
-            <span class="input-group-addon"><i class="fa fa-at fa-fw"></i></span>
-            <input type="text" class="form-control tabler" name="email" placeholder="email">
+            <span class="input-group-addon"><i class="fa fa-check fa-fw"></i></span>
+            <?= Render::select('status', Merchant::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler']) ?>
         </div>
         <button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button>
     </div>
@@ -42,11 +37,11 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
     <table class="table table-bordered table-striped" id="info-table">
         <thead>
         <tr>
-            <th><i class="fa fa-list fa-fw"></i>project</th>
-            <th><i class="fa fa-user-circle fa-fw"></i>identity</th>
-            <th><i class="fa fa-address-card fa-fw"></i>name</th>
-            <th><i class="fa fa-phone-square fa-fw"></i>mobile</th>
-            <th><i class="fa fa-at fa-fw"></i>email</th>
+            <th><i class="fa fa-list fa-fw"></i>id</th>
+            <th><i class="fa fa-book fa-fw"></i>title</th>
+            <th><i class="fa fa-calendar-times-o fa-fw"></i>merchant number</th>
+            <th><i class="fa fa-calendar-times-o fa-fw"></i>pay type</th>
+            <th><i class="fa fa-calendar-times-o fa-fw"></i>status</th>
             <th><i class="fa fa-clock-o fa-fw"></i>updated at</th>
             <th><i class="fa fa-gear fa-fw"></i>operation</th>
         </tr>
@@ -59,7 +54,7 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
     </table>
     <div class="btn-toolbar" id="info-page">
         <div class="btn-group" role="group">
-            <a type="button" class="btn btn-default" href="/project/contacts-detail"><i class="fa fa-plus fa-fw"></i>insert</a>
+            <a type="button" class="btn btn-default" href="/platform/merchant-detail"><i class="fa fa-plus fa-fw"></i>insert</a>
             <button type="button" class="btn btn-default"><i class="fa fa-check-square fa-fw"></i>check all</button>
             <button type="button" class="btn btn-default"><i class="fa fa-minus-square fa-fw"></i>inverse</button>
             <button type="button" class="btn btn-default"><i class="fa fa-trash fa-fw"></i>batch delete</button>
@@ -75,15 +70,16 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
         // 初始化表格异步加载事件
         (new tabler).init({
             // 请求地址
-            url: '/project/contacts-list',
+            url: '/platform/merchant-list',
             // 数据渲染配置
             table: '#info-table', page: '#info-page', template: 'info-template', search: '#info-search', button: '#search-button',
             // 全选、反选按钮、页面加载完毕自动loading
             selectButton: '.select-all', reverseButton: '.reverse-all', readyCall: true,
             // param => tabler
             afterPost: function(param) {
-                // 所属权组名称显示
-                tableHandler.renderCategory({ category: $(param.tabler).find('.identity'), select: 'identity' });
+                // 名称显示
+                tableHandler.renderCategory({ category: $(param.tabler).find('.paytype'), select: 'paytype' });
+                tableHandler.renderCategory({ category: $(param.tabler).find('.status'), select: 'status' });
                 // 初始化 删除按钮事件
                 tableHandler.requestSingle({ button: $(param.tabler).find('.delete-data'), url: $('.delete-mult:first').data('href'), isKeep: false });
             }
@@ -93,14 +89,15 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
 <script id="info-template" type="text/html">
     {{each infos as info key}}
     <tr id="tr-{{info.id}}" data-id="{{info.id}}">
-        <td>{{info.project_id}}/{{info.project.title}}</td>
-        <td class="identity">{{info.identity}}</td>
-        <td>{{info.name}}</td>
-        <td>{{info.mobile}}</td>
-        <td>{{info.email}}</td>
+        <td>{{info.id}}</td>
+        <td>{{info.title}}</td>
+        <td>{{info.merchant_number}}</td>
+        <td class="paytype">{{info.paytype}}</td>
+        <td class="status">{{info.status}}</td>
         <td>{{info.updated_at | dateShow: 'minute'}}</td>
         <td>
-            <a class="label label-primary" href="/project/contacts-detail?id={{info.id}}"><i class="fa fa-edit fa-fw"></i>edit</a>
+            <a class="label label-primary" href="/platform/merchant-detail?id={{info.id}}"><i class="fa fa-edit fa-fw"></i>edit</a>
+            <a class="label label-success" href="/admin-resource/merchant?item_id={{info.id}}"><i class="fa fa-superpowers fa-fw"></i>permission</a>
             <a class="delete-data label label-danger" href="javascript:;"><i class="fa fa-trash fa-fw"></i>delete</a>
         </td>
     </tr>

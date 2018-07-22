@@ -26,7 +26,7 @@ return [
     
     '002' => [
         '002001' => ['title' => 'Project', 'icon_class' => 'shopping-cart', 'controller' => '#'],
-        '002002' => ['title' => 'Merchant', 'icon_class' => 'thumb-tack', 'controller' => '#'],
+        '002002' => ['title' => 'Platform', 'icon_class' => 'thumb-tack', 'controller' => '#'],
     ],
     '002001' => [
         '002001001' => ['title' => 'Project List', 'icon_class' => 'book', 'controller' => 'project/list'],

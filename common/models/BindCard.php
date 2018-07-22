@@ -31,7 +31,7 @@ class BindCard extends ActiveRecord {
         return [
             'project_id' => 'project number',
             'platform_id' => 'platform number',
-            'merchant_id' => 'merchant number',
+            'merchant_id' => 'platform number',
             'paytype' => 'pay type',
             'bank_id' => 'bank id',
             'card_no' => 'card number',

@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\components\ActiveQuery;
 use Yii;
 
 /**
@@ -9,8 +10,8 @@ use Yii;
  */
 class Project extends ActiveRecord {
 
-    const StatusNormal = '1';
-    const StatusForbidden = '2';
+    const StatusNormal = '0';
+    const StatusForbidden = '1';
     public static $statusSelector = [
         self::StatusNormal =>  '正常',
         self::StatusForbidden => '禁用',
@@ -65,7 +66,7 @@ class Project extends ActiveRecord {
 
     /**
      * 获取项目的商户号配置
-     * @return array
+     * @return ActiveQuery
      */
     public function getProjectMerchants()
     {
@@ -95,6 +96,15 @@ class Project extends ActiveRecord {
         }
         return AdminResource::find()->where(['item_id' => $this->id, 'identity' => array_merge(Yii::$app->admin->identities, [Yii::$app->admin->id]), 'type' => AdminResource::TypeProject])->exists();
     }
+
+    /**
+     * 获取项目已存在的负责人
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return AdminResource::find()->select('identity')->where(['item_id' => $this->id, 'type' => AdminResource::TypeProject])->column();
+    }
     
     /**
      * 获取项目联系人
@@ -103,9 +113,5 @@ class Project extends ActiveRecord {
     public function getContacts()
     {
         return $this->hasOne(ProjectContacts::className(), ['project_id' => 'id']);
-    }
-    public function saveContacts($contacts)
-    {
-
     }
 }

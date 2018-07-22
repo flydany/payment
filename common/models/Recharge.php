@@ -44,7 +44,7 @@ class Recharge extends ActiveRecord {
         return [
             'project_id' => 'project number',
             'platform_id' => 'platform number',
-            'project_merchant_id' => 'project merchant',
+            'project_merchant_id' => 'project platform',
             'order_number' => 'order number',
             'amount' => 'amount',
             'fee' => 'fee',

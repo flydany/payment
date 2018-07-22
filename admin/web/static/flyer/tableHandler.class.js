@@ -12,18 +12,23 @@ var tableHandler = {
         if ( ! title) {
             title = 'information';
         }
-        layer.confirm('are you sure you want to perform this operation?', {
-                icon: 3,
-                title: title,
-                btn: ['confirm', 'cancel']
-            },
-            function(index) {
-                layer.close(index);
+        BootstrapDialog.confirm({
+            type: BootstrapDialog.TYPE_DEFAULT,
+            title: title,
+            message: 'are you sure you want to perform this operation?',
+            closeable: true,
+            btnCancelLabel: 'cancel',
+            btnOKLabel: 'confirm',
+            callback: function (result) {
+                if ( ! result) {
+                    return false;
+                }
                 if (param.functionName) {
                     param.functionName(param.param);
                 }
+                return true;
             }
-        );
+        });
     },
     /**
      * @name 添加一条插入表记录
@@ -117,7 +122,8 @@ var tableHandler = {
             data['_csrf'] = $('meta[name=csrf-token]').attr('content');
             // 弹出loading动画
             var url = param.url ? param.url : $(this).attr('data-href');
-            $(param.button).attr('data-layer-index', layer.load(0, { shade: [0.3, '#000'] }));
+            // $(param.button).attr('data-layer-index', layer.load(0, { shade: [0.3, '#000'] }));
+            var dialog = BootstrapDialog.show('loading...');
             // 保存数据
             $.ajax({
                 url: url,
@@ -126,18 +132,21 @@ var tableHandler = {
                 dataType: 'json',
                 // ajax请求完毕之后执行(失败成功都会执行)
                 complete: function() {
-                    layer.close($(param.button).attr('data-layer-index'));
+                    // layer.close($(param.button).attr('data-layer-index'));
+                    dialog.close();
                 },
                 // 加载信息异常提示
                 error: function() {
-                    layer.msg('json request failed', { shift: 6 });
+                    // layer.msg('json request failed', { shift: 6 });
+                    BootstrapDialog.alert({ type: BootstrapDialog.TYPE_DANGER, message: "json request failed" });
                 },
                 // 数据加载成功处理方法
                 success: function(ret) {
                     var data = ret;
                     // 处理成功
                     if (data.code == tableHandler.SuccessCode) {
-                        layer.msg('save successful!');
+                        // layer.msg('save successful!');
+                        BootstrapDialog.alert({ type: BootstrapDialog.TYPE_SUCCESS, message: "save successful!" });
                         if (data.id) {
                             $(param.tr).attr('data-id', data.id).attr('data-type', 'insert');
                         }
@@ -150,7 +159,8 @@ var tableHandler = {
                     }
                     // 处理失败
                     else {
-                        layer.msg(data.message, { shift: 6 });
+                        // layer.msg(data.message, { shift: 6 });
+                        BootstrapDialog.alert({ type: BootstrapDialog.TYPE_DANGER, message: data.message });
                     }
                 }
             });
@@ -175,19 +185,24 @@ var tableHandler = {
                 if (tableHandler.callUserFunction(param.beforeAlert, param) === false) {
                     return false;
                 }
-                // 设置弹层类型
-                param.dialog = {
-                    title: param.title, cssClass: "container-fluid",
-                    size: param.size ? param.size : BootstrapDialog.SIZE_LARGE,
-                    type: BootstrapDialog.TYPE_DEFAULT
-                };
                 var url = param.src ? param.src : $(this).attr('data-href');
                 url += ((url.indexOf('?') > 0) ? '&' : '?') + 'id=' + $(param.tr).attr('data-id');
+                // 设置弹层类型
+                param.dialog = {
+                    type: BootstrapDialog.TYPE_DEFAULT,
+                    title: param.title, cssClass: param.cssClass ? param.cssClass : 'fade',
+                    size: param.size ? param.size : BootstrapDialog.SIZE_LARGE,
+                    closeable: param.closeable ? param.closeable : true,
+                    message: function (dialog) {
+                        var $message = $('<div></div>');
+                        var pageToLoad = dialog.getData('pageToLoad');
+                        $message.load(pageToLoad);
+                        return $message;
+                    },
+                    data: { pageToLoad: url }
+                };
 
-                param.dialog.message = '<iframe src="' + url + '" width="100%" height="100%" style="border:none;"></iframe>';
-                $('body').append(param.dialog.message);
-
-                param.index = BootstrapDialog.show(param.dialog);
+                BootstrapDialog.show(param.dialog);
 
                 $(param.mthis).attr('data-index', param.index);
                 if ($(param.tr).length) {
@@ -245,26 +260,27 @@ var tableHandler = {
                             value = text;
                         }
                     }
-                    if (value && value != text) {
-                        var icon = '';
-                        if (icon_class) {
-                            icon = '<i class="icon-fw icon-' + icon_class + '"></i>';
-                        }
-                        if(param.color || (param.color == undefined)) {
-                            _html.push('<span class="flyer-status ' + (status ? status : 'blue') + ' thin mr-5px">' + icon + $.trim(value) + '</span>');
-                        }
-                        else {
-                            _html.push($.trim(icon + value));
-                        }
-                    }
-                    else {
-                        if(param.color || (param.color == undefined)) {
-                            _html.push('<span class="flyer-status red thin mr-5px">unknow：' + value + '</span>');
-                        }
-                        else {
-                            _html.push(value);
-                        }
-                    }
+                    _html.push(value);
+                    // if (value && value != text) {
+                    //     var icon = '';
+                    //     if (icon_class) {
+                    //         icon = '<i class="icon-fw icon-' + icon_class + '"></i>';
+                    //     }
+                    //     if(param.color || (param.color == undefined)) {
+                    //         _html.push('<span class="flyer-status ' + (status ? status : 'blue') + ' thin mr-5px">' + icon + $.trim(value) + '</span>');
+                    //     }
+                    //     else {
+                    //         _html.push($.trim(icon + value));
+                    //     }
+                    // }
+                    // else {
+                    //     if(param.color || (param.color == undefined)) {
+                    //         _html.push('<span class="flyer-status red thin mr-5px">unknow：' + value + '</span>');
+                    //     }
+                    //     else {
+                    //         _html.push(value);
+                    //     }
+                    // }
                 }
                 $(this).html(_html.join(param.splite ? param.splite : ''));
             }
@@ -300,7 +316,8 @@ var tableHandler = {
             param.tr = $(mthis).parents(param.trKey ? param.trKey : 'tr');
             var id = $(param.tr).attr('data-id');
             if (id <= 0) {
-                layer.msg('there was something wrong, please try again!', { shift: 6 });
+                // layer.msg('there was something wrong, please try again!', { shift: 6 });
+                BootstrapDialog.alert({ type: BootstrapDialog.TYPE_DANGER, message: 'there was something wrong, please try again!' });
                 return false;
             }
             param.data.id = id;
@@ -340,7 +357,8 @@ var tableHandler = {
             var checkbox = $(param.table).find('input[type=checkbox].list:checked');
             var checkboxLength = $(checkbox).length;
             if (checkboxLength <= 0) {
-                layer.msg((param.title ? param.title : 'batch operation') + ' need select the line which you want to operator', { shift: 6 });
+                // layer.msg((param.title ? param.title : 'batch operation') + ' need select the line which you want to operator', { shift: 6 });
+                BootstrapDialog.alert({ type: BootstrapDialog.TYPE_DANGER, message: (param.title ? param.title : 'batch operation') + ' need select the line which you want to operator' });
                 return false;
             }
             if (tableHandler.callUserFunction(param.beforeRequest, param) == false) {
@@ -387,7 +405,8 @@ var tableHandler = {
         param.data['_csrf'] = $('meta[name="csrf-token"]').attr("content");
         if(param.isShadow == undefined || param.isShadow) {
             // 加载弹层
-            $(param.mthis).attr('data-layer-index', layer.load(0, { shade: [0.3, '#000'] }));
+            // $(param.mthis).attr('data-layer-index', layer.load(0, { shade: [0.3, '#000'] }));
+            var dialog = BootstrapDialog.show('loading...');
         }
         // 保存数据
         $.ajax({
@@ -400,21 +419,24 @@ var tableHandler = {
             complete: function() {
                 if(param.isShadow == undefined || param.isShadow) {
                     // 加载弹层
-                    layer.close($(param.mthis).attr('data-layer-index'));
+                    // layer.close($(param.mthis).attr('data-layer-index'));
+                    dialog.close();
                 }
                 // 如果存在事件触发后调用的函数，调用函数
                 tableHandler.callUserFunction(param.afterPost, param);
             },
             // 加载信息异常提示
             error: function() {
-                layer.msg('ajax request failed', { shift: 6 });
+                // layer.msg('ajax request failed', { shift: 6 });
+                BootstrapDialog.alert({ type: BootstrapDialog.TYPE_DANGER, message: 'ajax request failed' });
             },
             // 数据加载成功处理方法
             success: function(ret) {
                 param.response = ret;
                 if (param.response.code == tableHandler.SuccessCode) {
                     if(param.isAlert || param.isAlert === undefined) {
-                        layer.msg(param.response.message ? param.response.message : (param.title ? param.title : 'operation') + ' successful');
+                        // layer.msg(param.response.message ? param.response.message : (param.title ? param.title : 'operation') + ' successful');
+                        BootstrapDialog.alert({ type: BootstrapDialog.TYPE_SUCCESS, message: param.response.message ? param.response.message : (param.title ? param.title : 'operation') + ' successful' });
                     }
                     if(param.isKeep || param.isKeep === undefined) {
 
@@ -429,7 +451,7 @@ var tableHandler = {
                     }
                     else {
                         if (param.trKey && ! $(param.table).find(param.trKey).length) {
-                            $(param.table).html('<div class="pd-10px"><i class="icon-ban-circle"></i> current data clear already</div>');
+                            $(param.table).html('<div class="pd"><i class="icon-ban-circle"></i> current data clear already</div>');
                         }
                     }
 
@@ -437,7 +459,8 @@ var tableHandler = {
                     tableHandler.callUserFunction(param.requestSuccess, param);
                 }
                 else {
-                    layer.alert(param.response.message, { icon: 2 });
+                    // layer.alert(param.response.message, { icon: 2 });
+                    BootstrapDialog.alert({ type: BootstrapDialog.TYPE_DANGER, message: param.response.message });
                     tableHandler.callUserFunction(param.requestFail, param);
                 }
             }

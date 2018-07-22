@@ -2,6 +2,7 @@
 
 namespace admin\controllers;
 
+use common\models\AdminResource;
 use Yii;
 use yii\helpers\ArrayHelper;
 use common\helpers\Render;

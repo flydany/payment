@@ -99,14 +99,14 @@ class Controller extends \yii\web\Controller {
                     unset($skip[$k]);
                     continue;
                 }
-                $web['url'] = strpos($web['url'], 'javascript') == 0 ? $skip : Url::to('@web/'.$web['url']);
+                $web['url'] = strpos($web['url'], 'javascript') === 0 ? $skip : Url::to('@web/'.$web['url']);
                 if( ! isset($web['title'])) {
                     $web['title'] = 'jump?';
                 }
             }
         }
         else {
-            $skip = $skip ? (strpos($skip, 'javascript') == 0 ? $skip : Url::to('@web/'.$skip)) : false;
+            $skip = $skip ? (strpos($skip, 'javascript') === 0 ? $skip : Url::to('@web/'.$skip)) : false;
         }
         return $this->render('/layouts/error', ['message' => $message, 'skip' => $skip]);
     }
@@ -125,42 +125,16 @@ class Controller extends \yii\web\Controller {
                     unset($skip[$k]);
                     continue;
                 }
-                $web['url'] = strpos($web['url'], 'javascript') == 0 ? $skip : Url::to('@web/'.$web['url']);
+                $web['url'] = strpos($web['url'], 'javascript') === 0 ? $skip : Url::to('@web/'.$web['url']);
                 if( ! isset($web['title'])) {
                     $web['title'] = 'jump?';
                 }
             }
         }
         else {
-            $skip = $skip ? (strpos($skip, 'javascript') == 0 ? $skip : Url::to('@web/'.$skip)) : false;
+            $skip = $skip ? (strpos($skip, 'javascript') === 0 ? $skip : Url::to('@web/'.$skip)) : false;
         }
         return $this->render('/layouts/success', ['message' => $message, 'skip' => $skip]);
-    }
-    // @name 错误异常跳出 后台界面
-    // @return string skip html
-    public function skip($message, $skip = '')
-    {
-        // @rule 如果message是数组格式，解析为message, skip
-        if(is_array($message)) {
-            $skip = $message['skip'];
-            $message = $message['message'];
-        }
-        if(is_array($skip)) {
-            foreach($skip as $k => & $web) {
-                if( ! isset($web['url'])) {
-                    unset($skip[$k]);
-                    continue;
-                }
-                $web['url'] = Url::to('@web/'.$web['url']);
-                if( ! isset($web['title'])) {
-                    $web['title'] = 'jump?';
-                }
-            }
-        }
-        else {
-            $skip = $skip ? Url::to('@web/'.$skip) : false;
-        }
-        return $this->redirect([Url::to('@web/welcome/skip'), 'message' => $message, 'skip' => $skip]);
     }
     
     // @name 设置当前选中的一级、二级菜单

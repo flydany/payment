@@ -18,7 +18,7 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
 <div class="contenter">
     <div class="alert alert-info mt" role="alert">
         <p><strong>Heads up!</strong></p>
-        <p>set permission group: <i class="fa fa-superpowers fa-fw"></i><?= $role->title ?> 's permission.</p>
+        <p>set administrator group: <i class="fa fa-superpowers fa-fw"></i><?= $role->title ?> 's permission.</p>
         <p>1. when selecting a column, all permissions under the current column are included, including other rights that may be extended later.</p>
     </div>
     <form id="info-detail" action="/admin/group-permissions?id=<?= $role->id ?>" method="post">

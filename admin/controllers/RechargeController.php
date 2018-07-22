@@ -24,7 +24,7 @@ class RechargeController extends Controller {
             'param' => [
                 'project_id' => ['project', ['int']],
                 'platform_id' => ['platform', ['in' => array_keys(Platform::$platformSelector)]],
-                'project_merchant_id' => ['merchant', ['int']],
+                'project_merchant_id' => ['platform', ['int']],
                 'start' => ['start time', ['date' => 'Y-m-d H:i:s']],
                 'end' => ['end time', ['date' => 'Y-m-d H:i:s']],
                 'status' => ['status', ['int']],

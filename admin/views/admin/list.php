@@ -8,7 +8,6 @@ use common\models\AdminRole;
 $this->title = 'Administrator List';
 $this->addCrumbs('Manager');
 
-$this->registerJavascript('@static/flyer/checker.class.js');
 $this->registerJavascript('@static/flyer/tabler.class.js');
 $this->registerJavascript('@static/flyer/tableHandler.class.js');
 ?>

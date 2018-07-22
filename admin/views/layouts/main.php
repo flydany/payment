@@ -42,7 +42,7 @@ use yii\helpers\Html;
         background: #EDEDED;
         border-bottom: 1px solid #D9DEE4;
         margin-bottom: 15px;
-        padding:10px 0;
+        padding:5px 0;
         width: 100%;
     }
     #sidebar-toggle {
@@ -62,9 +62,9 @@ use yii\helpers\Html;
 
 <div id="right-panel">
     <div class="wrap" id="top-panel">
-        <span id="sidebar-toggle"><i class="fa fa-bars"></i></span>
+        <!--span id="sidebar-toggle"><i class="fa fa-bars"></i></span-->
         <ol class="breadcrumb">
-            <li><a href="/site/index"><?= $this->context->module->name ?></a></li>
+            <li><i class="fa fa-home fa-fw"></i><a href="/site/index"><?= $this->context->module->name ?></a></li>
             <?php if( ! empty($this->crumbs)) {
                 foreach($this->crumbs as $crumbs) {
                     if($crumbs['url']) {

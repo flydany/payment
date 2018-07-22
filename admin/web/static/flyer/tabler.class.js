@@ -259,7 +259,7 @@ var tabler = function() {
     }
 
     this.init = function(param) {
-        if(checker_empty(param.url)) {
+        if(this.isEmpty(param.url)) {
             console.log('error configuration');
         }
         // 初始化配置参数
@@ -272,11 +272,11 @@ var tabler = function() {
         this.setTemplater(param.template);
         this.setShowLoading(param.showLoading);
         // 添加请求前数据处理函数
-        if( ! checker_empty(param.beforePost)) {
+        if( ! this.isEmpty(param.beforePost)) {
             this.addBeforeAjax(param.beforePost);
         }
         // 添加请求后数据处理函数
-        if( ! checker_empty(param.afterPost)) {
+        if( ! this.isEmpty(param.afterPost)) {
             this.addAfterAjax(param.afterPost);
         }
         // 初始化page全选、反选按钮
@@ -320,7 +320,7 @@ var tabler = function() {
             // 加载信息异常提示
             error: function() {
                 tablerClass.loaded();
-                BootstrapDialog.alert({ message: 'search program error' });
+                BootstrapDialog.show({ type: BootstrapDialog.TYPE_DANGER, message: 'search program error' });
                 // layer.msg('search program error', { shift: 6 });
                 tablerClass.showError('search program error', 'fa fa-times');
             },
@@ -349,7 +349,7 @@ var tabler = function() {
                     }
                 }
                 else {
-                    BootstrapDialog.show({ message: data.message });
+                    BootstrapDialog.alert({ type: BootstrapDialog.TYPE_DANGER, message: data.message });
                     // layer.msg(data.message, { shift: 6 });
                     tablerClass.showError(data.message);
                 }
@@ -389,7 +389,7 @@ var tabler = function() {
     }
     // 执行钩子函数
     this.trigger = function(functions, isBreak) {
-        if(checker_empty(functions)) {
+        if(this.isEmpty(functions)) {
             return true;
         }
         var functionLength = functions.length;
@@ -433,14 +433,14 @@ var tabler = function() {
     this.initSelect = function() {
         var tablerClass = this;
         // 设置全选按钮点击事件
-        if( ! checker_empty(this.selectButton)) {
+        if( ! this.isEmpty(this.selectButton)) {
             $(this.selectButton).bind('click', function() {
                 // $(tablerClass.tabler).find('input[type=checkbox].list:not(:checked)').parents('tr').click();
                 $(tablerClass.tabler).find('tr').not('.select').click();
             });
         }
         // 设置反选按钮点击事件
-        if( ! checker_empty(this.reverseButton)) {
+        if( ! this.isEmpty(this.reverseButton)) {
             $(this.reverseButton).bind('click', function() {
                 $.each($(tablerClass.tabler).find('input[type=checkbox].list'), function() {
                     $(this).parents('tr').click();
@@ -480,5 +480,11 @@ var tabler = function() {
         // 设置表格行背景
         $(this.tabler).find('tr').removeClass('even');
         $(this.tabler).find('tr:odd').addClass('even');
+    }
+    this.isEmpty = function(value, format) {
+        if(value == null || value == '' || value == [] || value == [''] || value == [""] || value == {}) {
+            return true;
+        }
+        return false;
     }
 }

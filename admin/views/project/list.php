@@ -8,7 +8,6 @@ use common\models\Project;
 $this->title = 'Project List';
 $this->addCrumbs('Project');
 
-$this->registerJavascript('@static/flyer/checker.class.js');
 $this->registerJavascript('@static/flyer/tabler.class.js');
 $this->registerJavascript('@static/flyer/tableHandler.class.js');
 ?>
@@ -19,7 +18,7 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
             <span class="input-group-addon"><i class="fa fa-list fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="id" placeholder="id">
         </div>
-        <div class="input-group col-md-4">
+        <div class="input-group col-md-3">
             <span class="input-group-addon"><i class="fa fa-book fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="title" placeholder="title">
         </div>
@@ -89,7 +88,7 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
         <td>
             <a class="label label-primary" href="/project/detail?id={{info.id}}"><i class="fa fa-edit fa-fw"></i>edit</a>
             <a class="label label-warning" href="/project/contacts-list?id={{info.id}}"><i class="fa fa-address-book fa-fw"></i>contacts</a>
-            <a class="label label-success" href="/project/resources?id={{info.id}}"><i class="fa fa-superpowers fa-fw"></i>permission</a>
+            <a class="label label-success" href="/admin-resource/project?item_id={{info.id}}"><i class="fa fa-superpowers fa-fw"></i>permission</a>
             <a class="delete-data label label-danger" href="javascript:;"><i class="fa fa-trash fa-fw"></i>delete</a>
         </td>
     </tr>

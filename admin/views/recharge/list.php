@@ -9,7 +9,6 @@ use common\models\Recharge;
 $this->title = 'Recharge Record';
 $this->addCrumbs('Recharge');
 
-$this->registerJavascript('@static/flyer/checker.class.js');
 $this->registerJavascript('@static/flyer/tabler.class.js');
 $this->registerJavascript('@static/flyer/tableHandler.class.js');
 ?>

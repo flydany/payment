@@ -708,7 +708,10 @@ function checker_eq(value, format) {
 // @name 校验两字符串/数字是否 = 特定值
 function checker_in(value, format) {
     if(format) {
-        if(format.indexOf(value) >= 0 || (checker_int(value) && format.indexOf(parseInt(value)))) {
+        if(format.indexOf(value) >= 0) {
+            return true;
+        }
+        if(checker_int(value) && format.indexOf(parseInt(value)) >= 0) {
             return true;
         }
     }
