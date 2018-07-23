@@ -8,7 +8,6 @@ use common\models\ProjectContacts;
 $this->title = 'Project Contacts List';
 $this->addCrumbs('Project');
 $this->addCrumbs('Project List', 'project/list');
-$this->setActiveNavigator('project/list');
 
 $this->registerJavascript('@static/flyer/tabler.class.js');
 $this->registerJavascript('@static/flyer/tableHandler.class.js');
