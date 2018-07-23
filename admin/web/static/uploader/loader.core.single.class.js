@@ -15,6 +15,7 @@ var loaderSingle = function() {
     this.action = null;
     // 前次上传的文件数组
     this.prevLoaderFile = '';
+    this.allow = ['.'];
     // 当前图片选择框选中的图片数组
     this.selectFile = {};
     // @name 添加前次已上传文件的添加事件
@@ -69,7 +70,7 @@ var loaderSingle = function() {
     // 初始化方法，给选择、上传按钮绑定事件
     this.loader = function() {
         var loaderSingleClass = this;
-        
+
         // 如果选择按钮存在
         if(this.fileInput) {
             // 绑定change事件
@@ -130,7 +131,7 @@ var loaderSingle = function() {
     this.uploadFile = function() {
         var loaderSingleClass = this;
         var form = new FormData();
-        form.append('upload', this.selectFile);
+        form.append('upload', this.selectFile[0]);
         form.append('_csrf', $('meta[name=csrf-token]').attr('content'));
         var xhr = new XMLHttpRequest();
         // 绑定上传事件
@@ -149,15 +150,14 @@ var loaderSingle = function() {
             var response = $.parseJSON(xhr.responseText);
             if (response == 'undefined' || response.code != 200) {
                 // 回调失败函数
-                loaderSingleClass.onFailure(loaderSingleClass.selectFile, xhr.responseText);
+                loaderSingleClass.onFailure(loaderSingleClass.selectFile[0], xhr.responseText);
             }
             else {
                 // 回调成功函数
-                loaderSingleClass.onSuccess(loaderSingleClass.selectFile, xhr.responseText);
+                loaderSingleClass.onSuccess(loaderSingleClass.selectFile[0], xhr.responseText);
                 // 回调上传完毕函数
                 loaderSingleClass.onComplete('All done!');
                 loaderSingleClass.selectFile = {};
-                console.log(loaderSingleClass.selectFile);
                 // 禁用图片上传按钮
                 $(loaderSingleClass.loaderButton).attr('disabled', true);
             }

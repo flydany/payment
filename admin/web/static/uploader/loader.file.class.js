@@ -1,4 +1,3 @@
-
 /**
  * @name 文件上传操作类
  * @author Flydany
@@ -6,7 +5,6 @@
  */
 var loaderFile = function() {
     loaderSingle.apply(this);
-    this.allow = ['.'];
     this.init = function(params) {
         this.params = params;
         this.conter = params.conter;
@@ -33,14 +31,14 @@ var loaderFile = function() {
         }
         var file = files[0];
         if (file.size >= this.maxSize) {
-            layer.msg('文件：' + file.name + ' 太大！');
+            BootstrapDialog.alert({ type: BootstrapDialog.TYPE_DANGER, message: 'file: ' + file.name + ' was too large!' });
             return false;
         }
         else {
             //获得文件后缀名
             var fileExt = file.name.substr(file.name.lastIndexOf(".")).toLowerCase();
             if((this.allow[0] != '.') && ! (this.allow.indexOf(fileExt) >= 0)) {
-                layer.msg("文件格式错误!");
+                BootstrapDialog.alert({ type: BootstrapDialog.TYPE_DANGER, message: 'file format error!' });
                 return false;
             }
         }
@@ -51,18 +49,18 @@ var loaderFile = function() {
         var loaderClass = this;
         var _html = '';
         _html += '<div class="loader-title">';
-        _html += '        <div class="load-status"><font class="flyer-status orange">请选择一个文件上传。</font></div>';
+        _html += '        <div class="load-status"><font class="flyer-status orange">choose an upload file.</font></div>';
         _html += '        <div class="load-bar">';
-        _html += '              <span class="file-picker">选择文件</span>';
-        _html += '              <span class="uploader">开始上传</span>';
+        _html += '              <span class="file-picker">choose</span>';
+        _html += '              <span class="uploader">upload</span>';
         _html += '              <input class="loader-file" name="uploadfile" type="file" style="display:none;">';
-        _html += '              <button class="start-loader" type="button" style="display:none;">确认上传文件</button>';
+        _html += '              <button class="start-loader" type="button" style="display:none;">confirm upload</button>';
         _html += '        </div>';
         _html += '</div>';
         _html += '<div class="load-progress-wrap"><div class="load-progress"></div></div>';
         // 填充HTML到DOM中
-        $(this.conter).addClass('flyer-loader').html(_html);
-        
+        $(this.conter).addClass('flyer-loader').addClass('single').html(_html);
+
         // 初始化其他选择文件按钮事件
         $(this.conter).find('.file-picker').bind('click', function() {
             $(this).siblings('.loader-file').click();
@@ -73,7 +71,7 @@ var loaderFile = function() {
                 $(this).siblings('.start-loader').click();
             }
             else {
-                layer.msg('不存在需要上传的文件！');
+                BootstrapDialog.alert({ type: BootstrapDialog.TYPE_DANGER, message: 'there is no file that needs to be uploaded!' });
             }
         });
     }
@@ -83,7 +81,7 @@ var loaderFile = function() {
     this.setStatusInfo = function(files) {
         if( ! files.length) {
             // 设置内容
-            $(this.conter).find('.load-status').html("<font class='flyer-status red'>请选择需要上传的模型压缩包文件</font>");
+            $(this.conter).find('.load-status').html("<font class='flyer-status red'>please choose to upload a file</font>");
             return true;
         }
         var size = 0,
@@ -99,7 +97,7 @@ var loaderFile = function() {
             size = (Math.round(size * 100 / 1024) / 100).toString() + 'KB';
         }
         // 设置内容
-        $(this.conter).find('.load-status').html("<font class='flyer-status orange'>待传文件 #" + files[0].name+ "# ，大小 " + size + "。</font>");
+        $(this.conter).find('.load-status').html("<font class='flyer-status orange'>file #" + files[0].name+ "#, size: " + size + ".</font>");
         return true;
     }
     // @name 显示原始已传文件内容提示
@@ -109,7 +107,7 @@ var loaderFile = function() {
         var loaderClass = this;
         // 显示原始已传文件内容
         if(file) {
-            $(this.conter).find('.load-status').html("<font class='flyer-status blue'>已传文件: " + file.name+ "。</font>");
+            $(this.conter).find('.load-status').html("<font class='flyer-status blue'>transmitted document: " + file.name+ ".</font>");
         }
     }
     // @name 选择文件时调用的函数
@@ -151,8 +149,7 @@ var loaderFile = function() {
     // @param loaded float 已上传的部分的大小
     // @param total float 文件总大小
     // @return boolean
-    this.onProgress = function(files, loaded, total) {
-        var file = files[0];
+    this.onProgress = function(file, loaded, total) {
         // 隐藏失败状态
         $(this.conter).find('.load-progress').removeClass('load-failure').removeClass('load-success');
         // 计算 进度条 进度
@@ -168,11 +165,10 @@ var loaderFile = function() {
     // @param file file 当前成功上传的文件
     // @param response json 当前请求的返回
     // @return boolean
-    this.onSuccess = function(files, response) {
-        var file = files[0];
+    this.onSuccess = function(file, response) {
         // 隐藏进度条，显示成功图标
         $(this.conter).find('.load-progress').removeClass('load-failure').addClass('load-success').show();
-        $(this.conter).find('.load-status').html("<font class='flyer-status blue'>已传文件: " + file.name+ "。</font>");
+        $(this.conter).find('.load-status').html("<font class='flyer-status blue'>transmitted document: " + file.name+ ".</font>");
         // 回调方法
         if(typeof(this.params.onSuccess) != 'undefined') { this.params.onSuccess(file, response); }
     }
@@ -180,8 +176,7 @@ var loaderFile = function() {
     // @param file file 当前上传失败的文件
     // @param response json 当前请求的返回
     // @return boolean
-    this.onFailure = function(files, response) {
-        var file = files[0];
+    this.onFailure = function(file, response) {
         // 隐藏进度条，显示失败状态
         $(this.conter).find('.load-progress').removeClass('load-success').addClass('load-failure').show();
         // 回调方法

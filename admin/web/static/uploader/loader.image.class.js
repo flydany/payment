@@ -33,14 +33,16 @@ var loaderImage = function() {
         }
         var file = files[0];
         if (file.size >= this.maxSize) {
-            layer.msg('图片：' + file.name + ' 太大！');
+            // layer.msg('picture: ' + file.name + ' was too large!');
+            BootstrapDialog.alert({ type: BootstrapDialog.TYPE_DANGER, message: 'picture: ' + file.name + ' was too large!' });
             return false;
         }
         else {
             //获得文件后缀名
             var fileExt = file.name.substr(file.name.lastIndexOf(".")).toLowerCase();
             if ( ! (fileExt == ".png" || fileExt == ".gif" || fileExt == ".jpg" || fileExt == ".jpeg")) {
-                layer.msg("图片仅限于 png, gif, jpeg, jpg格式 !");
+                // layer.msg("pictures are limited to png, gif, jpeg, jpg!");
+                BootstrapDialog.alert({ type: BootstrapDialog.TYPE_DANGER, message: 'pictures are limited to png, gif, jpeg, jpg!' });
                 return false;
             }
         }
@@ -52,12 +54,12 @@ var loaderImage = function() {
         var _html = '';
         _html += '<div class="loader-title">';
         _html += '    <div class="load-bar">';
-        _html += '        <span class="file-picker">选择图片</span>';
-        _html += '        <span class="uploader">开始上传</span>';
+        _html += '        <span class="file-picker">choose</span>';
+        _html += '        <span class="uploader">upload</span>';
         _html += '        <input class="loader-file" name="uploadfiles[]" type="file" size="30" style="display:none;">';
-        _html += '        <button class="start-loader" type="button" style="display:none;">确认上传文件</button>';
+        _html += '        <button class="start-loader" type="button" style="display:none;">confirm upload</button>';
         _html += '    </div>';
-        _html += '    <span class="load-status">点击左侧选择图片，选择需要上传的图片。</span>';
+        _html += '    <span class="load-status">click on the left side to select the picture and select the picture you want to upload.</span>';
         _html += '</div>';
         _html += '<div class="loader-content single"></div>';
         // 填充HTML到DOM中
@@ -73,7 +75,8 @@ var loaderImage = function() {
                 $(this).siblings('.start-loader').click();
             }
             else {
-                layer.msg('请先选择一个文件，再进行上传操作！');
+                // layer.msg('please select a picture first and upload it again.');
+                BootstrapDialog.alert({ type: BootstrapDialog.TYPE_DANGER, message: 'please select a picture first and upload it again!' });
             }
         });
     }
@@ -85,7 +88,7 @@ var loaderImage = function() {
         _html += '        <img src="' + e.target.result + '">';
         _html += '    </div>';
         _html += '    <p class="load-progress"></p>';
-        _html += '    <p class="load-failure">上传失败，请重试！</p>';
+        _html += '    <p class="load-failure">upload failure, please try again!</p>';
         _html += '    <p class="load-success"></p>';
         _html += '</div>';
 
@@ -115,7 +118,7 @@ var loaderImage = function() {
             size = (Math.round(file.size * 100 / 1024) / 100).toString() + 'KB';
         }
         // 设置内容
-        $(this.conter).find('.load-status').html("<span class='flyer-status red thin'>图片：" + file.name + "，共 " + size + "。</span>");
+        $(this.conter).find('.load-status').html("<span class='flyer-status red thin'>picture: " + file.name + ", size:  " + size + ".</span>");
     }
     // @name 选择图片时调用的函数
     // @param selectFile file 当前选中的文件
@@ -172,7 +175,7 @@ var loaderImage = function() {
     this.onSuccess = function(file, response) {
         // 隐藏进度条，显示成功图标
         $(this.conter).find('.image-1 .load-progress').hide().siblings('.load-success').show();
-        $(this.conter).find('.load-status').html("<span class='flyer-status green'>" + $(this.conter).find('.load-status').text() + "已上传完毕。</span>");
+        $(this.conter).find('.load-status').html("<span class='flyer-status green'>" + $(this.conter).find('.load-status').text() + " finished Uploaded.</span>");
         // 回调方法
         if(typeof(this.params.onSuccess) != 'undefined') { this.params.onSuccess(file, response); }
     }

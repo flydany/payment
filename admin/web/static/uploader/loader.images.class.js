@@ -37,7 +37,7 @@ var loaderImages = function() {
         var filterFiles = [];
         for(var i = 0, file; file = files[i]; ++i) {
             if (file.size >= this.maxSize) {
-                layer.msg('图片：' + file.name + ' 太大！');
+                layer.msg('picture: ' + file.name + ' was too large!');
             }
             else {
                 //获得文件后缀名
@@ -46,7 +46,7 @@ var loaderImages = function() {
                     filterFiles.push(file);
                 }
                 else {
-                    layer.msg("图片仅限于 png, gif, jpeg, jpg格式 !");
+                    layer.msg("pictures are limited to png, gif, jpeg, jpg!");
                 }
             }
         }
@@ -58,12 +58,12 @@ var loaderImages = function() {
         var _html = '';
         _html += '<div class="loader-title">';
         _html += '    <div class="load-bar">';
-        _html += '        <span class="file-picker">选择图片</span>';
-        _html += '        <span class="uploader">开始上传</span>';
+        _html += '        <span class="file-picker">choose</span>';
+        _html += '        <span class="uploader">upload</span>';
         _html += '        <input class="loader-file" name="uploadfiles[]" type="file" size="30" multiple style="display:none;">';
-        _html += '        <button class="start-loader" type="button" style="display:none;">确认上传文件</button>';
+        _html += '        <button class="start-loader" type="button" style="display:none;">confirm upload</button>';
         _html += '    </div>';
-        _html += '    <span class="load-status"><span class="flyer-status blue thin">最多可以上传' + this.maxCounter + '张图片</span>，当前选中 0 张图片，共 0KB。</span>';
+        _html += '    <span class="load-status"><span class="flyer-status blue thin">most can be uploaded: ' + this.maxCounter + '</span> pictures are currently selected, 0KB.</span>';
         _html += '</div>';
         _html += '<div class="loader-content multi"></div>';
         // 填充HTML到DOM中
@@ -79,7 +79,7 @@ var loaderImages = function() {
                 $(this).siblings('.start-loader').click();
             }
             else {
-                layer.msg('不存在需要上传的文件！');
+                layer.msg('there is no file that needs to be uploaded!');
             }
         });
     }
@@ -89,13 +89,13 @@ var loaderImages = function() {
         _html += '<div class="load-image image-' + file.index + '" data-index="' + file.index + '">';
         _html += '    <div class="handle-bar">';
         _html += '        <p class="file-name">' + file.name + '</p>';
-        _html += '        <span class="delete-file" title="删除"></span>';
+        _html += '        <span class="delete-file" title="delete"></span>';
         _html += '    </div>';
         _html += '    <div class="file-dispose">';
         _html += '        <img src="' + e.target.result + '">'; //  style="width:expression(this.width > ' + param.thumb_width + ' ? ' + param.thumb_width + 'px : this.width);"
         _html += '    </div>';
         _html += '    <p class="load-progress"></p>';
-        _html += '    <p class="load-failure">上传失败，请重试！</p>';
+        _html += '    <p class="load-failure">upload failure, please try again!</p>';
         _html += '    <p class="load-success"></p>';
         _html += '</div>';
 
@@ -108,7 +108,7 @@ var loaderImages = function() {
         _html += '<div class="load-image image-' + file.index + '" data-index="' + file.index + '">';
         _html += '    <div class="handle-bar">';
         _html += '        <p class="file-name">' + file.name + '</p>';
-        _html += '        <span class="delete-file" title="删除"></span>';
+        _html += '        <span class="delete-file" title="delete"></span>';
         _html += '    </div>';
         _html += '    <div class="file-dispose">';
         _html += '        <img src="' + this.uri + file.url + '">';
@@ -135,7 +135,7 @@ var loaderImages = function() {
             size = (Math.round(size * 100 / 1024) / 100).toString() + 'KB';
         }
         // 设置内容
-        $(this.conter).find('.load-status').html("<span class=\"flyer-status blue thin\">还可以上传" + (this.maxCounter - this.counter) + "张图片</span>，当前选中 " + number + " 张图片，共 " + size + "。");
+        $(this.conter).find('.load-status').html("<span class=\"flyer-status blue thin\">it can also be uploaded: " + (this.maxCounter - this.counter) + "</span>,  " + number + "  pictures are currently selected, " + size + ".");
     }
     // @name 选择图片时调用的函数
     // @param selectFile file 当前选中的文件

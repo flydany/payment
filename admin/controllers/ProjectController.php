@@ -8,6 +8,7 @@ use common\helpers\Render;
 use common\helpers\Checker;
 use common\models\Project;
 use common\models\ProjectContacts;
+use common\models\ProjectMerchant;
 
 class ProjectController extends Controller {
     
@@ -218,5 +219,113 @@ class ProjectController extends Controller {
             return $this->json(SuccessCode, 'project contacts delete successful.');
         }
         return $this->json('system.error', 'project contacts delete failed.');
+    }
+
+    /**
+     * this action showing project merchant list
+     * @param request type request->isAjax?
+     * @return html|json
+     */
+    public function actionMerchantList()
+    {
+        if( ! $this->request->isAjax) {
+            return $this->render('merchant-list');
+        }
+        $params = $this->request->post();
+        $query = ProjectMerchant::filters(['project_id', 'name', 'mobile', 'identity', 'email'], $params)->filterResource(AdminResource::TypeProject);
+        $pagination = Render::pagination((clone $query)->count());
+        $data['infos'] = $query->with('project')->orderBy('id desc')->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
+        $data['page'] = Render::pager($pagination);
+        return $this->json($data);
+    }
+
+    /**
+     * show project detail
+     * @param id int  - project id by get request
+     * @return string
+     */
+    public function actionMerchantDetail()
+    {
+        $merchant = null;
+        $merchantId = $this->request->get('id');
+        if($merchantId && ( ! $merchant = ProjectMerchant::finder($merchantId))) {
+            return $this->error('invalid project merchant', 'project/merchant-list');
+        }
+        if($merchant && empty($merchant->project->hasPermission)) {
+            return $this->error('permission forbidden', 'project/merchant-list');
+        }
+        return $this->render('merchant-detail', ['data' => $merchant]);
+    }
+    /**
+     * insert project
+     */
+    public function actionMerchantInsert()
+    {
+        $project = Project::finder($this->request->post('project_id'));
+        if(empty($project)) {
+            return $this->error('unknown project', 'project/merchant-list');
+        }
+        if(empty($project->hasPermission)) {
+            return $this->error('permission forbidden', 'project/merchant-list');
+        }
+        $merchant = new ProjectMerchant();
+        if ( ! $merchant->loadAttributes($this->request->post())->validate()) {
+            // 参数异常，渲染错误页面
+            return $this->error($merchant->errors(), 'project/merchant-detail');
+        }
+        if ($merchant->save()) {
+            // 保存成功
+            return $this->success('project merchant ('.$merchant->name.') insert successful', [
+                ['title' => 'go to project merchant list page', 'url' => 'project/merchant-list'],
+                ['title' => 'edit project merchant again', 'url' => 'project/merchant-detail?id='.$merchant->id]
+            ]);
+        }
+        // 参数异常，渲染错误页面
+        return $this->error('project merchant ('.$merchant->name.') insert failed, please try again', 'project/merchant-detail');
+    }
+    /**
+     * project detail show / update
+     * use get(id) to find project merchant
+     */
+    public function actionMerchantUpdate()
+    {
+        /* @var $merchant ProjectMerchant */
+        // id 为必填项，判断项目商户号存在状态
+        // 未得到，渲染错误页面
+        if( ! $merchant = ProjectMerchant::finder($this->request->get('id'))) {
+            return $this->error('invalid project merchant', 'project/merchant-list');
+        }
+        if ( ! $merchant->loadAttributes($this->request->post())->validate()) {
+            // 参数异常，渲染错误页面
+            return $this->error($merchant->errors(), 'project/merchant-detail?id='.$merchant->id);
+        }
+        if(empty($merchant->project)) {
+            return $this->error('unknown project', 'project/merchant-list');
+        }
+        if(empty($merchant->project->hasPermission)) {
+            return $this->error('permission forbidden', 'project/merchant-list');
+        }
+        if ($merchant->save()) {
+            // 保存成功
+            return $this->success('project ('.$merchant->name.') update successful', [
+                ['title' => 'go to project merchant list page', 'url' => 'project/merchant-list'],
+                ['title' => 'edit project merchant again', 'url' => 'project/merchant-detail?id='.$merchant->id],
+            ]);
+        }
+        // 参数异常，渲染错误页面
+        return $this->error('project merchant ('.$merchant->name.') update failed, please try again.', 'project/merchant-detail?id='.$merchant->id);
+    }
+    /**
+     * delete project merchant
+     */
+    public function actionMerchantDelete()
+    {
+        if( ! ($ids = $this->request->post('id'))) {
+            return $this->json('invalid.param', 'you must choice at least one project merchant.');
+        }
+        if(ProjectMerchant::trashAll(['id' => $ids])) {
+            return $this->json(SuccessCode, 'project merchant delete successful.');
+        }
+        return $this->json('system.error', 'project merchant delete failed.');
     }
 }

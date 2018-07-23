@@ -19,9 +19,33 @@
 
 select {
 	-webkit-appearance: none;
-	-webkit-border-top-left-radius: 0px;
-	-webkit-border-bottom-left-radius: 0px;
+	-webkit-border-top-left-radius: 0;
+	-webkit-border-bottom-left-radius: 0;
 }
+.selecter-inline,
+.selecter-bottom {
+	position:relative;
+}
+.selecter-inline:after,
+.selecter-bottom:after {
+	content: "\f0d7";
+	display: inline-block;
+	font: normal normal normal 14px/1 FontAwesome;
+	font-size: 14px;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	position: absolute;
+	top: 50%;
+	right: 15px;
+	margin-top: -10px;
+	z-index: 10;
+}
+.selecter-bottom:after {
+	top:0;
+	margin-top:35px;
+}
+
 
 .form-inline {
 	margin-bottom:15px;
@@ -294,19 +318,22 @@ ul.pagination {
 	margin-bottom:20px !important;
 }
 
-.fl {
+.float-left {
 	float:left !important;
 }
-.fr {
+.float-right {
 	float:right !important;
 }
-.tl  {
+.text-left  {
 	text-align:left !important;
 }
-.tr  {
+.text-center  {
+	text-align:center !important;
+}
+.text-right  {
 	text-align:right !important;
 }
 
 .box-shadow {
-	box-shadow:0 0px 5px rgba(0, 0, 0, 0.2);
+	box-shadow:0 0 5px rgba(0, 0, 0, 0.2);
 }

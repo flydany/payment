@@ -12,7 +12,7 @@ $this->addCrumbs('Project List', 'project/list');
 $this->title = (isset($data['id']) ? 'Update' : 'Insert'). ' Project';
 $this->setActiveNavigator('project/list');
 
-$this->registerJavascript('@static/flyer/checker.class.js');
+\admin\assets\CheckerAsset::register($this);
 ?>
 
 <div class="contenter">
@@ -31,7 +31,7 @@ $this->registerJavascript('@static/flyer/checker.class.js');
                 <label>effect date</label>
                 <input class="form-control" type="text" name="effect_date" value="<?= Render::value($data, 'effect_date') ?>" placeholder="effect date.">
             </div>
-            <div class="form-group col-md-6 checker">
+            <div class="form-group col-md-6 checker selecter-bottom">
                 <label>status</label>
                 <?= Render::select('status', Project::$statusSelector, Render::value($data, 'status')) ?>
             </div>

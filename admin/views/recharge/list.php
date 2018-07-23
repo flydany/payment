@@ -9,8 +9,8 @@ use common\models\Recharge;
 $this->title = 'Recharge Record';
 $this->addCrumbs('Recharge');
 
-$this->registerJavascript('@static/flyer/tabler.class.js');
-$this->registerJavascript('@static/flyer/tableHandler.class.js');
+\admin\assets\TablerAsset::register($this);
+
 ?>
 
 <div class="contenter">
@@ -31,11 +31,11 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
             <span class="input-group-addon"><i class="fa fa-thumb-tack fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="source_order_number" placeholder="source">
         </div>
-        <div class="input-group col-md-2">
+        <div class="input-group col-md-2 selecter-inline">
             <span class="input-group-addon"><i class="fa fa-check fa-fw"></i></span>
             <?= Render::select('status', Recharge::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler']) ?>
         </div>
-        <div class="input-group col-md-2">
+        <div class="input-group col-md-2 selecter-inline">
             <span class="input-group-addon"><i class="fa fa-bank fa-fw"></i></span>
             <?= Render::select('bank_id', Platform::$bankSelector, null, ['prompt' => '--', 'class' => 'tabler']) ?>
         </div>

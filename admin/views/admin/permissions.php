@@ -13,8 +13,8 @@ $this->addCrumbs('Administrator List', 'admin/list');
 $this->addCrumbs('Update Administrator', 'admin/detail?id='.$admin->id);
 $this->setActiveNavigator('admin/list');
 
-$this->registerJavascript('@static/flyer/checker.class.js');
-$this->registerJavascript('@static/flyer/tableHandler.class.js');
+\admin\assets\CheckerAsset::register($this);
+
 ?>
 
 <div class="contenter">

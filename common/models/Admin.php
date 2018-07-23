@@ -124,9 +124,14 @@ class Admin extends ActiveRecord {
     }
     public function getResourceNumbers($type = '')
     {
-        return array_map(function($resource) {
-            return $resource->item_id;
-        }, $this->getResources($type));
+        return array_unique(
+            array_map(
+                function($resource) {
+                    return $resource->item_id;
+                },
+                $this->getResources($type)
+            )
+        );
     }
     
     /**

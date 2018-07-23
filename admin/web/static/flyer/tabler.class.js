@@ -378,6 +378,9 @@ var tabler = function() {
         var tablerClass = this;
         $.each($(this.searcher).find(this.searchClass), function() {
             var name = $(this).attr('name');
+            if(tablerClass.isEmpty(name)) {
+                return true;
+            }
             if(['radio', 'checkbox'].indexOf($(this).attr('type')) >= 0) {
                 if( ! $(this).is(':checked')) {
                     return true;

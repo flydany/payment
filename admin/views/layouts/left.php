@@ -224,6 +224,7 @@ $this->registerJs("
             top:0;
             left:77px;
             width:230px;
+            min-height:120px;
             border-left: 3px solid #1ABB9C;
             background-color:#2A3F54;
             text-align:left;

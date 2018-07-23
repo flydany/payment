@@ -11,8 +11,8 @@ $this->addCrumbs('Manager');
 $this->addCrumbs(ucfirst($commit).' List', $target);
 $this->setActiveNavigator($target);
 
-$this->registerJavascript('@static/flyer/checker.class.js');
-$this->registerJavascript('@static/flyer/tableHandler.class.js');
+\admin\assets\CheckerAsset::register($this);
+
 ?>
 
 <div class="contenter">

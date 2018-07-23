@@ -4,6 +4,7 @@ namespace common\models;
 
 use common\components\ActiveQuery;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "Project".
@@ -13,8 +14,8 @@ class Project extends ActiveRecord {
     const StatusNormal = '0';
     const StatusForbidden = '1';
     public static $statusSelector = [
-        self::StatusNormal =>  '正常',
-        self::StatusForbidden => '禁用',
+        self::StatusNormal =>  'normal',
+        self::StatusForbidden => 'forbidden',
     ];
 
     // only define rules for those attributes that
@@ -113,5 +114,17 @@ class Project extends ActiveRecord {
     public function getContacts()
     {
         return $this->hasOne(ProjectContacts::className(), ['project_id' => 'id']);
+    }
+
+    /**
+     * 获取项目列表
+     * @return array
+     */
+    public static function projectSelector()
+    {
+        return ArrayHelper::map(
+            static::find()->select('id, title')->where(['status' => static::StatusNormal])->filterResource(AdminResource::TypeProject)->asArray()->all(),
+            'id', 'title'
+        );
     }
 }

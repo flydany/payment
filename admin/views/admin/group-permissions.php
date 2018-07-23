@@ -11,8 +11,8 @@ $this->addCrumbs('Administrator Group List', 'admin/group-list');
 $this->addCrumbs('Update Administrator Group', 'admin/group-detail?id='.$role->id);
 $this->setActiveNavigator('admin/group-list');
 
-$this->registerJavascript('@static/flyer/checker.class.js');
-$this->registerJavascript('@static/flyer/tableHandler.class.js');
+\admin\assets\CheckerAsset::register($this);
+
 ?>
 
 <div class="contenter">

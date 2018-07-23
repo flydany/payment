@@ -10,7 +10,7 @@ $this->addCrumbs('Administrator Group List', 'admin/group-list');
 $this->title = (isset($data['id']) ? 'Update' : 'Insert'). ' Administrator Group';
 $this->setActiveNavigator('admin/group-list');
 
-$this->registerJavascript('@static/flyer/checker.class.js');
+\admin\assets\CheckerAsset::register($this);
 ?>
 
 <div class="contenter">

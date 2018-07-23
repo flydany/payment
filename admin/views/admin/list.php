@@ -8,8 +8,8 @@ use common\models\AdminRole;
 $this->title = 'Administrator List';
 $this->addCrumbs('Manager');
 
-$this->registerJavascript('@static/flyer/tabler.class.js');
-$this->registerJavascript('@static/flyer/tableHandler.class.js');
+\admin\assets\TablerAsset::register($this);
+
 ?>
 
 <div class="contenter">
@@ -18,6 +18,10 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
             <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="username" placeholder="username">
         </div>
+        <!--div class="input-group col-md-3 selecter">
+            <span class="input-group-addon"><i class="fa fa-superpowers fa-fw"></i></span>
+            <?//= Render::select('role_id', AdminRole::identitySelector(), null, ['prompt' => '--']) ?>
+        </div-->
         <div class="input-group col-md-3">
             <span class="input-group-addon"><i class="fa fa-phone-square fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="mobile" placeholder="mobile">
@@ -29,6 +33,7 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
         <thead>
         <tr>
             <th><i class="fa fa-user fa-fw"></i>username</th>
+            <!--th><i class="fa fa-superpowers fa-fw"></i>role</th-->
             <th><i class="fa fa-id-card fa-fw"></i>realname</th>
             <th><i class="fa fa-phone-square fa-fw"></i>mobile</th>
             <th><i class="fa fa-calendar-times-o fa-fw"></i>effect date</th>
@@ -68,7 +73,7 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
             // param => tabler
             afterPost: function(param) {
                 // 所属权组名称显示
-                tableHandler.renderCategory({ category: $(param.tabler).find('.role'), select: 'role_id' });
+                // tableHandler.renderCategory({ category: $(param.tabler).find('.role'), select: 'role_id' });
                 // 初始化 删除按钮事件
                 tableHandler.requestSingle({ button: $(param.tabler).find('.delete-data'), url: $('.delete-mult:first').data('href'), isKeep: false });
             }
@@ -79,6 +84,7 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
     {{each infos as info key}}
     <tr id="tr-{{info.id}}" data-id="{{info.id}}">
         <td>{{info.username}}</td>
+        <!--td class="role">{{info.role}}</td-->
         <td>{{info.realname}}</td>
         <td>{{info.mobile}}</td>
         <td>{{info.effect_date}}</td>

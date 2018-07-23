@@ -13,7 +13,7 @@ $this->addCrumbs('Project Contacts List', 'project/contacts-list');
 $this->title = (isset($data['id']) ? 'Update' : 'Insert'). ' Project';
 $this->setActiveNavigator('project/list');
 
-$this->registerJavascript('@static/flyer/checker.class.js');
+\admin\assets\CheckerAsset::register($this);
 ?>
 
 <div class="contenter">
@@ -27,7 +27,7 @@ $this->registerJavascript('@static/flyer/checker.class.js');
             <label>project number</label>
             <input class="form-control" type="text" name="project_id" value="<?= Render::value($data, 'project_id') ?>" placeholder="project number">
         </div>
-        <div class="form-group checker">
+        <div class="form-group checker selecter-bottom">
             <label>identity</label>
             <?= Render::select('identity', ProjectContacts::$identitySelector, Render::value($data, 'identity')) ?>
         </div>

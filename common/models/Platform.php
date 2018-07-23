@@ -13,11 +13,11 @@ class Platform extends ActiveRecord {
     const PlatformReapal = '4';
     const PlatformFuiou = '5';
     public static $platformSelector = [
-        self::PlatformYeepay => '易宝',
-        self::PlatformAllin => '通联',
-        self::PlatformBaofoo => '宝付',
-        self::PlatformReapal => '融宝',
-        self::PlatformFuiou => '富友',
+        self::PlatformYeepay => 'yeepay',
+        self::PlatformAllin => 'allin',
+        self::PlatformBaofoo => 'baofoo',
+        self::PlatformReapal => 'reapeal',
+        self::PlatformFuiou => 'fuiou',
     ];
 
     // 支付类型常量
@@ -25,9 +25,9 @@ class Platform extends ActiveRecord {
     const PaytypeWithdraw = '2';
     const PaytypeAgreement = '3';
     public static $paytypeSelector = [
-        self::PaytypeRecharge => '充值',
-        self::PaytypeWithdraw => '提现',
-        self::PaytypeAgreement => '协议支付',
+        self::PaytypeRecharge => 'recharge',
+        self::PaytypeWithdraw => 'withdraw',
+        self::PaytypeAgreement => 'agreement',
     ];
 
     // 银行列表

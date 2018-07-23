@@ -3,6 +3,7 @@
 namespace admin\controllers;
 
 use Yii;
+use yii\web\UploadedFile;
 use common\helpers\Render;
 use common\helpers\Checker;
 use common\models\Platform;
@@ -39,10 +40,10 @@ class PlatformController extends Controller {
         $merchant = null;
         $merchantId = $this->request->get('id');
         if($merchantId && ( ! $merchant = Merchant::finder($merchantId))) {
-            return $this->error('invalid merchant', 'merchant/merchant-list');
+            return $this->error('invalid merchant', 'platform/merchant-list');
         }
         if($merchant && empty($merchant->hasPermission)) {
-            return $this->error('permission forbidden', 'merchant/merchant-list');
+            return $this->error('permission forbidden', 'platform/merchant-list');
         }
         return $this->render('merchant-detail', ['data' => $merchant]);
     }
@@ -52,19 +53,28 @@ class PlatformController extends Controller {
     public function actionMerchantInsert()
     {
         $merchant = new Merchant();
-        if ( ! $merchant->loadAttributes($this->request->post())->validate()) {
+        $params = $this->request->post();
+        $parameters = [];
+        foreach($params['parameter_name'] as $k => $name) {
+            if(empty($name)) {
+                continue;
+            }
+            $parameters[$name] = $params['parameter_value'][$k];
+        }
+        $params['parameters'] = json_encode($parameters);
+        if ( ! $merchant->loadAttributes($params)->validate()) {
             // 参数异常，渲染错误页面
-            return $this->error($merchant->errors(), 'merchant/merchant-detail');
+            return $this->error($merchant->errors(), 'platform/merchant-detail');
         }
         if ($merchant->save()) {
             // 保存成功
             return $this->success('merchant ('.$merchant->title.') insert successful', [
-                ['title' => 'go to merchant list page', 'url' => 'merchant/merchant-list'],
-                ['title' => 'edit merchant again', 'url' => 'merchant/merchant-detail?id='.$merchant->id]
+                ['title' => 'go to merchant list page', 'url' => 'platform/merchant-list'],
+                ['title' => 'edit merchant again', 'url' => 'platform/merchant-detail?id='.$merchant->id]
             ]);
         }
         // 参数异常，渲染错误页面
-        return $this->error('merchant ('.$merchant->title.') insert failed, please try again', 'merchant/merchant-detail');
+        return $this->error('merchant ('.$merchant->title.') insert failed, please try again', 'platform/merchant-detail');
     }
     /**
      * merchant detail show / update
@@ -76,24 +86,33 @@ class PlatformController extends Controller {
         // id 为必填项，判断管理员存在状态
         // 未得到，渲染错误页面
         if( ! $merchant = Merchant::finder($this->request->get('id'))) {
-            return $this->error('invalid merchant', 'merchant/merchant-list');
+            return $this->error('invalid merchant', 'platform/merchant-list');
         }
         if($merchant && empty($merchant->hasPermission)) {
-            return $this->error('permission forbidden', 'merchant/merchant-list');
+            return $this->error('permission forbidden', 'platform/merchant-list');
         }
-        if ( ! $merchant->loadAttributes($this->request->post())->validate()) {
+        $params = $this->request->post();
+        $parameters = [];
+        foreach($params['parameter_name'] as $k => $name) {
+            if(empty($name)) {
+                continue;
+            }
+            $parameters[$name] = $params['parameter_value'][$k];
+        }
+        $params['parameters'] = json_encode($parameters);
+        if ( ! $merchant->loadAttributes($params)->validate()) {
             // 参数异常，渲染错误页面
-            return $this->error($merchant->errors(), 'merchant/merchant-detail?id='.$merchant->id);
+            return $this->error($merchant->errors(), 'platform/merchant-detail?id='.$merchant->id);
         }
         if ($merchant->save()) {
             // 保存成功
             return $this->success('merchant ('.$merchant->title.') update successful', [
-                ['title' => 'go to merchant list page', 'url' => 'merchant/merchant-list'],
-                ['title' => 'edit merchant again', 'url' => 'merchant/merchant-detail?id='.$merchant->id],
+                ['title' => 'go to merchant list page', 'url' => 'platform/merchant-list'],
+                ['title' => 'edit merchant again', 'url' => 'platform/merchant-detail?id='.$merchant->id],
             ]);
         }
         // 参数异常，渲染错误页面
-        return $this->error('merchant ('.$merchant->title.') update failed, please try again.', 'merchant/merchant-detail?id='.$merchant->id);
+        return $this->error('merchant ('.$merchant->title.') update failed, please try again.', 'platform/merchant-detail?id='.$merchant->id);
     }
     /**
      * delete merchant
@@ -109,5 +128,20 @@ class PlatformController extends Controller {
             return $this->json(SuccessCode, 'merchant delete successful.');
         }
         return $this->json('system.error', 'merchant delete failed.');
+    }
+    /***
+     * 公私钥读取
+     * @param $upload file
+     * @return base64_encode string
+     */
+    function actionFileEncoder()
+    {
+        $file = UploadedFile::getInstanceByName('upload');
+        if(empty($file)) {
+            return $this->json('File.Exists', 'file objects do not exist!');
+        }
+        $reader = base64_encode(file_get_contents($file->tempName));
+        $exts = explode('.', $file->name);
+        return $this->json(['reader' => $reader, 'ext' => end($exts)]);
     }
 }

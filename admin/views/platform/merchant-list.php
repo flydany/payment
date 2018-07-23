@@ -9,8 +9,8 @@ use common\models\Merchant;
 $this->title = 'Merchant List';
 $this->addCrumbs('Platform');
 
-$this->registerJavascript('@static/flyer/tabler.class.js');
-$this->registerJavascript('@static/flyer/tableHandler.class.js');
+\admin\assets\TablerAsset::register($this);
+
 ?>
 
 <div class="contenter">
@@ -23,11 +23,11 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
             <span class="input-group-addon"><i class="fa fa-book fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="title" placeholder="title">
         </div>
-        <div class="input-group col-md-2">
+        <div class="input-group col-md-2 selecter-inline">
             <span class="input-group-addon"><i class="fa fa-check fa-fw"></i></span>
             <?= Render::select('paytype', Platform::$paytypeSelector, null, ['prompt' => '--', 'class' => 'tabler']) ?>
         </div>
-        <div class="input-group col-md-2">
+        <div class="input-group col-md-2 selecter-inline">
             <span class="input-group-addon"><i class="fa fa-check fa-fw"></i></span>
             <?= Render::select('status', Merchant::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler']) ?>
         </div>
@@ -39,9 +39,9 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
         <tr>
             <th><i class="fa fa-list fa-fw"></i>id</th>
             <th><i class="fa fa-book fa-fw"></i>title</th>
-            <th><i class="fa fa-calendar-times-o fa-fw"></i>merchant number</th>
-            <th><i class="fa fa-calendar-times-o fa-fw"></i>pay type</th>
-            <th><i class="fa fa-calendar-times-o fa-fw"></i>status</th>
+            <th><i class="fa fa-shopping-bag fa-fw"></i>merchant number</th>
+            <th><i class="fa fa-recycle fa-fw"></i>payment</th>
+            <th><i class="fa fa-check fa-fw"></i>status</th>
             <th><i class="fa fa-clock-o fa-fw"></i>updated at</th>
             <th><i class="fa fa-gear fa-fw"></i>operation</th>
         </tr>

@@ -160,7 +160,8 @@ var loaderMulti = function() {
         this.selectFiles = tmpFiles;
         if(this.counter + this.selectFiles.length > this.maxCounter) {
             this.selectFiles = [];
-            layer.msg('超过了允许上传的最大数量：' + this.maxCounter);
+            // layer.msg('exceeding the maximum number of allowed uploads: ' + this.maxCounter);
+            BootstrapDialog.alert({ type: BootstrapDialog.TYPE_DANGER, message: 'exceeding the maximum number of allowed uploads: ' + this.maxCounter });
             return false;
         }
         // 处理每个文件的下标

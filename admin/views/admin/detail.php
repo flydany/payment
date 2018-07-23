@@ -11,7 +11,7 @@ $this->addCrumbs('Administrator List', 'admin/list');
 $this->title = (isset($data['id']) ? 'Update' : 'Insert'). ' Administrator';
 $this->setActiveNavigator('admin/list');
 
-$this->registerJavascript('@static/flyer/checker.class.js');
+\admin\assets\CheckerAsset::register($this);
 ?>
 
 <div class="contenter">
@@ -36,10 +36,10 @@ $this->registerJavascript('@static/flyer/checker.class.js');
                 <input class="form-control" type="text" name="effect_date" value="<?= Render::value($data, 'effect_date', date('Y-m-d', strtotime('+1 year'))) ?>" placeholder="end date.">
             </div>
         </div>
-        <div class="form-group checker">
+        <!--div class="form-group checker selecter">
             <label>permission group</label>
-            <?= Render::select('role_id', AdminRole::identitySelector(), Render::value($data, 'role_id'), ['prompt' => '--']) ?>
-        </div>
+            <?//= Render::select('role_id', AdminRole::identitySelector(), Render::value($data, 'role_id'), ['prompt' => '--']) ?>
+        </div-->
         <div class="form-row">
             <div class="form-group col-md-6 checker">
                 <label>realname</label>

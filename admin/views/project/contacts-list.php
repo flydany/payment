@@ -9,8 +9,8 @@ $this->title = 'Project Contacts List';
 $this->addCrumbs('Project');
 $this->addCrumbs('Project List', 'project/list');
 
-$this->registerJavascript('@static/flyer/tabler.class.js');
-$this->registerJavascript('@static/flyer/tableHandler.class.js');
+\admin\assets\TablerAsset::register($this);
+
 ?>
 
 <div class="contenter">
@@ -19,7 +19,7 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
             <span class="input-group-addon"><i class="fa fa-list fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="project_id" value="<?= Yii::$app->request->get('id') ?>" placeholder="project number">
         </div>
-        <div class="input-group col-md-2">
+        <div class="input-group col-md-2 selecter-inline">
             <span class="input-group-addon"><i class="fa fa-user-circle fa-fw"></i></span>
             <?= Render::select('identity', ProjectContacts::$identitySelector, null, ['prompt' => '--', 'class' => 'tabler']) ?>
         </div>

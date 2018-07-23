@@ -25,8 +25,8 @@ class Merchant extends ActiveRecord {
     const StatusNormal = '0';
     const StatusForbidden = '1';
     public static $statusSelector = [
-        self::StatusNormal =>  '正常',
-        self::StatusForbidden => '禁用',
+        self::StatusNormal =>  'normal',
+        self::StatusForbidden => 'forbidden',
     ];
     
     /**
@@ -35,12 +35,12 @@ class Merchant extends ActiveRecord {
     public function rules()
     {
         return [
-            [['title', 'platform_id', 'merchant_id','paytype'], 'required'],
+            [['title', 'platform_id', 'merchant_number','paytype'], 'required'],
             [['platform_id', 'paytype', 'status', 'deleted_at'], 'integer'],
             [['private_type'], 'string', 'max' => 8],
-            [['title', 'request_uri','remark', 'rate', 'min', 'max', 'base_fee'], 'string', 'max' => 255],
-            [['merchant_id','private_password'], 'string', 'max' => 64],
-            [['private_key', 'public_key', 'configuration'], 'string', 'max' => 65535],
+            [['title', 'domain','remark', 'rate', 'min', 'max', 'base_fee'], 'string', 'max' => 255],
+            [['merchant_number','private_password'], 'string', 'max' => 64],
+            [['private_key', 'public_key', 'parameters'], 'string', 'max' => 65535],
         ];
     }
     /**
@@ -51,14 +51,14 @@ class Merchant extends ActiveRecord {
         return [
             'title' => 'title',
             'platform_id' => 'platform number',
-            'merchant_id' => 'merchant number',
+            'merchant_number' => 'merchant number',
             'paytype' => 'pay type',
             'request_uri' => 'request domain',
             'private_key' => 'private key',
             'private_password' => 'private key password',
             'private_type' => 'private key type',
             'public_key' => 'public key',
-            'configuration' => 'configurations',
+            'parameters' => 'parameters',
             'rate' => 'rate',
             'min' => 'min fee',
             'max' => 'max fee',
@@ -79,15 +79,15 @@ class Merchant extends ActiveRecord {
             'param' => [
                 'title' => ['title', ['maxlength' => 255, 'required']],
                 'platform_id' => ['platform number', ['inkey' => Platform::$platformSelector, 'required']],
-                'merchant_id' => ['merchant number', ['maxlength' => 64, 'required']],
+                'merchant_number' => ['merchant number', ['maxlength' => 64, 'required']],
                 'paytype' => ['pay type', ['inkey' => Platform::$paytypeSelector, 'required']],
-                'request_uri' => ['request domain', ['url', 'required']],
+                'domain' => ['request domain', ['url', 'required']],
                 'private_key' => ['private key', ['maxlength' => 65535]],
                 'private_password' => ['private key password', ['maxlength' => 64]],
                 'private_type' => ['private key type', ['inkey' => static::$privateTypeSelector]],
                 'public_key' => ['public key', ['maxlength' => 65535]],
-                // 'name' => ['其他参数KEY', ['maxlength' => 64]],
-                // 'value' => ['其他参数VALUE', ['maxlength' => 1024]],
+                'parameter_name' => ['parameter name', ['maxlength' => 64]],
+                'parameter_value' => ['parameter value', ['maxlength' => 1024]],
                 'remark' => ['remark', ['maxlength' => 255]],
                 'rate' => ['rate', ['maxlength' => 255]],
                 'min' => ['min fee', ['maxlength' => 255]],
@@ -130,13 +130,13 @@ class Merchant extends ActiveRecord {
     public static function configer($route, $merchant, $paytype = Platform::PaytypeDebit)
     {
         $paytypes = [$paytype, Platform::PaytypeFitAll];
-        $configuration = static::find()->where(['platform_id' => $route, 'paytype' => $paytypes, 'merchant_id' => $merchant])
+        $parameters = static::find()->where(['platform_id' => $route, 'paytype' => $paytypes, 'merchant_id' => $merchant])
             ->andWhere(['deleted_at' => '0', 'status' => static::StatusOnline])
             ->orderBy(['paytype' => 'desc', 'id' => 'desc'])->one();
-        if(empty($configuration)) {
+        if(empty($parameters)) {
             return false;
         }
-        return $configuration->builder();
+        return $parameters->builder();
     }
 
     /**
@@ -147,7 +147,7 @@ class Merchant extends ActiveRecord {
     {
         $params = [
             'partnerId' => $this->merchant_id,
-            'requestUri' => $this->request_uri,
+            'domain' => $this->domain,
             'privateKey' => base64_decode($this->private_key),
             'privatePassword' => $this->private_password,
             'publicKey' => base64_decode($this->public_key),
@@ -158,7 +158,7 @@ class Merchant extends ActiveRecord {
                 'baseFee' => json_decode($this->base_fee, true),
             ],
         ];
-        $oT = json_decode($this->configuration, true);
+        $oT = json_decode($this->parameters, true);
         if(empty($oT)) {
             return $params;
         }

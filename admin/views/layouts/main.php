@@ -32,7 +32,8 @@ use yii\helpers\Html;
     }
     #right-panel {
         margin-left:230px;
-        min-height:3200px;
+        min-height:1000px;
+        padding-bottom:35px;
         background-color:#FFF;
     }
     #right-panel .contenter {

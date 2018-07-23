@@ -590,14 +590,14 @@ var checker = function() {
         if(oneStatus !== this.pass) {
             oneMessage = title + '：' + oneMessage.join(', ');
             // 展示错误
-            $(parent).addClass('has-error').removeClass('has-pass');
+            $(parent).addClass('has-error').removeClass('has-success');
             // 获取需要渲染错误描述的dom元素
             $(parent).find(this.warnSpan).text(oneMessage);
         }
         // 校验通过
         else {
             // 取消展示错误、展示通过提示
-            $(parent).addClass('has-pass').removeClass('has-error');
+            $(parent).addClass('has-success').removeClass('has-error');
             $(parent).find(this.warnSpan).text('PASS');
         }
         return { code: oneStatus, message: oneMessage };

@@ -8,8 +8,8 @@ use common\models\Navigator;
 $this->title = 'Navigator List';
 $this->addCrumbs('System');
 
-$this->registerJavascript('@static/flyer/checker.class.js');
-$this->registerJavascript('@static/flyer/tableHandler.class.js');
+\admin\assets\CheckerAsset::register($this);
+
 
 $this->registerCss('
     tbody .edit {

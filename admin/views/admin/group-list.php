@@ -5,8 +5,8 @@
 $this->title = 'Administrator Group List';
 $this->addCrumbs('Manager');
 
-$this->registerJavascript('@static/flyer/tabler.class.js');
-$this->registerJavascript('@static/flyer/tableHandler.class.js');
+\admin\assets\TablerAsset::register($this);
+
 ?>
 
 <div class="contenter">
@@ -62,8 +62,6 @@ $this->registerJavascript('@static/flyer/tableHandler.class.js');
             selectButton: '.select-all', reverseButton: '.reverse-all', readyCall: true,
             // param => tabler
             afterPost: function(param) {
-                // 所属权组名称显示
-                tableHandler.renderCategory({ category: $(param.tabler).find('.role'), select: 'role_id' });
                 // 初始化 删除按钮事件
                 tableHandler.requestSingle({ button: $(param.tabler).find('.delete-data'), url: $('.delete-mult:first').data('href'), isKeep: false });
             }
