@@ -1,11 +1,13 @@
 # git 忽略文件
 
 *.DS_Store
+/.idea/*
+/vendor/*
 /admin/runtime/*
 /website/runtime/*
 /console/runtime/*
-/.idea/*
-/vendor/*
+/admin/web/assets/*
+/website/web/assets/*
 
 /website/controllers/AgreementController.php
 /website/controllers/DebitController.php
