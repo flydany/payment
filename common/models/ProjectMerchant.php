@@ -68,7 +68,7 @@ class ProjectMerchant extends ActiveRecord {
     public function beforeSave($insert)
     {
         $this->platform_id = $this->merchant->platform_id;
-        $this->paytype = $this->merchant->paytype;
+        // $this->paytype = $this->merchant->paytype;
         return parent::beforeSave($insert);
     }
 

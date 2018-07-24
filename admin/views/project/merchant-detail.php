@@ -3,6 +3,7 @@
 /* @var $this \admin\components\View */
 
 use common\helpers\Render;
+use common\models\Platform;
 use common\models\Project;
 use common\models\Merchant;
 use common\models\ProjectMerchant;
@@ -37,13 +38,19 @@ $this->setActiveNavigator('project/merchant-list');
                 <?= Render::select('merchant_id', Merchant::selector(), Render::value($data, 'merchant_id'), ['class' => 'picker', 'data-live-search' => 'true']) ?>
             </div>
         </div>
+        <div class="form-row">
+            <div class="form-group col-md-6 checker">
+                <label>merchant</label>
+                <?= Render::select('paytype', Platform::$paytypeSelector, Render::value($data, 'paytype'), ['class' => 'picker']) ?>
+            </div>
+            <div class="form-group col-md-6 checker">
+                <label>status</label>
+                <?= Render::select('status', ProjectMerchant::$statusSelector, Render::value($data, 'status'), ['class' => 'picker']) ?>
+            </div>
+        </div>
         <div class="form-group checker">
             <label>remark</label>
             <textarea class="form-control" name="remark" placeholder="remark."><?= Render::value($data, 'remark') ?></textarea>
-        </div>
-        <div class="form-group checker">
-            <label>status</label>
-            <?= Render::select('status', ProjectMerchant::$statusSelector, Render::value($data, 'status'), ['class' => 'picker']) ?>
         </div>
         <button type="submit" class="btn btn-primary" id="save-button"><i class="fa fa-save fa-fw"></i>save</button>
         <textarea id="info-detail-json" data-form="#info-detail" style="display:none;"><?= ProjectMerchant::checker() ?></textarea>

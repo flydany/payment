@@ -21,15 +21,15 @@ $this->addCrumbs('Recharge');
         </div>
         <div class="input-group col-md-3">
             <span class="input-group-addon"><i class="fa fa-cog fa-fw"></i></span>
-            <input type="text" class="form-control tabler" name="project_merchant_id" placeholder="merchant">
+            <input type="text" class="form-control tabler" name="project_merchant_id" placeholder="project merchant">
         </div>
         <div class="input-group col-md-2">
             <span class="input-group-addon"><i class="fa fa-barcode fa-fw"></i></span>
-            <input type="text" class="form-control tabler" name="order_number" placeholder="order">
+            <input type="text" class="form-control tabler" name="order_number" placeholder="order number">
         </div>
         <div class="input-group col-md-2">
-            <span class="input-group-addon"><i class="fa fa-thumb-tack fa-fw"></i></span>
-            <input type="text" class="form-control tabler" name="source_order_number" placeholder="source">
+            <span class="input-group-addon"><i class="fa fa-bullseye fa-fw"></i></span>
+            <input type="text" class="form-control tabler" name="source_order_number" placeholder="source order number">
         </div>
         <div class="input-group col-md-2">
             <span class="input-group-addon"><i class="fa fa-check fa-fw"></i></span>
@@ -45,17 +45,17 @@ $this->addCrumbs('Recharge');
             <span class="input-group-addon"><i class="fa fa-caret-right fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="end" placeholder="end time">
         </div>
-        <button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button>
+        <div class="input-group col-md-1"><button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button></div>
     </div>
 
     <table class="table table-bordered table-striped" id="info-table">
         <thead>
         <tr>
-            <th><i class="fa fa-list fa-fw"></i>id</th>
+            <th><i class="fa fa-list fa-fw"></i></th>
             <th><i class="fa fa-shopping-cart fa-fw"></i>project</th>
             <th><i class="fa fa-shopping-bag fa-fw"></i>merchant</th>
-            <th><i class="fa fa-barcode fa-fw"></i>order number</th>
-            <th><i class="fa fa-thumb-tack fa-fw"></i>source number</th>
+            <th><i class="fa fa-barcode fa-fw"></i>order</th>
+            <th><i class="fa fa-bullseye fa-fw"></i>source</th>
             <th><i class="fa fa-bank fa-fw"></i>bank</th>
             <th><i class="fa fa-cny fa-fw"></i>amount</th>
             <th><i class="fa fa-check fa-fw"></i>status</th>
@@ -108,7 +108,7 @@ $this->addCrumbs('Recharge');
     <tr id="tr-{{info.id}}" data-id="{{info.id}}">
         <td>{{info.id}}</td>
         <td><a href="/project/detail?id={{info.project_id}}">{{info.project.title}}</a></td>
-        <td><a href="/platform/merchant-detail?id={{info.merchant_id}}">{{info.merchant.title}}</a></td>
+        <td><a href="/project/merchant-detail?id={{info.project_merchant_id}}">{{info.projectMerchant.title}}</a></td>
         <td>{{info.order_number}}</td>
         <td>{{info.source_order_number}}</td>
         <td class="bank">{{info.bank_id}}</td>

@@ -36,7 +36,7 @@ class Merchant extends ActiveRecord {
     public function rules()
     {
         return [
-            [['title', 'platform_id', 'merchant_number','paytype'], 'required'],
+            [['title', 'platform_id', 'merchant_number'], 'required'],
             [['platform_id', 'paytype', 'status', 'deleted_at'], 'integer'],
             [['private_type'], 'string', 'max' => 8],
             [['domain','remark', 'rate', 'min', 'max', 'base_fee'], 'string', 'max' => 255],
@@ -79,13 +79,13 @@ class Merchant extends ActiveRecord {
         $rule = [
             'param' => [
                 'title' => ['title', ['maxlength' => 64, 'required']],
-                'platform_id' => ['platform number', ['inkey' => Platform::$platformSelector, 'required']],
+                'platform_id' => ['platform number', ['in' => array_keys(Platform::$platformSelector), 'required']],
                 'merchant_number' => ['merchant number', ['maxlength' => 64, 'required']],
-                'paytype' => ['pay type', ['inkey' => Platform::$paytypeSelector, 'required']],
+                'paytype' => ['pay type', ['in' => array_keys(Platform::$paytypeSelector), 'required']],
                 'domain' => ['request domain', ['url', 'required']],
                 'private_key' => ['private key', ['maxlength' => 65535]],
                 'private_password' => ['private key password', ['maxlength' => 64]],
-                'private_type' => ['private key type', ['inkey' => static::$privateTypeSelector]],
+                'private_type' => ['private key type', ['in' => array_keys(static::$privateTypeSelector)]],
                 'public_key' => ['public key', ['maxlength' => 65535]],
                 'parameter_name' => ['parameter name', ['maxlength' => 64]],
                 'parameter_value' => ['parameter value', ['maxlength' => 1024]],
@@ -94,7 +94,7 @@ class Merchant extends ActiveRecord {
                 'min' => ['min fee', ['maxlength' => 255]],
                 'max' => ['max fee', ['maxlength' => 255]],
                 'base_fee' => ['base fee', ['maxlength' => 255]],
-                'status' => ['status', ['inkey' => static::$statusSelector]],
+                'status' => ['status', ['in' => array_keys(static::$statusSelector)]],
             ],
         ];
         return $rule;
@@ -142,11 +142,11 @@ class Merchant extends ActiveRecord {
      * @param integer $paytype 配置类型
      * @return array
      */
-    public static function configer($route, $merchant, $paytype = Platform::PaytypeDebit)
+    public static function configer($platform, $merchant, $paytype = Platform::PaytypeRecharge)
     {
-        $paytypes = [$paytype, Platform::PaytypeFitAll];
-        $parameters = static::find()->where(['platform_id' => $route, 'paytype' => $paytypes, 'merchant_id' => $merchant])
-            ->andWhere(['deleted_at' => '0', 'status' => static::StatusOnline])
+        $paytypes = [$paytype, Platform::PaytypeFit];
+        $parameters = static::find()->where(['platform_id' => $platform, 'paytype' => $paytypes, 'merchant_id' => $merchant])
+            ->andWhere(['deleted_at' => '0', 'status' => static::StatusNormal])
             ->orderBy(['paytype' => 'desc', 'id' => 'desc'])->one();
         if(empty($parameters)) {
             return false;

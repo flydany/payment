@@ -21,6 +21,7 @@ class Platform extends ActiveRecord {
     ];
 
     // 支付类型常量
+    const PaytypeFit = '0';
     const PaytypeRecharge = '1';
     const PaytypeWithdraw = '2';
     const PaytypeAgreement = '3';

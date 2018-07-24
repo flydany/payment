@@ -4,6 +4,7 @@ namespace admin\controllers;
 
 use common\helpers\Checker;
 use common\helpers\Render;
+use common\models\AdminResource;
 use common\models\Platform;
 use common\models\Recharge;
 use common\models\RechargeLog;
@@ -30,9 +31,9 @@ class RechargeController extends Controller {
             'project_id', 'project_merchant_id', 'order_number', 'source_order_number', 'bank_id',
             ['created_at', '>=', 'start'], ['created_at', '<=', 'end'], 'status', 'deleted_at',
         ];
-        $query = Recharge::filters($conditions, $params);
+        $query = Recharge::filters($conditions, $params)->filterResource(AdminResource::TypeProject);
         $pagination = Render::pagination((clone $query)->count());
-        $data['infos'] = $query->orderBy('id desc')->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
+        $data['infos'] = $query->with('project')->with('projectMerchant')->orderBy('id desc')->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
         $data['page'] = Render::pager($pagination);
         return $this->json($data);
     }

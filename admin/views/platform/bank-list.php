@@ -3,10 +3,12 @@
 /* @var $this admin\components\View */
 
 use common\helpers\Render;
-use common\models\Project;
+use common\models\Platform;
+use common\models\Merchant;
 
-$this->title = 'Project List';
-$this->addCrumbs('Project');
+$this->title = 'Merchant Bank List';
+$this->addCrumbs('Platform');
+$this->addCrumbs('Merchant List', 'platform/merchant-list');
 
 \admin\assets\TablerAsset::register($this);
 
@@ -15,18 +17,26 @@ $this->addCrumbs('Project');
 <div class="contenter">
     <div class="form-inline search clearfix" id="info-search">
         <div class="input-group col-md-2">
-            <span class="input-group-addon"><i class="fa fa-list fa-fw"></i></span>
-            <input type="text" class="form-control tabler" name="id" placeholder="id">
+            <span class="input-group-addon"><i class="fa fa-thumb-tack fa-fw"></i></span>
+            <?= Render::select('platform_id', Platform::$platformSelector, null, ['prompt' => '--', 'class' => 'tabler picker']) ?>
         </div>
-        <div class="input-group col-md-3">
+        <div class="input-group col-md-2">
+            <span class="input-group-addon"><i class="fa fa-shopping-bag fa-fw"></i></span>
+            <input type="text" class="form-control tabler" name="merchant_number" placeholder="merchant number">
+        </div>
+        <div class="input-group col-md-2">
+            <span class="input-group-addon"><i class="fa fa-recycle fa-fw"></i></span>
+            <?= Render::select('paytype', Platform::$paytypeSelector, null, ['prompt' => '--', 'class' => 'tabler picker']) ?>
+        </div>
+        <div class="input-group col-md-2">
             <span class="input-group-addon"><i class="fa fa-book fa-fw"></i></span>
-            <input type="text" class="form-control tabler" name="title" placeholder="title">
+            <?= Render::select('bank_id', Platform::$bankSelector, null, ['prompt' => '--', 'class' => 'tabler picker']) ?>
         </div>
         <div class="input-group col-md-2">
             <span class="input-group-addon"><i class="fa fa-check fa-fw"></i></span>
-            <?= Render::select('status', Project::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler picker']) ?>
+            <?= Render::select('status', Merchant::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler picker']) ?>
         </div>
-        <button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button>
+        <div class="input-group col-md-1"><button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button></div>
     </div>
 
     <table class="table table-bordered table-striped" id="info-table">
@@ -34,7 +44,9 @@ $this->addCrumbs('Project');
         <tr>
             <th><i class="fa fa-list fa-fw"></i></th>
             <th><i class="fa fa-book fa-fw"></i>title</th>
-            <th><i class="fa fa-calendar-times-o fa-fw"></i>effect date</th>
+            <th><i class="fa fa-thumb-tack fa-fw"></i>platform</th>
+            <th><i class="fa fa-shopping-bag fa-fw"></i>merchant</th>
+            <th><i class="fa fa-recycle fa-fw"></i>payment</th>
             <th><i class="fa fa-check fa-fw"></i>status</th>
             <th><i class="fa fa-clock-o fa-fw"></i>updated at</th>
             <th><i class="fa fa-gear fa-fw"></i>operation</th>
@@ -42,13 +54,13 @@ $this->addCrumbs('Project');
         </thead>
         <tbody>
         <tr>
-            <td colspan="6"><i class="fa fa-search fa-fw"></i>click on the search button to search data.</td>
+            <td colspan="8"><i class="fa fa-search fa-fw"></i>click on the search button to search data.</td>
         </tr>
         </tbody>
     </table>
     <div class="btn-toolbar" id="info-page">
         <div class="btn-group" role="group">
-            <a type="button" class="btn btn-default" href="/project/detail"><i class="fa fa-plus fa-fw"></i>insert</a>
+            <a type="button" class="btn btn-default" href="/platform/bank-detail"><i class="fa fa-plus fa-fw"></i>insert</a>
             <button type="button" class="btn btn-default"><i class="fa fa-check-square fa-fw"></i>check all</button>
             <button type="button" class="btn btn-default"><i class="fa fa-minus-square fa-fw"></i>inverse</button>
             <button type="button" class="btn btn-default"><i class="fa fa-trash fa-fw"></i>batch delete</button>
@@ -64,14 +76,16 @@ $this->addCrumbs('Project');
         // 初始化表格异步加载事件
         (new tabler).init({
             // 请求地址
-            url: '/project/list',
+            url: '/platform/bank-list',
             // 数据渲染配置
             table: '#info-table', page: '#info-page', template: 'info-template', search: '#info-search', button: '#search-button',
             // 全选、反选按钮、页面加载完毕自动loading
             selectButton: '.select-all', reverseButton: '.reverse-all', readyCall: true,
             // param => tabler
             afterPost: function(param) {
-                // 所属权组名称显示
+                // 名称显示
+                tableHandler.renderCategory({ category: $(param.tabler).find('.platform'), select: 'platform_id' });
+                tableHandler.renderCategory({ category: $(param.tabler).find('.paytype'), select: 'paytype' });
                 tableHandler.renderCategory({ category: $(param.tabler).find('.status'), select: 'status' });
                 // 初始化 删除按钮事件
                 tableHandler.requestSingle({ button: $(param.tabler).find('.delete-data'), url: $('.delete-mult:first').data('href'), isKeep: false });
@@ -84,13 +98,13 @@ $this->addCrumbs('Project');
     <tr id="tr-{{info.id}}" data-id="{{info.id}}">
         <td>{{info.id}}</td>
         <td>{{info.title}}</td>
-        <td>{{info.effect_date}}</td>
+        <td class="platform">{{info.platform_id}}</td>
+        <td>{{info.merchant_number}}</td>
+        <td class="paytype">{{info.paytype}}</td>
         <td class="status">{{info.status}}</td>
         <td>{{info.updated_at | dateShow: 'minute'}}</td>
         <td>
-            <a class="label label-primary" href="/project/detail?id={{info.id}}"><i class="fa fa-edit fa-fw"></i>edit</a>
-            <a class="label label-warning" href="/project/contacts-list?id={{info.id}}"><i class="fa fa-address-book fa-fw"></i>contacts</a>
-            <a class="label label-success" href="/admin-resource/project?item_id={{info.id}}"><i class="fa fa-superpowers fa-fw"></i>permission</a>
+            <a class="label label-primary" href="/platform/bank-detail?id={{info.id}}"><i class="fa fa-edit fa-fw"></i>edit</a>
             <a class="delete-data label label-danger" href="javascript:;"><i class="fa fa-trash fa-fw"></i>delete</a>
         </td>
     </tr>

@@ -5,7 +5,7 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "ProjectMerchant".
+ * This is the model class for table "MerchantBank".
  */
 class MerchantBank extends ActiveRecord {
     
@@ -14,10 +14,11 @@ class MerchantBank extends ActiveRecord {
     public function rules()
     {
         return [
-            [['merchant_id', 'bank_id', 'paytype', 'priority', 'holiday_priority', 'single_limit', 'day_limit', 'month_limit', 'day_count', 'month_count'], 'required'],
-            [['merchant_id', 'bank_id', 'paytype', 'priority', 'holiday_priority', 'single_limit', 'day_limit', 'month_limit', 'day_count', 'month_count', 'limiter_threshold', 'admin_id', 'status', 'deleted_at'], 'integer'],
-            [['holiday_times', 'workday_times', 'weekend_times'], 'string', 'max' => 512],
+            [['platform_id', 'merchant_id', 'merchant_number', 'bank_id', 'paytype', 'priority', 'holiday_priority', 'single_limit', 'day_limit', 'month_limit', 'day_count', 'month_count'], 'required'],
+            [['platform_id', 'merchant_id', 'bank_id', 'paytype', 'priority', 'holiday_priority', 'single_limit', 'day_limit', 'month_limit', 'day_count', 'month_count', 'limit_threshold', 'admin_id', 'status', 'deleted_at'], 'integer'],
+            [['merchant_number'], 'string', 'max' => 64],
             [['remark'], 'string', 'max' => 255],
+            [['holiday_times', 'workday_times', 'weekend_times'], 'string', 'max' => 512],
         ];
     }
     /**
@@ -27,24 +28,26 @@ class MerchantBank extends ActiveRecord {
     public function attributeLabels()
     {
         return [
-            'merchant_id' => '商户编号',
-            'bank_id' => '银行',
-            'paytype' => '类型',
-            'priority' => '工作日优先级',
-            'holiday_priority' => '非工作日优先级',
-            'single_limit' => '单笔限额(元)',
-            'day_limit' => '单日限额(元)',
-            'month_limit' => '单月限额(元)',
-            'day_count' => '单日次数',
-            'month_count' => '单月次数',
-            'limiter_threshold' => '限流阀值',
-            'holiday_times' => '节假日时间',
-            'workday_times' => '工作日时间',
-            'weekend_times' => '休息日时间',
-            'admin_id' => '操作者',
-            'status' => '状态',
-            'remark' => '备注',
-            'deleted_at' => '删除时间',
+            'platform_id' => 'platform id',
+            'merchant_id' => 'merchant id',
+            'merchant_number' => 'merchant number',
+            'bank_id' => 'bank id',
+            'paytype' => 'payment type',
+            'priority' => 'workday priority',
+            'holiday_priority' => 'holiday priority',
+            'single_limit' => ' amount single limit',
+            'day_limit' => 'amount day limit',
+            'month_limit' => 'amount month limit',
+            'day_count' => 'count day limit',
+            'month_count' => 'count month limit',
+            'limit_threshold' => 'threshold limit',
+            'holiday_times' => 'holiday times',
+            'workday_times' => 'workday times',
+            'weekend_times' => 'weekend times',
+            'admin_id' => 'operator',
+            'status' => 'status',
+            'remark' => 'remark',
+            'deleted_at' => 'deleted at',
         ];
     }
     /**
@@ -57,11 +60,25 @@ class MerchantBank extends ActiveRecord {
     {
         $rule = [
             'param' => [
-                'project_id' => ['项目', ['maxlength' => 255, 'required']],
-                'identity' => ['身份标识', ['inkey' => static::$identitySelector, 'required']],
-                'name' => ['联系人', ['maxlength' => 64, 'required']],
-                'mobile' => ['手机号', ['maxlength' => 32, 'required']],
-                'email' => ['邮箱', ['maxlength' => 255, 'required']],
+                'platform_id' => ['platform', ['int', 'required']],
+                'merchant_id' => ['merchant id', ['maxlength' => 64, 'required']],
+                'bank_id' => ['bank id', ['int', 'required']],
+                'paytype' => ['payment type', ['in' => array_keys(Platform::$paytypeSelector), 'required']],
+                'priority' => ['workday priority', ['int', 'required']],
+                'holiday_priority' => ['holiday priority', ['int', 'required']],
+                'single_limit' => ['amount single limit', ['int', 'required']],
+                'day_limit' => ['amount day limit', ['int', 'required']],
+                'month_limit' => ['amount day limit', ['int', 'required']],
+                'day_count' => ['count day limit', ['int', 'required']],
+                'month_count' => ['count month limit', ['int', 'required']],
+                'limit_threshold' => ['threshold limit', ['int', 'required']],
+                'holiday_times' => ['holiday usable times', ['json']],
+                'workday_times' => ['workday usable times', ['json']],
+                'weekend_times' => ['weekend usable times', ['json']],
+                'admin_id' => ['operator', ['int']],
+                'remark' => ['remark', ['maxlength' => 255]],
+                'deleted_at' => ['deleted at', ['int']],
+                'status' => ['status', ['in' => array_keys(static::$statusSelector), 'required']],
             ],
         ];
         return $rule;

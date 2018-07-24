@@ -2,13 +2,12 @@
 
 namespace admin\controllers;
 
-use common\models\AdminResource;
-use Yii;
 use yii\web\UploadedFile;
 use common\helpers\Render;
-use common\helpers\Checker;
 use common\models\Platform;
 use common\models\Merchant;
+use common\models\MerchantBank;
+use common\models\AdminResource;
 
 class PlatformController extends Controller {
     
@@ -144,5 +143,107 @@ class PlatformController extends Controller {
         $reader = base64_encode(file_get_contents($file->tempName));
         $exts = explode('.', $file->name);
         return $this->json(['reader' => $reader, 'ext' => end($exts)]);
+    }
+
+
+    /**
+     * this action showing merchant bank list
+     * @param request type request->isAjax?
+     * @return html|json
+     */
+    public function actionBankList()
+    {
+        if( ! $this->request->isAjax) {
+            return $this->render('bank-list');
+        }
+        $params = $this->request->post();
+        $params['deleted_at'] = '0';
+        $query = MerchantBank::filters(['id', 'platform_id', 'merchant_number', 'paytype', 'status', 'deleted_at'], $params)->filterResource(AdminResource::TypeMerchant);
+        $pagination = Render::pagination((clone $query)->count());
+        $data['infos'] = $query->orderBy('id desc')->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
+        $data['page'] = Render::pager($pagination);
+        return $this->json($data);
+    }
+
+    /**
+     * show merchant bank detail
+     * @param id int  - merchant bank id by get request
+     * @return string
+     */
+    public function actionBankDetail()
+    {
+        $bank = null;
+        $bankId = $this->request->get('id');
+        if($bankId && ( ! $bank = MerchantBank::finder($bankId))) {
+            return $this->error('invalid merchant bank', 'platform/bank-list');
+        }
+        if($bank && empty($bank->hasPermission)) {
+            return $this->error('permission forbidden', 'platform/bank-list');
+        }
+        return $this->render('bank-detail', ['data' => $bank]);
+    }
+    /**
+     * insert merchant bank
+     */
+    public function actionBankInsert()
+    {
+        $bank = new MerchantBank();
+        if ( ! $bank->loadAttributes($this->request->post())->validate()) {
+            // 参数异常，渲染错误页面
+            return $this->error($bank->errors(), 'platform/bank-detail');
+        }
+        if ($bank->save()) {
+            // 保存成功
+            return $this->success('bank ('.Platform::$bankSelector[$bank->bank_id].') insert successful', [
+                ['title' => 'go to merchant bank list page', 'url' => 'platform/bank-list'],
+                ['title' => 'edit merchant bank again', 'url' => 'platform/bank-detail?id='.$bank->id]
+            ]);
+        }
+        // 参数异常，渲染错误页面
+        return $this->error('bank ('.Platform::$bankSelector[$bank->bank_id].') insert failed, please try again', 'platform/bank-detail');
+    }
+    /**
+     * merchant bank detail show / update
+     * use get(id) to find merchant bank
+     */
+    public function actionBankUpdate()
+    {
+        /* @var $bank Bank */
+        // id 为必填项，判断管理员存在状态
+        // 未得到，渲染错误页面
+        if( ! $bank = MerchantBank::finder($this->request->get('id'))) {
+            return $this->error('invalid merchant bank', 'platform/bank-list');
+        }
+        if($bank && empty($bank->hasPermission)) {
+            return $this->error('permission forbidden', 'platform/bank-list');
+        }
+        if ( ! $bank->loadAttributes($this->request->post())->validate()) {
+            // 参数异常，渲染错误页面
+            return $this->error($bank->errors(), 'platform/bank-detail?id='.$bank->id);
+        }
+        if ($bank->save()) {
+            // 保存成功
+            return $this->success('bank ('.Platform::$bankSelector[$bank->bank_id].') update successful', [
+                ['title' => 'go to merchant bank list page', 'url' => 'platform/bank-list'],
+                ['title' => 'edit merchant bank again', 'url' => 'platform/bank-detail?id='.$bank->id],
+            ]);
+        }
+        // 参数异常，渲染错误页面
+        return $this->error('bank ('.Platform::$bankSelector[$bank->bank_id].') update failed, please try again.', 'platform/bank-detail?id='.$bank->id);
+    }
+    /**
+     * delete merchant bank
+     */
+    public function actionBankDelete()
+    {
+        return $this->json('system.error', 'it is not allowed to delete.');
+
+        if( ! ($ids = $this->request->post('id'))) {
+            return $this->json('invalid.param', 'you must choice at least one merchant bank.');
+        }
+        if(MerchantBank::trashAll(['id' => $ids])) {
+            return $this->json(SuccessCode, 'bank delete successful.');
+        }
+        return $this->json('system.error', 'bank delete failed.');
     }
 }
