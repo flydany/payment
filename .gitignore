@@ -7,7 +7,9 @@
 /website/runtime/*
 /console/runtime/*
 /admin/web/assets/*
+!/admin/web/assets/index.html
 /website/web/assets/*
+!/website/web/assets/index.html
 
 /website/controllers/AgreementController.php
 /website/controllers/DebitController.php
