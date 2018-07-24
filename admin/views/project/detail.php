@@ -31,9 +31,9 @@ $this->setActiveNavigator('project/list');
                 <label>effect date</label>
                 <input class="form-control" type="text" name="effect_date" value="<?= Render::value($data, 'effect_date') ?>" placeholder="effect date.">
             </div>
-            <div class="form-group col-md-6 checker selecter-bottom">
+            <div class="form-group col-md-6 checker">
                 <label>status</label>
-                <?= Render::select('status', Project::$statusSelector, Render::value($data, 'status')) ?>
+                <?= Render::select('status', Project::$statusSelector, Render::value($data, 'status'), ['class' => 'picker']) ?>
             </div>
         </div>
         <div class="form-group checker">

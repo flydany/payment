@@ -22,9 +22,9 @@ $this->addCrumbs('Project');
             <span class="input-group-addon"><i class="fa fa-book fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="title" placeholder="title">
         </div>
-        <div class="input-group col-md-2  selecter-inline">
+        <div class="input-group col-md-2">
             <span class="input-group-addon"><i class="fa fa-check fa-fw"></i></span>
-            <?= Render::select('status', Project::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler']) ?>
+            <?= Render::select('status', Project::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler picker']) ?>
         </div>
         <button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button>
     </div>

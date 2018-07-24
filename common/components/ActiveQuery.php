@@ -25,6 +25,13 @@ class ActiveQuery extends \yii\db\ActiveQuery {
                 }
             }
             break;
+            case AdminResource::TypeMerchant: {
+                $id = 'merchant_id';
+                if($this->modelClass == 'common\models\Merchant') {
+                    $id = 'id';
+                }
+            }
+                break;
         }
         $this->andWhere([$this->modelClass::tableName().'.'.$id => Yii::$app->admin->getResourceNumbers($type)]);
         return $this;

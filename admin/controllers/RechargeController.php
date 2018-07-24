@@ -20,20 +20,6 @@ class RechargeController extends Controller {
         if($this->request->isGet) {
             return $this->render('list', ['params' => $params]);
         }
-        $rules = [
-            'param' => [
-                'project_id' => ['project', ['int']],
-                'platform_id' => ['platform', ['in' => array_keys(Platform::$platformSelector)]],
-                'project_merchant_id' => ['platform', ['int']],
-                'start' => ['start time', ['date' => 'Y-m-d H:i:s']],
-                'end' => ['end time', ['date' => 'Y-m-d H:i:s']],
-                'status' => ['status', ['int']],
-            ],
-        ];
-        $checker = Checker::authentication($rules, $params);
-        if($checker['code'] != SuccessCode) {
-            return $this->json('Param.Error', $checker['message']);
-        }
         foreach(['start', 'end'] as $key) {
             if(isset($params[$key])) {
                 $params[$key] = strtotime($params[$key]);

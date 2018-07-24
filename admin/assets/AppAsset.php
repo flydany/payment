@@ -16,6 +16,8 @@ class AppAsset extends AssetBundle {
     public $depends = [
         'admin\assets\BootstrapAsset',
         'admin\assets\FontAwesomeAsset',
+        'admin\assets\DialogAsset',
+        'admin\assets\SelecterAsset',
     ];
     
     public $css = [
@@ -26,7 +28,6 @@ class AppAsset extends AssetBundle {
     ];
     
     public $js = [
-        'bootstrap.dialog/js/bootstrap-dialog.min.js',
         'js/common.js',
     ];
     public $jsOptions = [

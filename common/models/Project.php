@@ -120,10 +120,14 @@ class Project extends ActiveRecord {
      * 获取项目列表
      * @return array
      */
-    public static function projectSelector()
+    public static function selector()
     {
         return ArrayHelper::map(
-            static::find()->select('id, title')->where(['status' => static::StatusNormal])->filterResource(AdminResource::TypeProject)->asArray()->all(),
+            array_map(
+                function($value) {
+                    return ['id' => $value['id'], 'title' => $value['id'].'.'.$value['title']];
+                },
+                static::find()->select('id, title')->where(['status' => static::StatusNormal])->filterResource(AdminResource::TypeProject)->asArray()->all()),
             'id', 'title'
         );
     }

@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 class Merchant extends ActiveRecord {
     
@@ -166,5 +167,21 @@ class Merchant extends ActiveRecord {
             $params[$key] = $value;
         }
         return $params;
+    }
+
+    /**
+     * 获取商户列表
+     * @return array
+     */
+    public static function selector()
+    {
+        return ArrayHelper::map(
+            array_map(
+                function($value) {
+                    return ['id' => $value['id'], 'title' => $value['id'].'.'.$value['title'].'.'.$value['merchant_number']];
+                },
+                static::find()->select('id, title, merchant_number')->where(['status' => static::StatusNormal])->filterResource(AdminResource::TypeMerchant)->asArray()->all()),
+            'id', 'title'
+        );
     }
 }

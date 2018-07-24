@@ -23,13 +23,13 @@ $this->addCrumbs('Platform');
             <span class="input-group-addon"><i class="fa fa-book fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="title" placeholder="title">
         </div>
-        <div class="input-group col-md-2 selecter-inline">
+        <div class="input-group col-md-2">
             <span class="input-group-addon"><i class="fa fa-check fa-fw"></i></span>
-            <?= Render::select('paytype', Platform::$paytypeSelector, null, ['prompt' => '--', 'class' => 'tabler']) ?>
+            <?= Render::select('paytype', Platform::$paytypeSelector, null, ['prompt' => '--', 'class' => 'tabler picker']) ?>
         </div>
-        <div class="input-group col-md-2 selecter-inline">
+        <div class="input-group col-md-2">
             <span class="input-group-addon"><i class="fa fa-check fa-fw"></i></span>
-            <?= Render::select('status', Merchant::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler']) ?>
+            <?= Render::select('status', Merchant::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler picker']) ?>
         </div>
         <button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button>
     </div>

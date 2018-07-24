@@ -232,9 +232,9 @@ class ProjectController extends Controller {
             return $this->render('merchant-list');
         }
         $params = $this->request->post();
-        $query = ProjectMerchant::filters(['project_id', 'name', 'mobile', 'identity', 'email'], $params)->filterResource(AdminResource::TypeProject);
+        $query = ProjectMerchant::filters(['id', ['title', 'like'], 'project_id', 'status'], $params)->filterResource(AdminResource::TypeProject);
         $pagination = Render::pagination((clone $query)->count());
-        $data['infos'] = $query->with('project')->orderBy('id desc')->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
+        $data['infos'] = $query->with('project')->with('merchant')->orderBy('id desc')->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
         $data['page'] = Render::pager($pagination);
         return $this->json($data);
     }
@@ -273,15 +273,19 @@ class ProjectController extends Controller {
             // 参数异常，渲染错误页面
             return $this->error($merchant->errors(), 'project/merchant-detail');
         }
+        if(empty($merchant->merchant)) {
+            // 参数异常，渲染错误页面
+            return $this->error('unknow merchant configurate', 'project/merchant-detail');
+        }
         if ($merchant->save()) {
             // 保存成功
-            return $this->success('project merchant ('.$merchant->name.') insert successful', [
+            return $this->success('project merchant ('.$merchant->title.') insert successful', [
                 ['title' => 'go to project merchant list page', 'url' => 'project/merchant-list'],
                 ['title' => 'edit project merchant again', 'url' => 'project/merchant-detail?id='.$merchant->id]
             ]);
         }
         // 参数异常，渲染错误页面
-        return $this->error('project merchant ('.$merchant->name.') insert failed, please try again', 'project/merchant-detail');
+        return $this->error('project merchant ('.$merchant->title.') insert failed, please try again', 'project/merchant-detail');
     }
     /**
      * project detail show / update
@@ -299,6 +303,10 @@ class ProjectController extends Controller {
             // 参数异常，渲染错误页面
             return $this->error($merchant->errors(), 'project/merchant-detail?id='.$merchant->id);
         }
+        if(empty($merchant->merchant)) {
+            // 参数异常，渲染错误页面
+            return $this->error('unknow merchant configurate', 'project/merchant-detail');
+        }
         if(empty($merchant->project)) {
             return $this->error('unknown project', 'project/merchant-list');
         }
@@ -307,13 +315,13 @@ class ProjectController extends Controller {
         }
         if ($merchant->save()) {
             // 保存成功
-            return $this->success('project ('.$merchant->name.') update successful', [
+            return $this->success('project ('.$merchant->title.') update successful', [
                 ['title' => 'go to project merchant list page', 'url' => 'project/merchant-list'],
                 ['title' => 'edit project merchant again', 'url' => 'project/merchant-detail?id='.$merchant->id],
             ]);
         }
         // 参数异常，渲染错误页面
-        return $this->error('project merchant ('.$merchant->name.') update failed, please try again.', 'project/merchant-detail?id='.$merchant->id);
+        return $this->error('project merchant ('.$merchant->title.') update failed, please try again.', 'project/merchant-detail?id='.$merchant->id);
     }
     /**
      * delete project merchant

@@ -28,17 +28,17 @@ $this->setActiveNavigator('platform/merchant-list');
             <input class="form-control" type="text" name="title" value="<?= Render::value($data, 'title') ?>" placeholder="title">
         </div>
         <div class="form-row">
-            <div class="form-group col-md-3 checker selecter-bottom">
+            <div class="form-group col-md-3 checker">
                 <label>platform</label>
-                <?= Render::select('platform_id', Platform::$platformSelector, Render::value($data, 'platform_id')) ?>
+                <?= Render::select('platform_id', Platform::$platformSelector, Render::value($data, 'platform_id'), ['class' => 'picker']) ?>
             </div>
             <div class="form-group col-md-6 checker">
                 <label>merchant number</label>
                 <input class="form-control" type="text" name="merchant_number" value="<?= Render::value($data, 'merchant_number') ?>" placeholder="merchant number">
             </div>
-            <div class="form-group col-md-3 checker selecter-bottom">
+            <div class="form-group col-md-3 checker">
                 <label>payment type</label>
-                <?= Render::select('paytype', Platform::$paytypeSelector, Render::value($data, 'paytype')) ?>
+                <?= Render::select('paytype', Platform::$paytypeSelector, Render::value($data, 'paytype'), ['class' => 'picker']) ?>
             </div>
         </div>
         <div class="form-group checker">
@@ -49,9 +49,9 @@ $this->setActiveNavigator('platform/merchant-list');
             <div class="panel-heading">merchant private key</div>
             <div class="panel-body pb-zero">
                 <div class="form-row">
-                    <div class="form-group col-md-6 checker selecter-bottom">
+                    <div class="form-group col-md-6 checker">
                         <label>key type</label>
-                        <?= Render::select('private_type', Merchant::$privateTypeSelector, Render::value($data, 'private_type'), ['prompt' => '--']) ?>
+                        <?= Render::select('private_type', Merchant::$privateTypeSelector, Render::value($data, 'private_type'), ['prompt' => '--', 'picker']) ?>
                     </div>
                     <div class="form-group col-md-6 checker">
                         <label>key password</label>
@@ -104,7 +104,7 @@ $this->setActiveNavigator('platform/merchant-list');
                 </div>
             </div>
         </div>
-        <div class="form-group checker selecter-bottom">
+        <div class="form-group checker">
             <label>status</label>
             <?= Render::select('status', Merchant::$statusSelector, Render::value($data, 'status')) ?>
         </div>

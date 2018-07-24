@@ -10,7 +10,6 @@ $this->addCrumbs('Project');
 $this->addCrumbs('Project List', 'project/list');
 
 \admin\assets\TablerAsset::register($this);
-
 ?>
 
 <div class="contenter">
@@ -19,9 +18,9 @@ $this->addCrumbs('Project List', 'project/list');
             <span class="input-group-addon"><i class="fa fa-list fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="project_id" value="<?= Yii::$app->request->get('id') ?>" placeholder="project number">
         </div>
-        <div class="input-group col-md-2 selecter-inline">
+        <div class="input-group col-md-2">
             <span class="input-group-addon"><i class="fa fa-user-circle fa-fw"></i></span>
-            <?= Render::select('identity', ProjectContacts::$identitySelector, null, ['prompt' => '--', 'class' => 'tabler']) ?>
+            <?= Render::select('identity', ProjectContacts::$identitySelector, null, ['prompt' => '--', 'class' => 'tabler picker']) ?>
         </div>
         <div class="input-group col-md-2">
             <span class="input-group-addon"><i class="fa fa-address-card fa-fw"></i></span>

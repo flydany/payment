@@ -27,9 +27,9 @@ $this->setActiveNavigator('project/list');
             <label>project number</label>
             <input class="form-control" type="text" name="project_id" value="<?= Render::value($data, 'project_id') ?>" placeholder="project number">
         </div>
-        <div class="form-group checker selecter-bottom">
+        <div class="form-group checker">
             <label>identity</label>
-            <?= Render::select('identity', ProjectContacts::$identitySelector, Render::value($data, 'identity')) ?>
+            <?= Render::select('identity', ProjectContacts::$identitySelector, Render::value($data, 'identity'), ['class' => 'picker']) ?>
         </div>
         <div class="form-group checker">
             <label>name</label>

@@ -21,9 +21,8 @@ class ProjectMerchant extends ActiveRecord {
     public function rules()
     {
         return [
-            [['project_id', 'platform_id', 'merchant_id', 'paytype', 'status'], 'required'],
-            [['project_id', 'platform_id', 'paytype', 'status'], 'integer'],
-            [['merchant_id'], 'string', 'max' => 64],
+            [['project_id', 'merchant_id', 'status'], 'required'],
+            [['project_id', 'platform_id', 'merchant_id', 'paytype', 'status'], 'integer'],
             [['remark'], 'string', 'max' => 255],
         ];
     }
@@ -34,12 +33,12 @@ class ProjectMerchant extends ActiveRecord {
     public function attributeLabels()
     {
         return [
-            'project_id' => '项目',
-            'platform_id' => '通道号',
-            'merchant_id' => '商户号',
-            'paytype' => '类型',
-            'status' => '状态',
-            'remark' => '备注',
+            'project_id' => 'project id',
+            'platform_id' => 'platform id',
+            'merchant_id' => 'merchant id',
+            'paytype' => 'payment type',
+            'status' => 'status',
+            'remark' => 'remark',
         ];
     }
     /**
@@ -51,24 +50,35 @@ class ProjectMerchant extends ActiveRecord {
     {
         $rule = [
             'param' => [
-                'project_id' => ['项目', ['maxlength' => 255, 'required']],
-                'platform_id' => ['通道号', ['inkey' => Platform::$platformSelector, 'required']],
-                'merchant_id' => ['商户号', ['maxlength' => 64, 'required']],
-                'paytype' => ['支付类型', ['maxlength' => Platform::$paytype, 'required']],
-                'status' => ['状态', ['inkey' => static::$statusSelector, 'required']],
-                'remark' => ['备注', ['maxlength' => 255, 'required']],
+                'project_id' => ['project id', ['int', 'required']],
+                // 'platform_id' => ['platform id', ['inkey' => array_keys(Platform::$platformSelector), 'required']],
+                'merchant_id' => ['merchant id', ['int', 'required']],
+                // 'paytype' => ['payment type', ['in' => array_keys(Platform::$paytype), 'required']],
+                'status' => ['status', ['in' => array_keys(static::$statusSelector), 'required']],
+                'remark' => ['remark', ['maxlength' => 255, 'required']],
             ],
         ];
         return $rule;
     }
-    
+
+    /**
+     * 更新前初始化商户配置的信息
+     * @return boolean
+     */
+    public function beforeSave($insert)
+    {
+        $this->platform_id = $this->merchant->platform_id;
+        $this->paytype = $this->merchant->paytype;
+        return parent::beforeSave($insert);
+    }
+
     /**
      * 获取项目
      * @return object
      */
     public function getProject()
     {
-        return $this->hasOne(Project::className(), ['project_id' => 'id']);
+        return $this->hasOne(Project::className(), ['id' => 'project_id']);
     }
     
     /**
@@ -77,7 +87,7 @@ class ProjectMerchant extends ActiveRecord {
      */
     public function getMerchant()
     {
-        return $this->hasOne(Merchant::className(), ['project_id' => 'id', 'merchant_id' => 'merchant_id', 'paytype' => 'paytype']);
+        return $this->hasOne(Merchant::className(), ['id' => 'merchant_id']);
     }
 
     /**

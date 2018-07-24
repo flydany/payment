@@ -3,6 +3,7 @@
 /* @var $this admin\components\View */
 
 use common\helpers\Render;
+use common\models\Project;
 use common\models\Platform;
 use common\models\Recharge;
 
@@ -10,18 +11,17 @@ $this->title = 'Recharge Record';
 $this->addCrumbs('Recharge');
 
 \admin\assets\TablerAsset::register($this);
-
 ?>
 
 <div class="contenter">
     <div class="form-inline search clearfix" id="info-search">
-        <div class="input-group col-md-2">
-            <span class="input-group-addon"><i class="fa fa-cog fa-fw"></i></span>
-            <input type="text" class="form-control tabler" name="project_id" placeholder="project">
+        <div class="input-group col-md-3">
+            <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
+            <?= Render::select('project_id', Project::selector(), null, ['prompt' => '--', 'placeholder' => 'project', 'class' => 'tabler picker', 'data-live-search' => 'true']) ?>
         </div>
-        <div class="input-group col-md-2">
+        <div class="input-group col-md-3">
             <span class="input-group-addon"><i class="fa fa-cog fa-fw"></i></span>
-            <input type="text" class="form-control tabler" name="merchant_id" placeholder="merchant">
+            <input type="text" class="form-control tabler" name="project_merchant_id" placeholder="merchant">
         </div>
         <div class="input-group col-md-2">
             <span class="input-group-addon"><i class="fa fa-barcode fa-fw"></i></span>
@@ -31,13 +31,13 @@ $this->addCrumbs('Recharge');
             <span class="input-group-addon"><i class="fa fa-thumb-tack fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="source_order_number" placeholder="source">
         </div>
-        <div class="input-group col-md-2 selecter-inline">
+        <div class="input-group col-md-2">
             <span class="input-group-addon"><i class="fa fa-check fa-fw"></i></span>
-            <?= Render::select('status', Recharge::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler']) ?>
+            <?= Render::select('status', Recharge::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler picker']) ?>
         </div>
-        <div class="input-group col-md-2 selecter-inline">
+        <div class="input-group col-md-2">
             <span class="input-group-addon"><i class="fa fa-bank fa-fw"></i></span>
-            <?= Render::select('bank_id', Platform::$bankSelector, null, ['prompt' => '--', 'class' => 'tabler']) ?>
+            <?= Render::select('bank_id', Platform::$bankSelector, null, ['prompt' => '--', 'class' => 'tabler picker']) ?>
         </div>
         <div class="input-group col-md-6">
             <span class="input-group-addon"><i class="fa fa-clock-o fa-fw"></i></span>
