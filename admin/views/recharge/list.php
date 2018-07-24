@@ -52,13 +52,13 @@ $this->addCrumbs('Recharge');
         <thead>
         <tr>
             <th><i class="fa fa-list fa-fw"></i>id</th>
-            <th><i class="fa fa-cog fa-fw"></i>pm</th>
+            <th><i class="fa fa-shopping-cart fa-fw"></i>project</th>
+            <th><i class="fa fa-shopping-bag fa-fw"></i>merchant</th>
             <th><i class="fa fa-barcode fa-fw"></i>order number</th>
             <th><i class="fa fa-thumb-tack fa-fw"></i>source number</th>
             <th><i class="fa fa-bank fa-fw"></i>bank</th>
             <th><i class="fa fa-cny fa-fw"></i>amount</th>
             <th><i class="fa fa-check fa-fw"></i>status</th>
-            <th><i class="fa fa-clock-o fa-fw"></i>success at</th>
             <th><i class="fa fa-clock-o fa-fw"></i>created at</th>
             <th><i class="fa fa-gear fa-fw"></i>operation</th>
         </tr>
@@ -107,13 +107,13 @@ $this->addCrumbs('Recharge');
     {{each infos as info key}}
     <tr id="tr-{{info.id}}" data-id="{{info.id}}">
         <td>{{info.id}}</td>
-        <td>{{info.project_id}} / {{info.project_merchant_id}}</td>
+        <td><a href="/project/detail?id={{info.project_id}}">{{info.project.title}}</a></td>
+        <td><a href="/platform/merchant-detail?id={{info.merchant_id}}">{{info.merchant.title}}</a></td>
         <td>{{info.order_number}}</td>
         <td>{{info.source_order_number}}</td>
         <td class="bank">{{info.bank_id}}</td>
         <td>{{info.amount | fmoney}}</td>
         <td class="status">{{info.status}}</td>
-        <td>{{info.success_at | dateShow: 'minute'}}</td>
         <td>{{info.created_at | dateShow: 'minute'}}</td>
         <td>
             <a class="label label-primary" href="/recharge/detail?id={{info.id}}"><i class="fa fa-edit fa-fw"></i>edit</a>

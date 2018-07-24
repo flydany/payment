@@ -2,6 +2,7 @@
 
 namespace admin\controllers;
 
+use common\models\AdminResource;
 use Yii;
 use yii\web\UploadedFile;
 use common\helpers\Render;
@@ -23,7 +24,7 @@ class PlatformController extends Controller {
         }
         $params = $this->request->post();
         $params['deleted_at'] = '0';
-        $query = Merchant::filters(['id', ['title', 'like'], 'paytype', 'status', 'deleted_at'], $params);
+        $query = Merchant::filters(['id', ['title', 'like'], 'platform_id', 'merchant_number', 'paytype', 'status', 'deleted_at'], $params)->filterResource(AdminResource::TypeMerchant);
         $pagination = Render::pagination((clone $query)->count());
         $data['infos'] = $query->orderBy('id desc')->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
         $data['page'] = Render::pager($pagination);

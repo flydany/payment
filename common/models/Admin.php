@@ -107,11 +107,11 @@ class Admin extends ActiveRecord {
     // 判断是否有权限
     public function hasPermission($permission)
     {
-        return $this->isSupper() || in_array($permission, $this->permissionSelector);
+        return $this->isSupper || in_array($permission, $this->permissionSelector);
     }
     public function isGroupPermission($permission)
     {
-        return $this->isSupper() || in_array($permission, array_column($this->groupPermissions, 'controller'));
+        return $this->isSupper || in_array($permission, array_column($this->groupPermissions, 'controller'));
     }
 
     /**

@@ -20,7 +20,7 @@ $this->addCrumbs('Project List', 'project/list');
             <span class="input-group-addon"><i class="fa fa-book fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="title" placeholder="title">
         </div>
-        <div class="input-group col-md-3">
+        <div class="input-group col-md-2">
             <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
             <?= Render::select('project_id', Project::selector(), null, ['prompt' => '--', 'placeholder' => 'project', 'class' => 'tabler picker', 'data-live-search' => 'true']) ?>
         </div>
@@ -97,9 +97,9 @@ $this->addCrumbs('Project List', 'project/list');
     {{each infos as info key}}
     <tr id="tr-{{info.id}}" data-id="{{info.id}}">
         <td>{{info.title}}</td>
-        <td>{{info.project.title}}</td>
+        <td><a href="/project/detail?id={{info.project_id}}">{{info.project.title}}</a></td>
         <td class="platform">{{info.platform_id}}</td>
-        <td>{{info.merchant.title}}</td>
+        <td><a href="/platform/merchant-detail?id={{info.merchant_id}}">{{info.merchant.title}}</a></td>
         <td class="paytype">{{info.paytype}}</td>
         <td class="status">{{info.status}}</td>
         <td>{{info.updated_at | dateShow: 'minute'}}</td>

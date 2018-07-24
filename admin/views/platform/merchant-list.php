@@ -16,30 +16,35 @@ $this->addCrumbs('Platform');
 <div class="contenter">
     <div class="form-inline search clearfix" id="info-search">
         <div class="input-group col-md-2">
-            <span class="input-group-addon"><i class="fa fa-list fa-fw"></i></span>
-            <input type="text" class="form-control tabler" name="id" placeholder="id">
-        </div>
-        <div class="input-group col-md-3">
             <span class="input-group-addon"><i class="fa fa-book fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="title" placeholder="title">
         </div>
         <div class="input-group col-md-2">
-            <span class="input-group-addon"><i class="fa fa-check fa-fw"></i></span>
+            <span class="input-group-addon"><i class="fa fa-thumb-tack fa-fw"></i></span>
+            <?= Render::select('platform_id', Platform::$platformSelector, null, ['prompt' => '--', 'class' => 'tabler picker']) ?>
+        </div>
+        <div class="input-group col-md-2">
+            <span class="input-group-addon"><i class="fa fa-shopping-bag fa-fw"></i></span>
+            <input type="text" class="form-control tabler" name="merchant_number" placeholder="merchant number">
+        </div>
+        <div class="input-group col-md-2">
+            <span class="input-group-addon"><i class="fa fa-recycle fa-fw"></i></span>
             <?= Render::select('paytype', Platform::$paytypeSelector, null, ['prompt' => '--', 'class' => 'tabler picker']) ?>
         </div>
         <div class="input-group col-md-2">
             <span class="input-group-addon"><i class="fa fa-check fa-fw"></i></span>
             <?= Render::select('status', Merchant::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler picker']) ?>
         </div>
-        <button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button>
+        <div class="input-group col-md-1"><button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button></div>
     </div>
 
     <table class="table table-bordered table-striped" id="info-table">
         <thead>
         <tr>
-            <th><i class="fa fa-list fa-fw"></i>id</th>
+            <th><i class="fa fa-list fa-fw"></i></th>
             <th><i class="fa fa-book fa-fw"></i>title</th>
-            <th><i class="fa fa-shopping-bag fa-fw"></i>merchant number</th>
+            <th><i class="fa fa-thumb-tack fa-fw"></i>platform</th>
+            <th><i class="fa fa-shopping-bag fa-fw"></i>merchant</th>
             <th><i class="fa fa-recycle fa-fw"></i>payment</th>
             <th><i class="fa fa-check fa-fw"></i>status</th>
             <th><i class="fa fa-clock-o fa-fw"></i>updated at</th>
@@ -48,7 +53,7 @@ $this->addCrumbs('Platform');
         </thead>
         <tbody>
         <tr>
-            <td colspan="7"><i class="fa fa-search fa-fw"></i>click on the search button to search data.</td>
+            <td colspan="8"><i class="fa fa-search fa-fw"></i>click on the search button to search data.</td>
         </tr>
         </tbody>
     </table>
@@ -78,6 +83,7 @@ $this->addCrumbs('Platform');
             // param => tabler
             afterPost: function(param) {
                 // 名称显示
+                tableHandler.renderCategory({ category: $(param.tabler).find('.platform'), select: 'platform_id' });
                 tableHandler.renderCategory({ category: $(param.tabler).find('.paytype'), select: 'paytype' });
                 tableHandler.renderCategory({ category: $(param.tabler).find('.status'), select: 'status' });
                 // 初始化 删除按钮事件
@@ -91,6 +97,7 @@ $this->addCrumbs('Platform');
     <tr id="tr-{{info.id}}" data-id="{{info.id}}">
         <td>{{info.id}}</td>
         <td>{{info.title}}</td>
+        <td class="platform">{{info.platform_id}}</td>
         <td>{{info.merchant_number}}</td>
         <td class="paytype">{{info.paytype}}</td>
         <td class="status">{{info.status}}</td>

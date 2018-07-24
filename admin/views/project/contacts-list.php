@@ -91,7 +91,7 @@ $this->addCrumbs('Project List', 'project/list');
 <script id="info-template" type="text/html">
     {{each infos as info key}}
     <tr id="tr-{{info.id}}" data-id="{{info.id}}">
-        <td>{{info.project_id}}/{{info.project.title}}</td>
+        <td><a href="/project/detail?id={{info.project_id}}">{{info.project_id}}/{{info.project.title}}</a></td>
         <td class="identity">{{info.identity}}</td>
         <td>{{info.name}}</td>
         <td>{{info.mobile}}</td>

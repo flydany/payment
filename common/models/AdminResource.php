@@ -132,4 +132,21 @@ class AdminResource extends ActiveRecord {
         }
         return true;
     }
+
+    /**
+     * 添加权限
+     * @param string $identity 身份标识
+     * @param integer $item_id 数据源编号
+     * @param string $type 数据源类型
+     * @return boolean
+     */
+    public static function creator($identity, $item_id, $type = self::TypeProject)
+    {
+        $resource = new static();
+        $resource->loads(['type' => $type, 'identity' => (string)$identity, 'item_id' => $item_id]);
+        if($resource->validate() && $resource->save()) {
+            return true;
+        }
+        return false;
+    }
 }

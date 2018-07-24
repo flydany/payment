@@ -15,10 +15,9 @@ class UploaderAsset extends AssetBundle {
 
     public $js = [
         'loader.core.class.js',
-        'loader.core.single.class.js',
     ];
 
     public $css = [
-        'loader.css,'
+        'loader.css',
     ];
 }

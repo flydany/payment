@@ -25,8 +25,9 @@ class Project extends ActiveRecord {
         return [
             [['title', 'effect_date', 'public_key', 'status'], 'required'],
             [['status', 'deleted_at'], 'integer'],
+            [['title'], 'string', 'max' => 64],
             [['effect_date'], 'string', 'max' => 16],
-            [['title', 'remark'], 'string', 'max' => 255],
+            [['remark'], 'string', 'max' => 255],
             [['public_key'], 'string', 'max' => 1024],
         ];
     }
@@ -55,7 +56,7 @@ class Project extends ActiveRecord {
     {
         $rule = [
             'param' => [
-                'title' => ['title', ['maxlength' => 255, 'required']],
+                'title' => ['title', ['maxlength' => 64, 'required']],
                 'effect_date' => ['effect date', ['date' => 'Y-m-d', 'required']],
                 'public_key' => ['rsa public', ['maxlength' => 1024, 'required']],
                 'remark' => ['remark', ['maxlength' => 255, 'required']],
@@ -63,6 +64,23 @@ class Project extends ActiveRecord {
             ],
         ];
         return $rule;
+    }
+
+    /**
+     * 新建项目，赋予创建人权限
+     * @param boolean $insert 是否创建
+     * @param array $changedAttributes 改变的属性
+     * @return boolean|void
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        if( ! parent::afterSave($insert, $changedAttributes)) {
+            return false;
+        }
+        if($insert && ! Yii::$app->admin->isSupper) {
+            AdminResource::creator(Yii::$app->admin->id, $this->id, AdminResource::TypeProject);
+        }
+        return true;
     }
 
     /**
@@ -127,7 +145,7 @@ class Project extends ActiveRecord {
                 function($value) {
                     return ['id' => $value['id'], 'title' => $value['id'].'.'.$value['title']];
                 },
-                static::find()->select('id, title')->where(['status' => static::StatusNormal])->filterResource(AdminResource::TypeProject)->asArray()->all()),
+                static::find()->select('id, title')->where(['status' => static::StatusNormal])->filterResource(AdminResource::TypeProject)->orderBy('id desc')->asArray()->all()),
             'id', 'title'
         );
     }

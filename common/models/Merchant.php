@@ -39,8 +39,8 @@ class Merchant extends ActiveRecord {
             [['title', 'platform_id', 'merchant_number','paytype'], 'required'],
             [['platform_id', 'paytype', 'status', 'deleted_at'], 'integer'],
             [['private_type'], 'string', 'max' => 8],
-            [['title', 'domain','remark', 'rate', 'min', 'max', 'base_fee'], 'string', 'max' => 255],
-            [['merchant_number','private_password'], 'string', 'max' => 64],
+            [['domain','remark', 'rate', 'min', 'max', 'base_fee'], 'string', 'max' => 255],
+            [['title', 'merchant_number','private_password'], 'string', 'max' => 64],
             [['private_key', 'public_key', 'parameters'], 'string', 'max' => 65535],
         ];
     }
@@ -78,7 +78,7 @@ class Merchant extends ActiveRecord {
     {
         $rule = [
             'param' => [
-                'title' => ['title', ['maxlength' => 255, 'required']],
+                'title' => ['title', ['maxlength' => 64, 'required']],
                 'platform_id' => ['platform number', ['inkey' => Platform::$platformSelector, 'required']],
                 'merchant_number' => ['merchant number', ['maxlength' => 64, 'required']],
                 'paytype' => ['pay type', ['inkey' => Platform::$paytypeSelector, 'required']],
@@ -98,6 +98,20 @@ class Merchant extends ActiveRecord {
             ],
         ];
         return $rule;
+    }
+
+    /**
+     * 新建商户号，赋予创建人权限
+     * @param boolean $insert 是否创建
+     * @param array $changedAttributes 改变的属性
+     * @return boolean|void
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+        if($insert && ( ! Yii::$app->admin->isSupper)) {
+            AdminResource::creator(Yii::$app->admin->id, $this->id, AdminResource::TypeMerchant);
+        }
     }
 
     /**
@@ -180,7 +194,7 @@ class Merchant extends ActiveRecord {
                 function($value) {
                     return ['id' => $value['id'], 'title' => $value['id'].'.'.$value['title'].'.'.$value['merchant_number']];
                 },
-                static::find()->select('id, title, merchant_number')->where(['status' => static::StatusNormal])->filterResource(AdminResource::TypeMerchant)->asArray()->all()),
+                static::find()->select('id, title, merchant_number')->where(['status' => static::StatusNormal])->filterResource(AdminResource::TypeMerchant)->orderBy('id desc')->asArray()->all()),
             'id', 'title'
         );
     }
