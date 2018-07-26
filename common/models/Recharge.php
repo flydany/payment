@@ -9,13 +9,19 @@ use Yii;
  */
 class Recharge extends ActiveRecord {
 
-    // Cash's status defined
+    // status defined
     const StatusInit = '0';
-    const StatusPaying = '1';
-    const StatusSuccess = '2';
-    const StatusFailed = '3';
+    const StatusAuthing = '21';
+    const StatusAuthSuccess = '20';
+    const StatusAuthFailed = '22';
+    const StatusPaying = '91';
+    const StatusSuccess = '90';
+    const StatusFailed = '92';
     public static $statusSelector = [
         self::StatusInit => 'wait',
+        self::StatusAuthing => 'apply auth',
+        self::StatusAuthSuccess => 'auth success',
+        self::StatusAuthFailed => 'auth failed',
         self::StatusPaying => 'paying',
         self::StatusSuccess => 'success',
         self::StatusFailed => 'failed',
@@ -26,11 +32,11 @@ class Recharge extends ActiveRecord {
     public function rules()
     {
         return [
-            [['project_id', 'platform_id', 'project_merchant_id', 'amount', 'fee', 'bind_card_id', 'bank_id', 'order_number', 'source_order_number', 'status'], 'required'],
-            [['project_id', 'platform_id', 'project_merchant_id', 'amount', 'fee', 'bind_card_id', 'bank_id', 'success_at', 'deleted_at'], 'integer'],
-            [['order_number'], 'string', 'max' => 32],
-            [['outer_order_number', 'source_order_number'], 'string', 'max' => 64],
-            [['pay_summary', 'remark'], 'string', 'max' => 255],
+            [['project_id', 'platform_id', 'project_merchant_id', 'user_id', 'amount', 'fee', 'bind_card_id', 'bank_id', 'order_number', 'source_order_number', 'status'], 'required'],
+            [['project_id', 'platform_id', 'project_merchant_id', 'amount', 'fee', 'bind_card_id', 'bank_id', 'success_date', 'success_at', 'deleted_at'], 'integer'],
+            [['order_number', 'user_id'], 'string', 'max' => 32],
+            [['outer_order_number', 'source_order_number', 'postscript', 'error_code'], 'string', 'max' => 64],
+            [['remark'], 'string', 'max' => 255],
             [['order_number'], 'unique'],
             [['project_id', 'source_order_number'], 'unique', 'targetAttribute' => ['project_id', 'source_order_number']],
         ];
@@ -48,17 +54,68 @@ class Recharge extends ActiveRecord {
             'order_number' => 'order number',
             'amount' => 'amount',
             'fee' => 'fee',
+            'user_id' => 'user number',
             'bind_card_id' => 'bind card number',
             'bank_id' => 'bank number',
             'status' => 'status',
             'success_date' => 'success date',
             'success_at' => 'success at',
+            'error_code' => 'error code',
             'source_order_number' => 'source order number',
             'outer_order_number' => 'outer order number',
             'pay_summary' => 'pay summary',
             'remark' => 'remark',
             'deleted_at' => 'deleted at',
         ];
+    }
+    /**
+     * update & insert data check config for html
+     * @param $type string 页面操作类型
+     * @param $encodeJson boolean 是否转成JSON字符串
+     * @return string | array
+     */
+    public static function flyer($type = 'update')
+    {
+        // jsut search
+        $rule = [
+            'param' => [
+                'project_id' => ['project', ['int', 'required']],
+                'platform_id' => ['platform', ['int', 'required']],
+                'project_merchant_id' => ['project merchant number', ['int', 'required']],
+                'order_number' => ['order number', ['maxlength' => 32, 'required']],
+                'amount' => ['recharge amount', ['int', 'required']],
+                'fee' => ['recharge fee', ['int', 'required']],
+                'user_id' => ['user_number', ['maxlength' => 32, 'required']],
+                'bind_card_id' => ['bind card id', ['int', 'required']],
+                'bank_id' => ['bank number', ['in' => array_keys(Platform::$bankSelector), 'required']],
+                'success_date' => ['success date', ['date' => 'Ymd']],
+                'success_at' => ['success at', ['date' => 'Y-m-d H:i:s']],
+                'error_code' => ['error code', ['maxlength' => 64]],
+                'source_order_number' => ['source order number', ['maxlength' => 64, 'required']],
+                'outer_order_number' => ['outer order number', ['maxlength' => 64]],
+                'postscript' => ['postscript', ['maxlength' => 64]],
+                'remark' => ['remark', ['maxlength' => 255]],
+                'status' => ['recharge status', ['in' => array_keys(static::$statusSelector)]],
+            ],
+        ];
+        return $rule;
+    }
+
+    /**
+     * 更新数据钩子
+     * @param boolean $insert
+     * @return boolean
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        $changed = [];
+        foreach($changedAttributes as $key => $value) {
+            if($this->getOldAttribute($key) != $value) {
+                $changed[$key] = ['before' => $this->getOldAttribute($key), 'after' => $value];
+            }
+        }
+        $this->logger($insert ? 'creator' : 'editor', 'change attributes: '.json_encode($changed));
+        return parent::afterSave($insert, $changedAttributes);
     }
 
     /**
@@ -68,6 +125,15 @@ class Recharge extends ActiveRecord {
     public function getProject()
     {
         return $this->hasOne(Project::className(), ['id' => 'project_id']);
+    }
+
+    /**
+     * 判断是否有权限操作
+     * @return boolean
+     */
+    public function getHasPermission()
+    {
+        return $this->project->hasPermission;
     }
 
     /**
@@ -115,7 +181,7 @@ class Recharge extends ActiveRecord {
         $this->success_at = time();
         $this->updated_at = time();
         return $this->transaction(function($db) use ($remark) {
-            if( ! $this->cSave(['status' => $this->status])) {
+            if( ! $this->cSave('status')) {
                 throw new \Exception('update recharge status error');
             }
             // 记录日志
@@ -140,7 +206,7 @@ class Recharge extends ActiveRecord {
         $this->status = static::StatusFailed;
         $this->updated_at = time();
         return $this->transaction(function($db) use ($remark) {
-            if( ! $this->cSave(['status' => $this->status])) {
+            if( ! $this->cSave('status')) {
                 throw new \Exception('update recharge status error');
             }
             // 记录日志
@@ -153,15 +219,15 @@ class Recharge extends ActiveRecord {
     
     /**
      * 添加日志
-     * @param $type int 操作类型
-     * @param $remark string 备注
+     * @param $event int 操作类型
+     * @param $operation string 备注
      * @return boolean
      */
-    public function logger($type, $remark = '')
+    public function logger($event, $operation = '')
     {
         $param = [
-            'handler' => $type,
-            'remark' => $remark,
+            'event' => $event,
+            'operation' => $operation,
             'recharge_id' => $this->id,
         ];
         return RechargeLog::logger($param);

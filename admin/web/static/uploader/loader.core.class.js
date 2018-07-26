@@ -161,7 +161,7 @@ var loaderMulti = function() {
         if(this.counter + this.selectFiles.length > this.maxCounter) {
             this.selectFiles = [];
             // layer.msg('exceeding the maximum number of allowed uploads: ' + this.maxCounter);
-            BootstrapDialog.alert({ type: BootstrapDialog.TYPE_DANGER, message: 'exceeding the maximum number of allowed uploads: ' + this.maxCounter });
+            jQuery.warning('exceeding the maximum number of allowed uploads: ' + this.maxCounter);
             return false;
         }
         // 处理每个文件的下标

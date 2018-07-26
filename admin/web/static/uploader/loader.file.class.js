@@ -31,14 +31,14 @@ var loaderFile = function() {
         }
         var file = files[0];
         if (file.size >= this.maxSize) {
-            BootstrapDialog.alert({ type: BootstrapDialog.TYPE_DANGER, message: 'file: ' + file.name + ' was too large!' });
+            jQuery.warning('file: ' + file.name + ' was too large!');
             return false;
         }
         else {
             //获得文件后缀名
             var fileExt = file.name.substr(file.name.lastIndexOf(".")).toLowerCase();
             if((this.allow[0] != '.') && ! (this.allow.indexOf(fileExt) >= 0)) {
-                BootstrapDialog.alert({ type: BootstrapDialog.TYPE_DANGER, message: 'file format error!' });
+                jQuery.warning('file format error!');
                 return false;
             }
         }
@@ -71,7 +71,7 @@ var loaderFile = function() {
                 $(this).siblings('.start-loader').click();
             }
             else {
-                BootstrapDialog.alert({ type: BootstrapDialog.TYPE_DANGER, message: 'there is no file that needs to be uploaded!' });
+                jQuery.warning('there is no file that needs to be uploaded!');
             }
         });
     }

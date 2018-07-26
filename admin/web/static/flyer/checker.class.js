@@ -449,7 +449,7 @@ var checker = function() {
         // 判断是否校验通过
         if(this.isError()) {
             // layer.msg(this.getMessage().join('。'), { shift: 6 });
-            BootstrapDialog.alert({ message: this.getMessage().join('。') });
+            jQuery.warning(this.getMessage().join('。'));
             $(this.getErrorDom()[0]).focus();
             return false;
         }

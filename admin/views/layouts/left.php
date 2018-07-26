@@ -183,14 +183,14 @@ $this->registerJs("
         #website-name,
         #admin-name,
         #sidebar-menu {
-            width:80px;
+            width:70px;
             text-align:center;
         }
         #left-panel {
             z-index:10;
         }
         #right-panel {
-            margin-left:80px;
+            margin-left:70px;
         }
         #website-name span,
         #admin-name,
@@ -204,7 +204,7 @@ $this->registerJs("
         }
         #sidebar-menu .fa {
             width:auto;
-            font-size:32px;
+            font-size:28px;
         }
         #sidebar-menu .menu-section {
             margin-bottom:0;
@@ -222,7 +222,7 @@ $this->registerJs("
         #sidebar-menu .child-menu {
             position:absolute;
             top:0;
-            left:77px;
+            left:67px;
             width:230px;
             min-height:120px;
             border-left: 3px solid #1ABB9C;

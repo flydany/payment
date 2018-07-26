@@ -4,7 +4,6 @@
 
 use common\helpers\Render;
 use common\models\Project;
-use common\models\ProjectContacts;
 
 
 $this->addCrumbs('Project');

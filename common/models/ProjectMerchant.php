@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "ProjectMerchant".
@@ -101,5 +102,13 @@ class ProjectMerchant extends ActiveRecord {
         return MerchantBank::find()->where(['platform_id' => $this->platform_id, 'paytype' => $this->paytype, 'status' => static::StatusUsable])
             ->andWhere(['or', ['merchant_id' => $this->merchant_id], ['merchant_id' => '']])
             ->asArray()->all();
+    }
+
+    public static function selector($projectId = '')
+    {
+        return ArrayHelper::map(
+            ProjectMerchant::find()->select('id, title')->andFilterWhere(['project_id' => $projectId])->filterResource(AdminResource::TypeProject)->asArray()->all(),
+            'id', 'title'
+        );
     }
 }

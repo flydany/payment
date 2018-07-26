@@ -28,6 +28,7 @@ class AppAsset extends AssetBundle {
     ];
     
     public $js = [
+        'js/dialog.js',
         'js/common.js',
     ];
     public $jsOptions = [

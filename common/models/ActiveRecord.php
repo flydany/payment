@@ -169,10 +169,15 @@ class ActiveRecord extends \yii\db\ActiveRecord {
      */
     public function cSave($keys)
     {
+        if( ! is_array($keys) && $keys) {
+            $keys = [$keys];
+        }
         $conditions['id'] = $this->id;
         $conditions['created_at'] = $this->created_at;
-        foreach($keys as $key) {
-            $conditions[$key] = $this->{$key};
+        if( ! empty($keys)) {
+            foreach($keys as $key) {
+                $conditions[$key] = $this->{$key};
+            }
         }
         return static::updateAll($this->attributes, $conditions);
     }

@@ -10,16 +10,11 @@ use common\helpers\Util;
  */
 class RechargeLog extends ActiveRecord {
 
-    // @name 日志操作人类型定义
-    const HandlerUser = '0';
-    const HandlerAdmin = '1';
-    const HandlerSystem = '2';
-    const HandlerOuter = '3';
-    public static $handlerSelector = [
-        self::HandlerUser => ['title' => '用户', 'status' => 'green'],
-        self::HandlerAdmin => ['title' => '管理员', 'status' => 'purple'],
-        self::HandlerSystem => ['title' => '系统', 'status' => 'blue'],
-        self::HandlerOuter => ['title' => '第三方', 'status' => 'red'],
+    const StatusSuccess = '0';
+    const StatusFailed = '1';
+    public static $statusSelector = [
+        self::StatusSuccess => 'success',
+        self::StatusFailed => 'failed',
     ];
 
     // only define rules for those attributes that
@@ -27,38 +22,48 @@ class RechargeLog extends ActiveRecord {
     public function rules()
     {
         return [
-            [['recharge_id', 'handler', 'ip', 'remark'], 'required'],
-            [['recharge_id', 'handler', 'operator'], 'integer'],
+            [['recharge_id', 'event', 'operation', 'ip'], 'required'],
+            [['recharge_id', 'admin_id', 'status'], 'integer'],
             [['ip'], 'string', 'max' => 32],
-            [['remark'], 'string', 'max' => 65535],
+            [['event'], 'string', 'max' => 64],
+            [['operation'], 'string', 'max' => 65535],
         ];
     }
     /**
-     * @name 字段名称
+     * 字段名称
      * @return array
      */
     public function attributeLabels()
     {
         return [
-            'recharge_id' => '充值记录',
-            'handler' => '操作类型',
-            'ip' => '请求IP',
-            'operator ' => '操作人',
-            'remark' => '备注',
+            'recharge_id' => 'recharge number',
+            'event' => 'event',
+            'admin_id ' => 'admin',
+            'ip' => 'ip',
+            'operation' => 'operation',
         ];
     }
 
     /**
-     * @name 添加日志
+     * 获取管理员信息
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOperator()
+    {
+        return $this->hasOne(Admin::className(), ['id' => 'admin_id']);
+    }
+
+    /**
+     * 添加日志
      * @param $param array 数据数组
      * @return boolean
      */
     public static function logger($param)
     {
         $logger = new static();
-        $param['operator'] = Yii::$app->isLogin() ? Yii::$app->user['id'] : 0;
+        $param['admin_id'] = (Yii::$app->isLogin() && Yii::$app->admin) ? Yii::$app->admin->id : 0;
         $param['ip'] = Util::clientIp();
-        $logger->load([static::className() => $param], static::className());
+        $logger->loads($param);
         return $logger->save();
     }
 }

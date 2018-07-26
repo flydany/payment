@@ -8,28 +8,6 @@
 var tableHandler = {
     SuccessCode: 200,
 
-    confirm: function(param, title) {
-        if ( ! title) {
-            title = 'information';
-        }
-        BootstrapDialog.confirm({
-            type: BootstrapDialog.TYPE_DEFAULT,
-            title: title,
-            message: 'are you sure you want to perform this operation?',
-            closeable: true,
-            btnCancelLabel: 'cancel',
-            btnOKLabel: 'confirm',
-            callback: function (result) {
-                if ( ! result) {
-                    return false;
-                }
-                if (param.functionName) {
-                    param.functionName(param.param);
-                }
-                return true;
-            }
-        });
-    },
     /**
      * @name 添加一条插入表记录
      * @param param 参数配置
@@ -123,7 +101,7 @@ var tableHandler = {
             // 弹出loading动画
             var url = param.url ? param.url : $(this).attr('data-href');
             // $(param.button).attr('data-layer-index', layer.load(0, { shade: [0.3, '#000'] }));
-            var dialog = BootstrapDialog.show('loading...');
+            var dialog = jQuery.loading();
             // 保存数据
             $.ajax({
                 url: url,
@@ -133,12 +111,12 @@ var tableHandler = {
                 // ajax请求完毕之后执行(失败成功都会执行)
                 complete: function() {
                     // layer.close($(param.button).attr('data-layer-index'));
-                    dialog.close();
+                    jQuery.loaded(dialog);
                 },
                 // 加载信息异常提示
                 error: function() {
                     // layer.msg('json request failed', { shift: 6 });
-                    BootstrapDialog.alert({ type: BootstrapDialog.TYPE_DANGER, message: "json request failed" });
+                    jQuery.warning('json request failed');
                 },
                 // 数据加载成功处理方法
                 success: function(ret) {
@@ -146,7 +124,7 @@ var tableHandler = {
                     // 处理成功
                     if (data.code == tableHandler.SuccessCode) {
                         // layer.msg('save successful!');
-                        BootstrapDialog.alert({ type: BootstrapDialog.TYPE_SUCCESS, message: "save successful!" });
+                        jQuery.warning('save successful!');
                         if (data.id) {
                             $(param.tr).attr('data-id', data.id).attr('data-type', 'insert');
                         }
@@ -160,7 +138,7 @@ var tableHandler = {
                     // 处理失败
                     else {
                         // layer.msg(data.message, { shift: 6 });
-                        BootstrapDialog.alert({ type: BootstrapDialog.TYPE_DANGER, message: data.message });
+                        jQuery.warning(data.message);
                     }
                 }
             });
@@ -187,22 +165,8 @@ var tableHandler = {
                 }
                 var url = param.src ? param.src : $(this).attr('data-href');
                 url += ((url.indexOf('?') > 0) ? '&' : '?') + 'id=' + $(param.tr).attr('data-id');
-                // 设置弹层类型
-                param.dialog = {
-                    type: BootstrapDialog.TYPE_DEFAULT,
-                    title: param.title, cssClass: param.cssClass ? param.cssClass : 'fade',
-                    size: param.size ? param.size : BootstrapDialog.SIZE_LARGE,
-                    closeable: param.closeable ? param.closeable : true,
-                    message: function (dialog) {
-                        var $message = $('<div></div>');
-                        var pageToLoad = dialog.getData('pageToLoad');
-                        $message.load(pageToLoad);
-                        return $message;
-                    },
-                    data: { pageToLoad: url }
-                };
-
-                BootstrapDialog.show(param.dialog);
+                // 弹层
+                jQuery.dialog(param.title, url);
 
                 $(param.mthis).attr('data-index', param.index);
                 if ($(param.tr).length) {
@@ -317,7 +281,7 @@ var tableHandler = {
             var id = $(param.tr).attr('data-id');
             if (id <= 0) {
                 // layer.msg('there was something wrong, please try again!', { shift: 6 });
-                BootstrapDialog.alert({ type: BootstrapDialog.TYPE_DANGER, message: 'there was something wrong, please try again!' });
+                jQuery.warning('there was something wrong, please try again!');
                 return false;
             }
             param.data.id = id;
@@ -336,7 +300,11 @@ var tableHandler = {
         param.url = param.url ? param.url : $(mthis).attr('data-href');
         // 确认弹窗
         if(param.isConfirm || param.isConfirm === undefined) {
-            tableHandler.confirm({ functionName: tableHandler.request, param: param }, param.title ? param.title : 'operation');
+            jQuery.confirm(function() {
+                    tableHandler.request(param);
+                },
+                param.title
+            );
         }
         else {
             tableHandler.request(param);
@@ -358,7 +326,7 @@ var tableHandler = {
             var checkboxLength = $(checkbox).length;
             if (checkboxLength <= 0) {
                 // layer.msg((param.title ? param.title : 'batch operation') + ' need select the line which you want to operator', { shift: 6 });
-                BootstrapDialog.alert({ type: BootstrapDialog.TYPE_DANGER, message: (param.title ? param.title : 'batch operation') + ' need select the line which you want to operator' });
+                jQuery.warning((param.title ? param.title : 'batch operation') + ' need select the line which you want to operator');
                 return false;
             }
             if (tableHandler.callUserFunction(param.beforeRequest, param) == false) {
@@ -381,7 +349,11 @@ var tableHandler = {
             param.tr = $(checkbox).parents(param.trKey ? trKey.trKey : 'tr');
             param.url = param.url ? param.url : $(this).attr('data-href');
             // 确认弹窗
-            tableHandler.confirm({ functionName: tableHandler.request, param: param }, param.title ? param.title : 'batch operation');
+            jQuery.confirm(function() {
+                    tableHandler.request(param);
+                },
+                param.title ? param.title : 'batch operation'
+            );
             return true;
         });
     },
@@ -406,7 +378,7 @@ var tableHandler = {
         if(param.isShadow == undefined || param.isShadow) {
             // 加载弹层
             // $(param.mthis).attr('data-layer-index', layer.load(0, { shade: [0.3, '#000'] }));
-            var dialog = BootstrapDialog.show('loading...');
+            var dialog = jQuery.loading();
         }
         // 保存数据
         $.ajax({
@@ -420,7 +392,7 @@ var tableHandler = {
                 if(param.isShadow == undefined || param.isShadow) {
                     // 加载弹层
                     // layer.close($(param.mthis).attr('data-layer-index'));
-                    dialog.close();
+                    jQuery.loaded(dialog);
                 }
                 // 如果存在事件触发后调用的函数，调用函数
                 tableHandler.callUserFunction(param.afterPost, param);
@@ -428,7 +400,7 @@ var tableHandler = {
             // 加载信息异常提示
             error: function() {
                 // layer.msg('ajax request failed', { shift: 6 });
-                BootstrapDialog.alert({ type: BootstrapDialog.TYPE_DANGER, message: 'ajax request failed' });
+                jQuery.warning('ajax request failed');
             },
             // 数据加载成功处理方法
             success: function(ret) {
@@ -436,7 +408,7 @@ var tableHandler = {
                 if (param.response.code == tableHandler.SuccessCode) {
                     if(param.isAlert || param.isAlert === undefined) {
                         // layer.msg(param.response.message ? param.response.message : (param.title ? param.title : 'operation') + ' successful');
-                        BootstrapDialog.alert({ type: BootstrapDialog.TYPE_SUCCESS, message: param.response.message ? param.response.message : (param.title ? param.title : 'operation') + ' successful' });
+                        jQuery.success(param.response.message ? param.response.message : (param.title ? param.title : 'operation') + ' successful');
                     }
                     if(param.isKeep || param.isKeep === undefined) {
 
@@ -460,7 +432,7 @@ var tableHandler = {
                 }
                 else {
                     // layer.alert(param.response.message, { icon: 2 });
-                    BootstrapDialog.alert({ type: BootstrapDialog.TYPE_DANGER, message: param.response.message });
+                    jQuery.warning(param.response.message);
                     tableHandler.callUserFunction(param.requestFail, param);
                 }
             }

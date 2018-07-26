@@ -149,34 +149,6 @@ $this->setActiveNavigator('platform/merchant-list');
             insertParameter();
         });
         $('#insert-parameter').click();
-
-        // 初始化 私钥文件上传插件
-        (new loaderFile()).init({
-            conter: '#private-file',
-            action: '/platform/file-encoder',
-            onSuccess: function (file, response) {
-                response = $.parseJSON(response);
-                $('textarea[name=private_key]').val(response.reader);
-                $('select[name=private_type]').val(response.ext).change();
-            },
-            onFailure: function (file, response) {
-                response = $.parseJSON(response);
-                BootstrapDialog.alert({ type: BootstrapDialog.TYPE_DANGER, message: 'private file load failure: ' + response.message });
-            }
-        });
-        // 初始化 公钥文件上传插件
-        (new loaderFile()).init({
-            conter: '#public-file',
-            action: '/platform/file-encoder',
-            onSuccess: function (file, response) {
-                response = $.parseJSON(response);
-                $('textarea[name=public_key]').val(response.reader);
-            },
-            onFailure: function (file, response) {
-                response = $.parseJSON(response);
-                BootstrapDialog.alert({ type: BootstrapDialog.TYPE_DANGER, message: 'public file load failure: ' + response.message });
-            }
-        });
     });
     // 添加参数对
     function insertParameter(name, value)

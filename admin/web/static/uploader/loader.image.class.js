@@ -34,7 +34,7 @@ var loaderImage = function() {
         var file = files[0];
         if (file.size >= this.maxSize) {
             // layer.msg('picture: ' + file.name + ' was too large!');
-            BootstrapDialog.alert({ type: BootstrapDialog.TYPE_DANGER, message: 'picture: ' + file.name + ' was too large!' });
+            jQuery.warning('picture: ' + file.name + ' was too large!');
             return false;
         }
         else {
@@ -42,7 +42,7 @@ var loaderImage = function() {
             var fileExt = file.name.substr(file.name.lastIndexOf(".")).toLowerCase();
             if ( ! (fileExt == ".png" || fileExt == ".gif" || fileExt == ".jpg" || fileExt == ".jpeg")) {
                 // layer.msg("pictures are limited to png, gif, jpeg, jpg!");
-                BootstrapDialog.alert({ type: BootstrapDialog.TYPE_DANGER, message: 'pictures are limited to png, gif, jpeg, jpg!' });
+                jQuery.warning('pictures are limited to png, gif, jpeg, jpg!');
                 return false;
             }
         }
@@ -76,7 +76,7 @@ var loaderImage = function() {
             }
             else {
                 // layer.msg('please select a picture first and upload it again.');
-                BootstrapDialog.alert({ type: BootstrapDialog.TYPE_DANGER, message: 'please select a picture first and upload it again!' });
+                jQuery.warning('please select a picture first and upload it again!');
             }
         });
     }

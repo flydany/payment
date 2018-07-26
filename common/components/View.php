@@ -13,7 +13,7 @@ class View extends \yii\web\View {
     public $crumbs = [];
 
     /**
-     * @name 添加面包屑导航
+     * 添加面包屑导航
      * @param $title string 导航名称
      * @param $url string 导航地址
      * @return $this
@@ -25,6 +25,15 @@ class View extends \yii\web\View {
             'title' => $title,
         ];
         return $this;
+    }
+
+    /**
+     * 获取Request
+     * @return \yii\console\Request|\yii\web\Request
+     */
+    public function getRequest()
+    {
+        return Yii::$app->getRequest();
     }
     
     /**
@@ -41,6 +50,7 @@ class View extends \yii\web\View {
      * @param string $js js路径
      * @param array $options 配置信息
      * @param boolean|null $key 是否MD5 KEY
+     * @return script tag
      */
     public function registerJavascript($url, $options = [], $key = null)
     {
@@ -60,6 +70,7 @@ class View extends \yii\web\View {
      * @param string $js js路径
      * @param array $options 配置信息
      * @param boolean|null $key 是否MD5 KEY
+     * @return link tag
      */
     public function registerCsser($url, $options = [], $key = null)
     {

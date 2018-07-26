@@ -253,8 +253,11 @@ class Controller extends \yii\web\Controller {
     }
 
     // @name 打印数组
-    public function v($data)
+    public function v($data, $title = '')
     {
-        echo '<pre>'; print_r($data); echo '</pre>';
+        echo '<pre>';
+        echo $title ? $title .': ' : '';
+        print_r($data);
+        echo '</pre>';
     }
 }

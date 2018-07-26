@@ -320,7 +320,7 @@ var tabler = function() {
             // 加载信息异常提示
             error: function() {
                 tablerClass.loaded();
-                BootstrapDialog.show({ type: BootstrapDialog.TYPE_DANGER, message: 'search program error' });
+                jQuery.warning('search program error');
                 // layer.msg('search program error', { shift: 6 });
                 tablerClass.showError('search program error', 'fa fa-times');
             },
@@ -349,7 +349,7 @@ var tabler = function() {
                     }
                 }
                 else {
-                    BootstrapDialog.alert({ type: BootstrapDialog.TYPE_DANGER, message: data.message });
+                    jQuery.warning(message: data.message);
                     // layer.msg(data.message, { shift: 6 });
                     tablerClass.showError(data.message);
                 }
