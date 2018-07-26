@@ -2,6 +2,8 @@
 
 namespace common\components;
 
+use common\models\Merchant;
+use common\models\MerchantBank;
 use Yii;
 use common\models\AdminResource;
 
@@ -23,15 +25,21 @@ class ActiveQuery extends \yii\db\ActiveQuery {
                 if($this->modelClass == 'common\models\Project') {
                     $id = 'id';
                 }
+                $ids = Yii::$app->admin->getResourceNumbers($type);
             } break;
             case AdminResource::TypeMerchant: {
                 $id = 'merchant_id';
                 if($this->modelClass == 'common\models\Merchant') {
                     $id = 'id';
                 }
+                $ids = Yii::$app->admin->getResourceNumbers($type);
+                if($this->modelClass == 'common\models\MerchantBank') {
+                    $id = 'merchant_number';
+                    $ids = Merchant::find()->select('merchant_number')->where(['id' => $ids])->column();
+                }
             } break;
         }
-        $this->andWhere([$this->modelClass::tableName().'.'.$id => Yii::$app->admin->getResourceNumbers($type)]);
+        $this->andWhere([$this->modelClass::tableName().'.'.$id => $ids]);
         return $this;
     }
 }

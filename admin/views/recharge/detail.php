@@ -25,23 +25,18 @@ $this->setActiveNavigator('project/list');
         <p>1. the account will be disabled after the expiration date.</p>
     </div>
     <form id="info-detail" method="post" action="/recharge/update?id=<?= $recharge->id ?>">
-        <div class="panel panel-primary">
-            <div class="panel-heading">order number group</div>
-            <div class="panel-body pb-zero">
-                <div class="form-group checker">
-                    <label>order number</label>
-                    <input class="form-control" type="text" name="order_number" value="<?= $recharge->order_number ?>" placeholder="order number" readonly>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6 checker">
-                        <label>source order number</label>
-                        <input class="form-control" type="text" name="source_order_number" value="<?= $recharge->source_order_number ?>" placeholder="source order number">
-                    </div>
-                    <div class="form-group col-md-6 checker">
-                        <label>outer order number</label>
-                        <input class="form-control" type="text" name="outer_order_number" value="<?= $recharge->outer_order_number ?>" placeholder="outer order number">
-                    </div>
-                </div>
+        <div class="form-group checker">
+            <label>order number</label>
+            <input class="form-control" type="text" name="order_number" value="<?= $recharge->order_number ?>" placeholder="order number" readonly>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6 checker">
+                <label>source order number</label>
+                <input class="form-control" type="text" name="source_order_number" value="<?= $recharge->source_order_number ?>" placeholder="source order number">
+            </div>
+            <div class="form-group col-md-6 checker">
+                <label>outer order number</label>
+                <input class="form-control" type="text" name="outer_order_number" value="<?= $recharge->outer_order_number ?>" placeholder="outer order number">
             </div>
         </div>
         <div class="panel panel-primary">
@@ -121,22 +116,24 @@ $this->setActiveNavigator('project/list');
     </form>
     <div class="panel panel-primary mt-15px">
         <div class="panel-heading">recharge logs</div>
-        <table class="table table-bordered table-striped" id="info-table">
-            <thead>
-            <tr>
-                <th class="first"><i class="fa fa-user fa-fw"></i>operator</th>
-                <th><i class="fa fa-gear fa-fw"></i>event</th>
-                <th><i class="fa fa-location-arrow fa-fw"></i>IP</th>
-                <th><i class="fa fa-gavel fa-fw"></i>operation</th>
-                <th><i class="fa fa-clock-o fa-fw"></i>time</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td colspan="5"><i class="fa fa-search fa-fw"></i>click on the search button to search data.</td>
-            </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped" id="info-table">
+                <thead>
+                <tr>
+                    <th class="first"><i class="fa fa-user fa-fw"></i>operator</th>
+                    <th><i class="fa fa-gear fa-fw"></i>event</th>
+                    <th><i class="fa fa-location-arrow fa-fw"></i>IP</th>
+                    <th><i class="fa fa-gavel fa-fw"></i>operation</th>
+                    <th><i class="fa fa-clock-o fa-fw"></i>time</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td colspan="5"><i class="fa fa-search fa-fw"></i>click on the search button to search data.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
     <div class="btn-toolbar" id="info-page">
         <div class="btn-group render" role="group"></div>

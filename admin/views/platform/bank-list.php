@@ -38,26 +38,27 @@ $this->addCrumbs('Merchant List', 'platform/merchant-list');
         </div>
         <div class="input-group col-md-1"><button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button></div>
     </div>
-
-    <table class="table table-bordered table-striped" id="info-table">
-        <thead>
-        <tr>
-            <th><i class="fa fa-list fa-fw"></i></th>
-            <th><i class="fa fa-book fa-fw"></i>title</th>
-            <th><i class="fa fa-thumb-tack fa-fw"></i>platform</th>
-            <th><i class="fa fa-shopping-bag fa-fw"></i>merchant</th>
-            <th><i class="fa fa-recycle fa-fw"></i>payment</th>
-            <th><i class="fa fa-check fa-fw"></i>status</th>
-            <th><i class="fa fa-clock-o fa-fw"></i>updated at</th>
-            <th><i class="fa fa-gear fa-fw"></i>operation</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td colspan="8"><i class="fa fa-search fa-fw"></i>click on the search button to search data.</td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped" id="info-table">
+            <thead>
+            <tr>
+                <th><i class="fa fa-list fa-fw"></i></th>
+                <th><i class="fa fa-book fa-fw"></i>title</th>
+                <th><i class="fa fa-thumb-tack fa-fw"></i>platform</th>
+                <th><i class="fa fa-shopping-bag fa-fw"></i>merchant</th>
+                <th><i class="fa fa-recycle fa-fw"></i>payment</th>
+                <th><i class="fa fa-check fa-fw"></i>status</th>
+                <th><i class="fa fa-clock-o fa-fw"></i>updated at</th>
+                <th><i class="fa fa-gear fa-fw"></i>operation</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td colspan="8"><i class="fa fa-search fa-fw"></i>click on the search button to search data.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
     <div class="btn-toolbar" id="info-page">
         <div class="btn-group" role="group">
             <a type="button" class="btn btn-default" href="/platform/bank-detail"><i class="fa fa-plus fa-fw"></i>insert</a>

@@ -108,13 +108,18 @@ class Recharge extends ActiveRecord {
      */
     public function afterSave($insert, $changedAttributes)
     {
-        $changed = [];
-        foreach($changedAttributes as $key => $value) {
-            if($this->getOldAttribute($key) != $value) {
-                $changed[$key] = ['before' => $this->getOldAttribute($key), 'after' => $value];
-            }
+        if($insert) {
+            $this->logger('creator', 'create recharge order');
         }
-        $this->logger($insert ? 'creator' : 'editor', 'change attributes: '.json_encode($changed));
+        else {
+            $changed = [];
+            foreach($changedAttributes as $key => $value) {
+                if($this->getOldAttribute($key) != $value) {
+                    $changed[$key] = ['before' => $this->getOldAttribute($key), 'after' => $value];
+                }
+            }
+            $this->logger('editor', json_encode($changed));
+        }
         return parent::afterSave($insert, $changedAttributes);
     }
 

@@ -5,15 +5,22 @@
 use common\helpers\Render;
 use common\models\Platform;
 use common\models\Merchant;
+use common\models\MerchantBank;
 
 
 $this->addCrumbs('Platform');
 $this->addCrumbs('Merchant List', 'platform/merchant-list');
+$this->addCrumbs('Merchant List', 'platform/bank-list');
 $this->title = (isset($data['id']) ? 'Update' : 'Insert'). ' Platform';
-$this->setActiveNavigator('platform/merchant-list');
+$this->setActiveNavigator('platform/bank-list');
 
 \admin\assets\CheckerAsset::register($this);
-\admin\assets\UploaderFileAsset::register($this);
+
+$this->registerCss('
+    #timers-list .input-group {
+        margin-bottom:15px;
+    }
+');
 ?>
 
 <div class="contenter">
@@ -22,11 +29,7 @@ $this->setActiveNavigator('platform/merchant-list');
         <p><?= $this->modifyNotice(Render::value($data, 'id')) ?></p>
         <p>1. the account will be disabled after the expiration date.</p>
     </div>
-    <form id="info-detail" method="post" action="/platform/merchant-<?= isset($data['id']) ? 'update?id='.$data['id'] : 'insert' ?>">
-        <div class="form-group checker">
-            <label>title</label>
-            <input class="form-control" type="text" name="title" value="<?= Render::value($data, 'title') ?>" placeholder="title">
-        </div>
+    <form id="info-detail" method="post" action="/platform/bank-<?= isset($data['id']) ? 'update?id='.$data['id'] : 'insert' ?>">
         <div class="form-row">
             <div class="form-group col-md-3 checker">
                 <label>platform</label>
@@ -42,93 +45,78 @@ $this->setActiveNavigator('platform/merchant-list');
             </div>
         </div>
         <div class="form-group checker">
-            <label>api domain</label>
-            <input class="form-control" type="text" name="domain" value="<?= Render::value($data, 'domain') ?>" placeholder="api domain">
+            <label>bank</label>
+            <?= Render::select('bank_id', Platform::$bankSelector, Render::value($data, 'bank_id'), ['prompt' => '--', 'class' => 'picker']) ?>
         </div>
         <div class="panel panel-primary">
-            <div class="panel-heading">merchant private key</div>
-            <div class="panel-body pb-zero">
-                <div class="form-row">
-                    <div class="form-group col-md-6 checker">
-                        <label>key type</label>
-                        <?= Render::select('private_type', Merchant::$privateTypeSelector, Render::value($data, 'private_type'), ['prompt' => '--', 'picker']) ?>
-                    </div>
-                    <div class="form-group col-md-6 checker">
-                        <label>key password</label>
-                        <input class="form-control" type="text" name="private_password" value="<?= Render::value($data, 'private_password') ?>" placeholder="private key password">
-                    </div>
+            <div class="panel-heading">amount limit</div>
+            <div class="panel-body pb-zero form-row">
+                <div class="form-group col-md-4 checker">
+                    <label>single amount limit</label>
+                    <input class="form-control" type="text" name="single_limit" value="<?= Render::value($data, 'single_limit') ?>" placeholder="single limit">
                 </div>
-                <div class="form-group" id="private-file"></div>
-                <div class="form-group checker">
-                    <label>key string</label>
-                    <textarea class="form-control" name="private_key" placeholder="private key."><?= Render::value($data, 'private_key') ?></textarea>
+                <div class="form-group col-md-4 checker">
+                    <label>per day amount limit</label>
+                    <input class="form-control" type="text" name="day_limit" value="<?= Render::value($data, 'day_limit') ?>" placeholder="day limit">
+                </div>
+                <div class="form-group col-md-4 checker">
+                    <label>per month amount limit</label>
+                    <input class="form-control" type="text" name="month_limit" value="<?= Render::value($data, 'month_limit') ?>" placeholder="month limit">
                 </div>
             </div>
         </div>
         <div class="panel panel-primary">
-            <div class="panel-heading">platform public key</div>
-            <div class="panel-body pb-zero">
-                <div class="form-group" id="public-file"></div>
-                <div class="form-group checker">
-                    <label>key string</label>
-                    <textarea class="form-control" name="public_key" placeholder="public key."><?= Render::value($data, 'public_key') ?></textarea>
+            <div class="panel-heading">count limit</div>
+            <div class="panel-body pb-zero form-row">
+                <div class="form-group col-md-4 checker">
+                    <label>per day count limit</label>
+                    <input class="form-control" type="text" name="single_count_limit" value="<?= Render::value($data, 'single_limit') ?>" placeholder="single limit">
+                </div>
+                <div class="form-group col-md-4 checker">
+                    <label>per month count limit</label>
+                    <input class="form-control" type="text" name="month_count_limit" value="<?= Render::value($data, 'month_limit') ?>" placeholder="month limit">
+                </div>
+                <div class="form-group col-md-4 checker">
+                    <label>threshold percent limit(%)</label>
+                    <input class="form-control" type="text" name="threshold_limit" value="<?= Render::value($data, 'threshold_limit') ?>" placeholder="threshold limit">
                 </div>
             </div>
         </div>
         <div class="panel panel-primary">
-            <div class="panel-heading">merchant parameters<a class="btn btn-default btn-sm ml-15px" id="insert-parameter"><i class="fa fa-plus fa-fw"></i>insert</a><span class="text-danger"><i class="fa fa-long-arrow-left fa-fw ml-15px"></i>click this button to add a new parameter</span></div>
-            <div class="panel-body pb-zero" id="parameters-list"></div>
+            <div class="panel-heading">weekday time limit<a class="btn btn-default btn-sm ml-15px insert-timer" data-type="weekday"><i class="fa fa-plus fa-fw"></i>insert</a><span class="text-danger"><i class="fa fa-long-arrow-left fa-fw ml-15px"></i>click this button to add a new timer</span></div>
+            <div class="panel-body pb-zero" id="weekday-timers-list"></div>
         </div>
         <div class="panel panel-primary">
-            <div class="panel-heading">fee</div>
-            <div class="panel-body pb-zero">
-                <div class="form-row">
-                    <div class="form-group col-md-6 checker">
-                        <label>rate</label>
-                        <input class="form-control" type="text" name="rate" value="<?= Render::value($data, 'rate') ?>" placeholder="rate">
-                    </div>
-                    <div class="form-group col-md-6 checker">
-                        <label>base fee</label>
-                        <input class="form-control" type="text" name="base_fee" value="<?= Render::value($data, 'base_fee') ?>" placeholder="base fee">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6 checker">
-                        <label>min fee</label>
-                        <input class="form-control" type="text" name="min" value="<?= Render::value($data, 'min') ?>" placeholder="min fee">
-                    </div>
-                    <div class="form-group col-md-6 checker">
-                        <label>max fee</label>
-                        <input class="form-control" type="text" name="max" value="<?= Render::value($data, 'max') ?>" placeholder="max fee">
-                    </div>
-                </div>
-            </div>
+            <div class="panel-heading">weekend time limit<a class="btn btn-default btn-sm ml-15px insert-timer" data-type="weekend"><i class="fa fa-plus fa-fw"></i>insert</a><span class="text-danger"><i class="fa fa-long-arrow-left fa-fw ml-15px"></i>click this button to add a new timer</span></div>
+            <div class="panel-body pb-zero" id="weekend-timers-list"></div>
+        </div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">holiday time limit<a class="btn btn-default btn-sm ml-15px insert-timer" data-type="holiday"><i class="fa fa-plus fa-fw"></i>insert</a><span class="text-danger"><i class="fa fa-long-arrow-left fa-fw ml-15px"></i>click this button to add a new timer</span></div>
+            <div class="panel-body pb-zero" id="holiday-timers-list"></div>
         </div>
         <div class="form-group checker">
             <label>status</label>
-            <?= Render::select('status', Merchant::$statusSelector, Render::value($data, 'status')) ?>
+            <?= Render::select('status', MerchantBank::$statusSelector, Render::value($data, 'status'), ['class' => 'picker']) ?>
         </div>
         <div class="form-group checker">
             <label>remark</label>
             <textarea class="form-control" name="remark" placeholder="remark."><?= Render::value($data, 'remark') ?></textarea>
         </div>
         <button type="submit" class="btn btn-primary" id="save-button"><i class="fa fa-save fa-fw"></i>save</button>
-        <textarea id="info-detail-json" data-form="#info-detail" style="display:none;"><?= Merchant::checker() ?></textarea>
+        <textarea id="info-detail-json" data-form="#info-detail" style="display:none;"><?= MerchantBank::checker() ?></textarea>
         <input type="hidden" name="_csrf" value="<?=Yii::$app->request->getCsrfToken() ?>">
     </form>
 </div>
 
-<div id="parameter-template" style="display:none;">
-    <div class="form-group form-row parameter">
-        <div class="input-group col-md-3 checker">
-            <label class="input-group-addon">name</label>
-            <input class="form-control" type="text" name="parameter_name[]" value="" placeholder="parameter name">
+<div id="timer-template" style="display:none;">
+    <div class="form-group form-row timer">
+        <div class="input-group col-md-11">
+            <label class="input-group-addon">time slot</label>
+            <input class="form-control" type="text" value="" placeholder="start time">
+            <span class="input-group-addon"><i class="fa fa-caret-right fa-fw"></i></span>
+            <input class="form-control" type="text" value="" placeholder="end time">
         </div>
-        <div class="input-group col-md-8 checker">
-            <span class="input-group-addon">value</span>
-            <input class="form-control" type="text" name="parameter_value[]" value="" placeholder="parameter value">
-        </div>
-        <div class="col-md-1"><a class="label label-danger" onclick="deleteParameter(this);" href="javascript:;"><i class="fa fa-close fa-fw"></i>delete</a></div>
+        <div class="col-md-1"><a class="label label-danger" onclick="deleteTimer(this);" href="javascript:;"><i class="fa fa-close fa-fw"></i>delete</a></div>
     </div>
 </div>
 
@@ -138,34 +126,37 @@ $this->setActiveNavigator('platform/merchant-list');
         (new checker).init({ ruleDom: '#info-detail-json' });
 
         <?php
-        if( ! empty($data->parameters)) {
-        foreach(json_decode($data->parameters, true) as $name => $value) {
+        foreach(['weekday', 'weekend', 'holiday'] as $type) {
+        $key = $type.'_times';
+        if( ! empty($data->{$key})) {
+        foreach(json_decode($data->{$key}, true) as $time) {
         ?>
-        insertParameter('<?= $name ?>', '<?= $value ?>');
+        insertTimer('<?= $type ?>', '<?= $time['start'] ?>', '<?= $time['end'] ?>');
         <?php
-        } }
+        } } }
         ?>
-        $('#insert-parameter').bind('click', function() {
-            insertParameter();
+
+        $('.insert-timer').bind('click', function() {
+            insertTimer($(this).data('type'));
         });
-        $('#insert-parameter').click();
+        $('.insert-timer').click();
     });
-    // 添加参数对
-    function insertParameter(name, value)
+    // 添加时间段
+    function insertTimer(type, start, end)
     {
-        var parameterWrap = $('#parameter-template .parameter').clone(true);
+        var timerWrap = $('#timer-template').html();
         if(name) {
-            $(parameterWrap).find('input').eq(0).val(name);
-            $(parameterWrap).find('input').eq(1).val(value);
+            $(timerWrap).find('input').eq(0).attr('name', type + '_start[]').val(start);
+            $(timerWrap).find('input').eq(1).attr('name', type + '_end[]').val(end);
         }
-        $('#parameters-list').append(parameterWrap);
+        $('#' + type + '-timers-list').append(timerWrap);
     }
-    // 删除参数对
-    function deleteParameter(mthis)
+    // 删除时间段
+    function deleteTimer(mthis)
     {
-        if ($(mthis).parents('.parameter').siblings().length < 1) {
+        if ($(mthis).parents('.timer').siblings().length < 1) {
             return;
         }
-        $(mthis).parents('.parameter').remove();
+        $(mthis).parents('.timer').remove();
     }
 </script>

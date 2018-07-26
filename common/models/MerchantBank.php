@@ -8,7 +8,14 @@ use Yii;
  * This is the model class for table "MerchantBank".
  */
 class MerchantBank extends ActiveRecord {
-    
+
+    const StatusNormal = '0';
+    const StatusForbidden = '1';
+    public static $statusSelector = [
+        self::StatusNormal =>  'normal',
+        self::StatusForbidden => 'forbidden',
+    ];
+
     // only define rules for those attributes that
     // will receive user inputs.
     public function rules()
@@ -18,7 +25,7 @@ class MerchantBank extends ActiveRecord {
             [['platform_id', 'merchant_id', 'bank_id', 'paytype', 'priority', 'holiday_priority', 'single_limit', 'day_limit', 'month_limit', 'day_count', 'month_count', 'limit_threshold', 'admin_id', 'status', 'deleted_at'], 'integer'],
             [['merchant_number'], 'string', 'max' => 64],
             [['remark'], 'string', 'max' => 255],
-            [['holiday_times', 'workday_times', 'weekend_times'], 'string', 'max' => 512],
+            [['weekday_times', 'weekend_times', 'holiday_times'], 'string', 'max' => 512],
         ];
     }
     /**
@@ -41,9 +48,9 @@ class MerchantBank extends ActiveRecord {
             'day_count' => 'count day limit',
             'month_count' => 'count month limit',
             'limit_threshold' => 'threshold limit',
-            'holiday_times' => 'holiday times',
-            'workday_times' => 'workday times',
+            'weekday_times' => 'workday times',
             'weekend_times' => 'weekend times',
+            'holiday_times' => 'holiday times',
             'admin_id' => 'operator',
             'status' => 'status',
             'remark' => 'remark',
@@ -72,9 +79,9 @@ class MerchantBank extends ActiveRecord {
                 'day_count' => ['count day limit', ['int', 'required']],
                 'month_count' => ['count month limit', ['int', 'required']],
                 'limit_threshold' => ['threshold limit', ['int', 'required']],
-                'holiday_times' => ['holiday usable times', ['json']],
-                'workday_times' => ['workday usable times', ['json']],
-                'weekend_times' => ['weekend usable times', ['json']],
+                'weekday_times' => ['workday usable times', ['json', 'maxlength' => 512]],
+                'weekend_times' => ['weekend usable times', ['json', 'maxlength' => 512]],
+                'holiday_times' => ['holiday usable times', ['json', 'maxlength' => 512]],
                 'admin_id' => ['operator', ['int']],
                 'remark' => ['remark', ['maxlength' => 255]],
                 'deleted_at' => ['deleted at', ['int']],

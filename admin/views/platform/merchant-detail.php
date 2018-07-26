@@ -106,7 +106,7 @@ $this->setActiveNavigator('platform/merchant-list');
         </div>
         <div class="form-group checker">
             <label>status</label>
-            <?= Render::select('status', Merchant::$statusSelector, Render::value($data, 'status')) ?>
+            <?= Render::select('status', Merchant::$statusSelector, Render::value($data, 'status'), ['class' => 'picker']) ?>
         </div>
         <div class="form-group checker">
             <label>remark</label>
