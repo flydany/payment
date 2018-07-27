@@ -81,7 +81,7 @@ class Merchant extends ActiveRecord {
                 'title' => ['title', ['maxlength' => 64, 'required']],
                 'platform_id' => ['platform number', ['in' => array_keys(Platform::$platformSelector), 'required']],
                 'merchant_number' => ['merchant number', ['maxlength' => 64, 'required']],
-                'paytype' => ['pay type', ['in' => array_keys(Platform::$paytypeSelector), 'required']],
+                'paytype' => ['pay type', ['in' => array_keys(Platform::$paytypeSelector)]],
                 'domain' => ['request domain', ['url', 'required']],
                 'private_key' => ['private key', ['maxlength' => 65535]],
                 'private_password' => ['private key password', ['maxlength' => 64]],

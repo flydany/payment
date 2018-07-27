@@ -29,21 +29,21 @@ $this->setActiveNavigator('project/merchant-list');
             <input class="form-control" type="text" name="title" value="<?= Render::value($data, 'title') ?>" placeholder="project name.">
         </div>
         <div class="form-row">
-            <div class="form-group col-md-6 checker">
+            <div class="form-group col-xs-6 checker">
                 <label>project</label>
                 <?= Render::select('project_id', Project::selector(), Render::value($data, 'project_id'), ['class' => 'picker', 'data-live-search' => 'true']) ?>
             </div>
-            <div class="form-group col-md-6 checker">
+            <div class="form-group col-xs-6 checker">
                 <label>merchant</label>
                 <?= Render::select('merchant_id', Merchant::selector(), Render::value($data, 'merchant_id'), ['class' => 'picker', 'data-live-search' => 'true']) ?>
             </div>
         </div>
         <div class="form-row">
-            <div class="form-group col-md-6 checker">
+            <div class="form-group col-xs-6 checker">
                 <label>merchant</label>
                 <?= Render::select('paytype', Platform::$paytypeSelector, Render::value($data, 'paytype'), ['class' => 'picker']) ?>
             </div>
-            <div class="form-group col-md-6 checker">
+            <div class="form-group col-xs-6 checker">
                 <label>status</label>
                 <?= Render::select('status', ProjectMerchant::$statusSelector, Render::value($data, 'status'), ['class' => 'picker']) ?>
             </div>

@@ -15,27 +15,27 @@ $this->addCrumbs('Platform');
 
 <div class="contenter">
     <div class="form-inline search clearfix" id="info-search">
-        <div class="input-group col-md-2">
+        <div class="input-group col-xs-2">
             <span class="input-group-addon"><i class="fa fa-book fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="title" placeholder="title">
         </div>
-        <div class="input-group col-md-2">
+        <div class="input-group col-xs-2">
             <span class="input-group-addon"><i class="fa fa-thumb-tack fa-fw"></i></span>
             <?= Render::select('platform_id', Platform::$platformSelector, null, ['prompt' => '--', 'class' => 'tabler picker']) ?>
         </div>
-        <div class="input-group col-md-2">
+        <div class="input-group col-xs-2">
             <span class="input-group-addon"><i class="fa fa-shopping-bag fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="merchant_number" placeholder="merchant number">
         </div>
-        <div class="input-group col-md-2">
+        <div class="input-group col-xs-2">
             <span class="input-group-addon"><i class="fa fa-recycle fa-fw"></i></span>
             <?= Render::select('paytype', Platform::$paytypeSelector, null, ['prompt' => '--', 'class' => 'tabler picker']) ?>
         </div>
-        <div class="input-group col-md-2">
+        <div class="input-group col-xs-2">
             <span class="input-group-addon"><i class="fa fa-check fa-fw"></i></span>
             <?= Render::select('status', Merchant::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler picker']) ?>
         </div>
-        <div class="input-group col-md-1"><button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button></div>
+        <div class="input-group col-xs-1"><button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button></div>
     </div>
 
     <table class="table table-bordered table-striped" id="info-table">
@@ -105,6 +105,7 @@ $this->addCrumbs('Platform');
         <td>
             <a class="label label-primary" href="/platform/merchant-detail?id={{info.id}}"><i class="fa fa-edit fa-fw"></i>edit</a>
             <a class="label label-success" href="/admin-resource/merchant?item_id={{info.id}}"><i class="fa fa-superpowers fa-fw"></i>permission</a>
+            <a class="label label-warning" href="/platform/bank-list?platform_id={{info.platform_id}}&merchant_number={{info.merchant_number}}&paytype={{info.paytype}}"><i class="fa fa-bank fa-fw"></i>banks</a>
             <a class="delete-data label label-danger" href="javascript:;"><i class="fa fa-trash fa-fw"></i>delete</a>
         </td>
     </tr>

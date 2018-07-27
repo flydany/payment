@@ -1,6 +1,6 @@
 
 .flyer-loader-single,
-.flyer-loader {width:100%;font-size:12px;color:#666;border:1px solid #ccc;border-radius:4px;overflow:hidden;}
+.flyer-loader {width:100%;color:#666;border:1px solid #ccc;border-radius:4px;overflow:hidden;}
 
 /* 标头图片操作部分 */
 .flyer-loader .loader-title {position:relative;height:40px;line-height:30px;padding:5px 10px;border-bottom:1px solid #e6e6e6;box-shadow:inset 0 0 1px rgba(0,0,0,.2);}
@@ -10,7 +10,7 @@
 .flyer-loader .load-bar {right:10px;}
 .flyer-loader .load-bar .flyer-file {display:none;}
 .flyer-loader .file-picker,
-.flyer-loader .uploader {display:inline-block;height:25px;line-height:25px;padding:0 20px;color:#666;font-size:12px;border:1px solid #e6e6e6;border-radius:3px;background-color:#fff;cursor:pointer;}
+.flyer-loader .uploader {display:inline-block;height:25px;line-height:25px;padding:0 20px;color:#666;border:1px solid #e6e6e6;border-radius:3px;background-color:#fff;cursor:pointer;}
 .flyer-loader .uploader {margin-left:8px;color:#fff;border-color:#00B7EE;background-color:#00B7EE;}
 .flyer-loader .uploader:hover {border-color:#00A2D4;background-color:#00A2D4;}
 
@@ -33,7 +33,7 @@
 .flyer-loader .load-success {display:none;bottom:0;}
 .flyer-loader .load-progress {width:0;height:10px;background:none repeat scroll 0 0 #00B7EE;}
 .flyer-loader .load-progress-wrap {position:relative;height:10px;width:100%;background-color:#fff;}
-.flyer-loader .load-failure {font-size:12px;color:#fff;text-align:center;background:none repeat scroll 0 0 #ff0000;}
+.flyer-loader .load-failure {color:#fff;text-align:center;background:none repeat scroll 0 0 #ff0000;}
 .flyer-loader .load-success {height:20px;background:url(image/success.png) no-repeat scroll right bottom transparent;background-size:auto 100%;}
 .file-dispose {display:table-cell;width:100%;height:160px;text-align:center;vertical-align:middle;background-image:url(image/background.png);}
 .load-image-single .file-dispose {height:auto;}

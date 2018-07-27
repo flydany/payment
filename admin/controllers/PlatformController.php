@@ -7,10 +7,14 @@ use common\helpers\Render;
 use common\models\Platform;
 use common\models\Merchant;
 use common\models\MerchantBank;
+use common\models\MerchantBankMaintain;
 use common\models\AdminResource;
 
 class PlatformController extends Controller {
-    
+
+    /*********************************************************************************/
+    /************** merchant  *******************************************************/
+    /*********************************************************************************/
     /**
      * this action showing merchant list
      * @param request type request->isAjax?
@@ -145,7 +149,9 @@ class PlatformController extends Controller {
         return $this->json(['reader' => $reader, 'ext' => end($exts)]);
     }
 
-
+    /*********************************************************************************/
+    /************** merchant banks *************************************************/
+    /*********************************************************************************/
     /**
      * this action showing merchant bank list
      * @param request type request->isAjax?
@@ -160,7 +166,7 @@ class PlatformController extends Controller {
         $params['deleted_at'] = '0';
         $query = MerchantBank::filters(['id', 'platform_id', 'merchant_number', 'paytype', 'status', 'deleted_at'], $params)->filterResource(AdminResource::TypeMerchant);
         $pagination = Render::pagination((clone $query)->count());
-        $data['infos'] = $query->orderBy('id desc')->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
+        $data['infos'] = $query->orderBy(['id' => 'desc'])->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
         $data['page'] = Render::pager($pagination);
         return $this->json($data);
     }
@@ -188,9 +194,27 @@ class PlatformController extends Controller {
     public function actionBankInsert()
     {
         $bank = new MerchantBank();
-        if ( ! $bank->loadAttributes($this->request->post())->validate()) {
+        $params = $this->request->post();
+        foreach(['single_amount', 'day_amount', 'month_amount'] as $key) {
+            $params[$key] = bcmul($params[$key], 100, 0);
+        }
+        foreach(['weekday', 'weekend', 'holiday'] as $key) {
+            $times = [];
+            foreach($params[$key.'_start'] as $k => $start) {
+                if(empty($start) || empty($params[$key.'_end'][$k])) {
+                    $params[$key.'_times'] = '';
+                    continue;
+                }
+                $times[] = ['start' => $start, 'end' => $params[$key.'_end'][$k]];
+            }
+            $params[$key.'_times'] = json_encode($times);
+        }
+        if ( ! $bank->loadAttributes($params)->validate()) {
             // 参数异常，渲染错误页面
             return $this->error($bank->errors(), 'platform/bank-detail');
+        }
+        if(empty($bank->hasPermission)) {
+            return $this->error('permission forbidden', 'platform/bank-list');
         }
         if ($bank->save()) {
             // 保存成功
@@ -217,9 +241,27 @@ class PlatformController extends Controller {
         if($bank && empty($bank->hasPermission)) {
             return $this->error('permission forbidden', 'platform/bank-list');
         }
-        if ( ! $bank->loadAttributes($this->request->post())->validate()) {
+        $params = $this->request->post();
+        foreach(['single_amount', 'day_amount', 'month_amount'] as $key) {
+            $params[$key] = bcmul($params[$key], 100, 0);
+        }
+        foreach(['weekday', 'weekend', 'holiday'] as $key) {
+            $times = [];
+            foreach($params[$key.'_start'] as $k => $start) {
+                if(empty($start) || empty($params[$key.'_end'][$k])) {
+                    $params[$key.'_times'] = '';
+                    continue;
+                }
+                $times[] = ['start' => $start, 'end' => $params[$key.'_end'][$k]];
+            }
+            $params[$key.'_times'] = json_encode($times);
+        }
+        if ( ! $bank->loadAttributes($params)->validate()) {
             // 参数异常，渲染错误页面
             return $this->error($bank->errors(), 'platform/bank-detail?id='.$bank->id);
+        }
+        if(empty($bank->hasPermission)) {
+            return $this->error('permission forbidden', 'platform/bank-list');
         }
         if ($bank->save()) {
             // 保存成功
@@ -245,5 +287,145 @@ class PlatformController extends Controller {
             return $this->json(SuccessCode, 'bank delete successful.');
         }
         return $this->json('system.error', 'bank delete failed.');
+    }
+
+    /*********************************************************************************/
+    /************** merchant maintain  **********************************************/
+    /*********************************************************************************/
+    /**
+     * this action showing merchant maintain list
+     * @param request type request->isAjax?
+     * @return html|json
+     */
+    public function actionMaintainList()
+    {
+        if( ! $this->request->isAjax) {
+            return $this->render('maintain-list');
+        }
+        $params = $this->request->post();
+        $params['deleted_at'] = '0';
+        $query = MerchantBankMaintain::filters(['id', 'platform_id', 'merchant_number', 'paytype', 'status', 'deleted_at'], $params)->filterResource(AdminResource::TypeMerchant);
+        $pagination = Render::pagination((clone $query)->count());
+        $data['infos'] = $query->orderBy(['id' => 'desc'])->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
+        $data['page'] = Render::pager($pagination);
+        return $this->json($data);
+    }
+
+    /**
+     * show merchant maintain detail
+     * @param id int  - merchant maintain id by get request
+     * @return string
+     */
+    public function actionMaintainDetail()
+    {
+        $maintain = null;
+        $maintainId = $this->request->get('id');
+        if($maintainId && ( ! $maintain = MerchantBankMaintain::finder($maintainId))) {
+            return $this->error('invalid merchant maintain', 'platform/maintain-list');
+        }
+        if($maintain && empty($maintain->hasPermission)) {
+            return $this->error('permission forbidden', 'platform/maintain-list');
+        }
+        return $this->render('maintain-detail', ['data' => $maintain]);
+    }
+    /**
+     * insert merchant maintain
+     */
+    public function actionMaintainInsert()
+    {
+        $maintain = new MerchantBankMaintain();
+        $params = $this->request->post();
+        foreach(['single_amount', 'day_amount', 'month_amount'] as $key) {
+            $params[$key] = bcmul($params[$key], 100, 0);
+        }
+        foreach(['weekday', 'weekend', 'holiday'] as $key) {
+            $times = [];
+            foreach($params[$key.'_start'] as $k => $start) {
+                if(empty($start) || empty($params[$key.'_end'][$k])) {
+                    $params[$key.'_times'] = '';
+                    continue;
+                }
+                $times[] = ['start' => $start, 'end' => $params[$key.'_end'][$k]];
+            }
+            $params[$key.'_times'] = json_encode($times);
+        }
+        if ( ! $maintain->loadAttributes($params)->validate()) {
+            // 参数异常，渲染错误页面
+            return $this->error($maintain->errors(), 'platform/maintain-detail');
+        }
+        if(empty($maintain->hasPermission)) {
+            return $this->error('permission forbidden', 'platform/maintain-list');
+        }
+        if ($maintain->save()) {
+            // 保存成功
+            return $this->success('maintain ('.Platform::$maintainSelector[$maintain->maintain_id].') insert successful', [
+                ['title' => 'go to merchant maintain list page', 'url' => 'platform/maintain-list'],
+                ['title' => 'edit merchant maintain again', 'url' => 'platform/maintain-detail?id='.$maintain->id]
+            ]);
+        }
+        // 参数异常，渲染错误页面
+        return $this->error('maintain ('.Platform::$maintainSelector[$maintain->maintain_id].') insert failed, please try again', 'platform/maintain-detail');
+    }
+    /**
+     * merchant maintain detail show / update
+     * use get(id) to find merchant maintain
+     */
+    public function actionMaintainUpdate()
+    {
+        /* @var $maintain Maintain */
+        // id 为必填项，判断管理员存在状态
+        // 未得到，渲染错误页面
+        if( ! $maintain = MerchantBankMaintain::finder($this->request->get('id'))) {
+            return $this->error('invalid merchant maintain', 'platform/maintain-list');
+        }
+        if($maintain && empty($maintain->hasPermission)) {
+            return $this->error('permission forbidden', 'platform/maintain-list');
+        }
+        $params = $this->request->post();
+        foreach(['single_amount', 'day_amount', 'month_amount'] as $key) {
+            $params[$key] = bcmul($params[$key], 100, 0);
+        }
+        foreach(['weekday', 'weekend', 'holiday'] as $key) {
+            $times = [];
+            foreach($params[$key.'_start'] as $k => $start) {
+                if(empty($start) || empty($params[$key.'_end'][$k])) {
+                    $params[$key.'_times'] = '';
+                    continue;
+                }
+                $times[] = ['start' => $start, 'end' => $params[$key.'_end'][$k]];
+            }
+            $params[$key.'_times'] = json_encode($times);
+        }
+        if ( ! $maintain->loadAttributes($params)->validate()) {
+            // 参数异常，渲染错误页面
+            return $this->error($maintain->errors(), 'platform/maintain-detail?id='.$maintain->id);
+        }
+        if(empty($maintain->hasPermission)) {
+            return $this->error('permission forbidden', 'platform/maintain-list');
+        }
+        if ($maintain->save()) {
+            // 保存成功
+            return $this->success('maintain ('.Platform::$maintainSelector[$maintain->maintain_id].') update successful', [
+                ['title' => 'go to merchant maintain list page', 'url' => 'platform/maintain-list'],
+                ['title' => 'edit merchant maintain again', 'url' => 'platform/maintain-detail?id='.$maintain->id],
+            ]);
+        }
+        // 参数异常，渲染错误页面
+        return $this->error('maintain ('.Platform::$maintainSelector[$maintain->maintain_id].') update failed, please try again.', 'platform/maintain-detail?id='.$maintain->id);
+    }
+    /**
+     * delete merchant maintain
+     */
+    public function actionMaintainDelete()
+    {
+        return $this->json('system.error', 'it is not allowed to delete.');
+
+        if( ! ($ids = $this->request->post('id'))) {
+            return $this->json('invalid.param', 'you must choice at least one merchant maintain.');
+        }
+        if(MerchantBankMaintain::trashAll(['id' => $ids])) {
+            return $this->json(SuccessCode, 'maintain delete successful.');
+        }
+        return $this->json('system.error', 'maintain delete failed.');
     }
 }

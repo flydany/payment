@@ -57,7 +57,7 @@ use yii\helpers\Html;
         margin-bottom:0;
     }
 </style>
-<div class="col-md-3" id="left-panel">
+<div class="col-xs-3" id="left-panel">
     <?= $this->render('left') ?>
 </div>
 

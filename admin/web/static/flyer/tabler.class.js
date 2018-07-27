@@ -349,7 +349,7 @@ var tabler = function() {
                     }
                 }
                 else {
-                    jQuery.warning(message: data.message);
+                    jQuery.warning(data.message);
                     // layer.msg(data.message, { shift: 6 });
                     tablerClass.showError(data.message);
                 }

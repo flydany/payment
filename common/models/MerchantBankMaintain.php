@@ -5,9 +5,9 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "MerchantBank".
+ * This is the model class for table "MerchantBankMaintain".
  */
-class MerchantBank extends ActiveRecord {
+class MerchantBankMaintain extends ActiveRecord {
 
     const StatusNormal = '0';
     const StatusForbidden = '1';
@@ -21,11 +21,11 @@ class MerchantBank extends ActiveRecord {
     public function rules()
     {
         return [
-            [['platform_id', 'bank_id', 'paytype', 'priority', 'weekend_priority', 'single_amount', 'day_amount', 'month_amount', 'day_count', 'month_count'], 'required'],
-            [['platform_id', 'bank_id', 'paytype', 'priority', 'weekend_priority', 'priority_threshold', 'single_amount', 'day_amount', 'month_amount', 'day_count', 'month_count', 'admin_id', 'status', 'deleted_at'], 'integer'],
+            [['platform_id', 'bank_id', 'paytype', 'single_amount', 'day_amount', 'month_amount', 'begin_time', 'finish_time'], 'required'],
+            [['platform_id', 'bank_id', 'paytype', 'single_amount', 'day_amount', 'month_amount', 'begin_time', 'finish_time', 'admin_id', 'status', 'deleted_at'], 'integer'],
             [['merchant_number'], 'string', 'max' => 64],
             [['remark'], 'string', 'max' => 255],
-            [['weekday_times', 'weekend_times', 'holiday_times'], 'string', 'max' => 512],
+            [['times'], 'string', 'max' => 512],
         ];
     }
     /**
@@ -39,17 +39,10 @@ class MerchantBank extends ActiveRecord {
             'merchant_number' => 'merchant number',
             'bank_id' => 'bank id',
             'paytype' => 'payment type',
-            'priority' => 'weekday priority',
-            'weekend_priority' => 'weekend priority',
-            'priority_threshold' => 'priority threshold',
             'single_amount' => ' amount single limit',
             'day_amount' => 'amount day limit',
             'month_amount' => 'amount month limit',
-            'day_count' => 'count day limit',
-            'month_count' => 'count month limit',
-            'weekday_times' => 'workday times',
-            'weekend_times' => 'weekend times',
-            'holiday_times' => 'holiday times',
+            'times' => 'maintain times',
             'admin_id' => 'operator',
             'status' => 'status',
             'remark' => 'remark',
@@ -70,20 +63,12 @@ class MerchantBank extends ActiveRecord {
                 'merchant_number' => ['merchant id', ['maxlength' => 64]],
                 'paytype' => ['payment type', ['in' => array_keys(Platform::$paytypeSelector), 'required']],
                 'bank_id' => ['bank id', ['int', 'required']],
-                'priority' => ['weekday priority', ['int', 'required']],
-                'weekend_priority' => ['weekend priority', ['int', 'required']],
-                'priority_threshold' => ['threshold limit', ['int', 'required']],
                 'single_amount' => ['amount single limit', ['float', 'required']],
                 'day_amount' => ['amount day limit', ['float', 'required']],
                 'month_amount' => ['amount day limit', ['float', 'required']],
-                'day_count' => ['count day limit', ['int', 'required']],
-                'month_count' => ['count month limit', ['int', 'required']],
-                'weekday_start' => ['weekday usable start time'],
-                'weekday_end' => ['weekday usable end time'],
-                'weekend_start' => ['weekend usable start time'],
-                'weekend_end' => ['weekend usable end time'],
-                'holiday_start' => ['holiday usable start time'],
-                'holiday_end' => ['holiday usable end time'],
+                'begin_time' => ['begin time', ['date' => 'Y-m-d H:i:s', 'required']],
+                'finish_time' => ['finish time', ['date' => 'Y-m-d H:i:s', 'required']],
+                'times' => ['times', ['maxlength' => 512]],
                 'remark' => ['remark', ['maxlength' => 255]],
                 'status' => ['status', ['in' => array_keys(static::$statusSelector), 'required']],
             ],

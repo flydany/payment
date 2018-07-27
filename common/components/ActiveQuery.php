@@ -2,10 +2,11 @@
 
 namespace common\components;
 
-use common\models\Merchant;
-use common\models\MerchantBank;
 use Yii;
 use common\models\AdminResource;
+use common\models\Merchant;
+use common\models\MerchantBank;
+use common\models\MerchantBankMaintain;
 
 class ActiveQuery extends \yii\db\ActiveQuery {
     
@@ -33,7 +34,7 @@ class ActiveQuery extends \yii\db\ActiveQuery {
                     $id = 'id';
                 }
                 $ids = Yii::$app->admin->getResourceNumbers($type);
-                if($this->modelClass == 'common\models\MerchantBank') {
+                if(in_array($this->modelClass, ['common\models\MerchantBank', 'common\models\MerchantBankMaintain'])) {
                     $id = 'merchant_number';
                     $ids = Merchant::find()->select('merchant_number')->where(['id' => $ids])->column();
                 }

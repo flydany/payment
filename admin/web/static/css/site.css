@@ -83,6 +83,14 @@ body {
 	font-size:14px;
 }
 
+/* -------- bootstrap select ----- */
+.has-success .bootstrap-select>.dropdown-toggle {
+	border-color:#3c763d;
+}
+.has-error .bootstrap-select>.dropdown-toggle {
+	border-color:#a94442;
+}
+
 /* -------- search form ----- */
 .search {
 	margin-bottom:10px;

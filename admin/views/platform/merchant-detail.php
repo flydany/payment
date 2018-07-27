@@ -28,17 +28,17 @@ $this->setActiveNavigator('platform/merchant-list');
             <input class="form-control" type="text" name="title" value="<?= Render::value($data, 'title') ?>" placeholder="title">
         </div>
         <div class="form-row">
-            <div class="form-group col-md-3 checker">
+            <div class="form-group col-xs-3 checker">
                 <label>platform</label>
                 <?= Render::select('platform_id', Platform::$platformSelector, Render::value($data, 'platform_id'), ['class' => 'picker']) ?>
             </div>
-            <div class="form-group col-md-6 checker">
+            <div class="form-group col-xs-6 checker">
                 <label>merchant number</label>
                 <input class="form-control" type="text" name="merchant_number" value="<?= Render::value($data, 'merchant_number') ?>" placeholder="merchant number">
             </div>
-            <div class="form-group col-md-3 checker">
+            <div class="form-group col-xs-3 checker">
                 <label>payment type</label>
-                <?= Render::select('paytype', Platform::$paytypeSelector, Render::value($data, 'paytype'), ['class' => 'picker']) ?>
+                <?= Render::select('paytype', Platform::$paytypeSelector, Render::value($data, 'paytype'), ['prompt' => '--', 'class' => 'picker']) ?>
             </div>
         </div>
         <div class="form-group checker">
@@ -49,11 +49,11 @@ $this->setActiveNavigator('platform/merchant-list');
             <div class="panel-heading">merchant private key</div>
             <div class="panel-body pb-zero">
                 <div class="form-row">
-                    <div class="form-group col-md-6 checker">
+                    <div class="form-group col-xs-6 checker">
                         <label>key type</label>
                         <?= Render::select('private_type', Merchant::$privateTypeSelector, Render::value($data, 'private_type'), ['prompt' => '--', 'picker']) ?>
                     </div>
-                    <div class="form-group col-md-6 checker">
+                    <div class="form-group col-xs-6 checker">
                         <label>key password</label>
                         <input class="form-control" type="text" name="private_password" value="<?= Render::value($data, 'private_password') ?>" placeholder="private key password">
                     </div>
@@ -83,21 +83,21 @@ $this->setActiveNavigator('platform/merchant-list');
             <div class="panel-heading">fee</div>
             <div class="panel-body pb-zero">
                 <div class="form-row">
-                    <div class="form-group col-md-6 checker">
+                    <div class="form-group col-xs-6 checker">
                         <label>rate</label>
                         <input class="form-control" type="text" name="rate" value="<?= Render::value($data, 'rate') ?>" placeholder="rate">
                     </div>
-                    <div class="form-group col-md-6 checker">
+                    <div class="form-group col-xs-6 checker">
                         <label>base fee</label>
                         <input class="form-control" type="text" name="base_fee" value="<?= Render::value($data, 'base_fee') ?>" placeholder="base fee">
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-md-6 checker">
+                    <div class="form-group col-xs-6 checker">
                         <label>min fee</label>
                         <input class="form-control" type="text" name="min" value="<?= Render::value($data, 'min') ?>" placeholder="min fee">
                     </div>
-                    <div class="form-group col-md-6 checker">
+                    <div class="form-group col-xs-6 checker">
                         <label>max fee</label>
                         <input class="form-control" type="text" name="max" value="<?= Render::value($data, 'max') ?>" placeholder="max fee">
                     </div>
@@ -120,15 +120,15 @@ $this->setActiveNavigator('platform/merchant-list');
 
 <div id="parameter-template" style="display:none;">
     <div class="form-group form-row parameter">
-        <div class="input-group col-md-3 checker">
+        <div class="input-group col-xs-3 checker">
             <label class="input-group-addon">name</label>
             <input class="form-control" type="text" name="parameter_name[]" value="" placeholder="parameter name">
         </div>
-        <div class="input-group col-md-8 checker">
+        <div class="input-group col-xs-8 checker">
             <span class="input-group-addon">value</span>
             <input class="form-control" type="text" name="parameter_value[]" value="" placeholder="parameter value">
         </div>
-        <div class="col-md-1"><a class="label label-danger" onclick="deleteParameter(this);" href="javascript:;"><i class="fa fa-close fa-fw"></i>delete</a></div>
+        <div class="col-xs-1"><a class="label label-danger" onclick="deleteParameter(this);" href="javascript:;"><i class="fa fa-close fa-fw"></i>delete</a></div>
     </div>
 </div>
 

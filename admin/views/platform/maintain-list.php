@@ -6,7 +6,7 @@ use common\helpers\Render;
 use common\models\Platform;
 use common\models\Merchant;
 
-$this->title = 'Merchant Bank List';
+$this->title = 'Merchant Maintain List';
 $this->addCrumbs('Platform');
 $this->addCrumbs('Merchant List', 'platform/merchant-list');
 
@@ -46,7 +46,6 @@ $this->addCrumbs('Merchant List', 'platform/merchant-list');
                 <th><i class="fa fa-shopping-bag fa-fw"></i>merchant</th>
                 <th><i class="fa fa-recycle fa-fw"></i>payment</th>
                 <th><i class="fa fa-bank fa-fw"></i>bank</th>
-                <th><i class="fa fa-sort-alpha-asc fa-fw"></i>priority</th>
                 <th><i class="fa fa-filter fa-fw"></i>single</th>
                 <th><i class="fa fa-filter fa-fw"></i>day</th>
                 <th><i class="fa fa-check fa-fw"></i>status</th>
@@ -55,14 +54,14 @@ $this->addCrumbs('Merchant List', 'platform/merchant-list');
             </thead>
             <tbody>
             <tr>
-                <td colspan="9"><i class="fa fa-search fa-fw"></i>click on the search button to search data.</td>
+                <td colspan="8"><i class="fa fa-search fa-fw"></i>click on the search button to search data.</td>
             </tr>
             </tbody>
         </table>
     </div>
     <div class="btn-toolbar" id="info-page">
         <div class="btn-group" role="group">
-            <a type="button" class="btn btn-default" href="/platform/bank-detail"><i class="fa fa-plus fa-fw"></i>insert</a>
+            <a type="button" class="btn btn-default" href="/platform/maintain-detail"><i class="fa fa-plus fa-fw"></i>insert</a>
             <button type="button" class="btn btn-default"><i class="fa fa-check-square fa-fw"></i>check all</button>
             <button type="button" class="btn btn-default"><i class="fa fa-minus-square fa-fw"></i>inverse</button>
             <button type="button" class="btn btn-default"><i class="fa fa-trash fa-fw"></i>batch delete</button>
@@ -78,7 +77,7 @@ $this->addCrumbs('Merchant List', 'platform/merchant-list');
         // 初始化表格异步加载事件
         (new tabler).init({
             // 请求地址
-            url: '/platform/bank-list',
+            url: '/platform/maintain-list',
             // 数据渲染配置
             table: '#info-table', page: '#info-page', template: 'info-template', search: '#info-search', button: '#search-button',
             // 全选、反选按钮、页面加载完毕自动loading
@@ -100,15 +99,14 @@ $this->addCrumbs('Merchant List', 'platform/merchant-list');
     {{each infos as info key}}
     <tr id="tr-{{info.id}}" data-id="{{info.id}}">
         <td class="platform">{{info.platform_id}}</td>
-        <td>{{if info.merchant_number}}{{info.merchant_number}}{{else}}all merchant usable{{/if}}</td>
+        <td>{{if info.merchant_number}}{{info.merchant_number}}{{else}}all merchant disable{{/if}}</td>
         <td class="paytype">{{info.paytype}}</td>
         <td class="bank">{{info.bank_id}}</td>
-        <td>{{info.priority}}/{{info.weekend_priority}}/{{info.priority_threshold}}</td>
         <td>{{info.single_amount}}</td>
         <td>{{info.day_amount}}</td>
         <td class="status">{{info.status}}</td>
         <td>
-            <a class="label label-primary" href="/platform/bank-detail?id={{info.id}}"><i class="fa fa-edit fa-fw"></i>edit</a>
+            <a class="label label-primary" href="/platform/maintain-detail?id={{info.id}}"><i class="fa fa-edit fa-fw"></i>edit</a>
             <a class="delete-data label label-danger" href="javascript:;"><i class="fa fa-trash fa-fw"></i>delete</a>
         </td>
     </tr>

@@ -14,23 +14,23 @@ $this->addCrumbs('Project List', 'project/list');
 
 <div class="contenter">
     <div class="form-inline search clearfix" id="info-search">
-        <div class="input-group col-md-2">
+        <div class="input-group col-xs-2">
             <span class="input-group-addon"><i class="fa fa-list fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="project_id" value="<?= Yii::$app->request->get('id') ?>" placeholder="project number">
         </div>
-        <div class="input-group col-md-2">
+        <div class="input-group col-xs-2">
             <span class="input-group-addon"><i class="fa fa-user-circle fa-fw"></i></span>
             <?= Render::select('identity', ProjectContacts::$identitySelector, null, ['prompt' => '--', 'class' => 'tabler picker']) ?>
         </div>
-        <div class="input-group col-md-2">
+        <div class="input-group col-xs-2">
             <span class="input-group-addon"><i class="fa fa-address-card fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="name" placeholder="name">
         </div>
-        <div class="input-group col-md-2">
+        <div class="input-group col-xs-2">
             <span class="input-group-addon"><i class="fa fa-phone-square fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="mobile" placeholder="mobile">
         </div>
-        <div class="input-group col-md-2">
+        <div class="input-group col-xs-2">
             <span class="input-group-addon"><i class="fa fa-at fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="email" placeholder="email">
         </div>

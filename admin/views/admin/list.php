@@ -14,15 +14,15 @@ $this->addCrumbs('Manager');
 
 <div class="contenter">
     <div class="form-inline search clearfix" id="info-search">
-        <div class="input-group col-md-3">
+        <div class="input-group col-xs-3">
             <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="username" placeholder="username">
         </div>
-        <!--div class="input-group col-md-3 selecter">
+        <!--div class="input-group col-xs-3 selecter">
             <span class="input-group-addon"><i class="fa fa-superpowers fa-fw"></i></span>
             <?//= Render::select('role_id', AdminRole::identitySelector(), null, ['prompt' => '--']) ?>
         </div-->
-        <div class="input-group col-md-3">
+        <div class="input-group col-xs-3">
             <span class="input-group-addon"><i class="fa fa-phone-square fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="mobile" placeholder="mobile">
         </div>

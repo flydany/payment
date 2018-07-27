@@ -36,6 +36,7 @@ return [
     '002002' => [
         '002002001' => ['title' => 'Merchant List', 'icon_class' => 'shopping-bag', 'controller' => 'platform/merchant-list'],
         '002002002' => ['title' => 'Merchant Banks', 'icon_class' => 'bank', 'controller' => 'platform/bank-list'],
+        '002002003' => ['title' => 'Merchant Maintains', 'icon_class' => 'ban', 'controller' => 'platform/maintain-list'],
     ],
     
     '009' => [

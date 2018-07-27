@@ -30,11 +30,11 @@ $this->setActiveNavigator('project/list');
             <input class="form-control" type="text" name="order_number" value="<?= $recharge->order_number ?>" placeholder="order number" readonly>
         </div>
         <div class="form-row">
-            <div class="form-group col-md-6 checker">
+            <div class="form-group col-xs-6 checker">
                 <label>source order number</label>
                 <input class="form-control" type="text" name="source_order_number" value="<?= $recharge->source_order_number ?>" placeholder="source order number">
             </div>
-            <div class="form-group col-md-6 checker">
+            <div class="form-group col-xs-6 checker">
                 <label>outer order number</label>
                 <input class="form-control" type="text" name="outer_order_number" value="<?= $recharge->outer_order_number ?>" placeholder="outer order number">
             </div>
@@ -43,21 +43,21 @@ $this->setActiveNavigator('project/list');
             <div class="panel-heading">recharge configuration</div>
             <div class="panel-body pb-zero">
                 <div class="form-row">
-                    <div class="form-group col-md-6 checker">
+                    <div class="form-group col-xs-6 checker">
                         <label>project</label>
                         <?= Render::select('project_id', Project::selector(), $recharge->project_id, ['prompt' => '--', 'class' => 'picker', 'disabled' => 'disabled']) ?>
                     </div>
-                    <div class="form-group col-md-6 checker">
+                    <div class="form-group col-xs-6 checker">
                         <label>project merchant</label>
                         <?= Render::select('project_merchant_id', ProjectMerchant::selector($recharge->project_id), $recharge->project_merchant_id, ['class' => 'picker', 'data-live-search' => 'true']) ?>
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-md-6 checker">
+                    <div class="form-group col-xs-6 checker">
                         <label>user</label>
                         <input class="form-control" type="text" name="user_id" value="<?= $recharge->user_id ?>" placeholder="user id">
                     </div>
-                    <div class="form-group col-md-6 checker">
+                    <div class="form-group col-xs-6 checker">
                         <label>bind card</label>
                         <input class="form-control" type="text" name="bind_card_id" value="<?= $recharge->bind_card_id ?>" placeholder="bind card id">
                     </div>
@@ -68,11 +68,11 @@ $this->setActiveNavigator('project/list');
             <div class="panel-heading">recharge parameter</div>
             <div class="panel-body pb-zero">
                 <div class="form-row">
-                    <div class="form-group col-md-6 checker">
+                    <div class="form-group col-xs-6 checker">
                         <label>amount</label>
                         <input class="form-control" type="text" name="amount" value="<?= $recharge->amount ?>" placeholder="amount">
                     </div>
-                    <div class="form-group col-md-6 checker">
+                    <div class="form-group col-xs-6 checker">
                         <label>fee</label>
                         <input class="form-control" type="text" name="fee" value="<?= $recharge->fee ?>" placeholder="fee">
                     </div>
@@ -87,15 +87,15 @@ $this->setActiveNavigator('project/list');
             <div class="panel-heading">recharge result</div>
             <div class="panel-body pb-zero">
                 <div class="form-row">
-                    <div class="form-group col-md-4 checker">
+                    <div class="form-group col-xs-4 checker">
                         <label>success date</label>
                         <input class="form-control" type="text" name="success_date" value="<?= $recharge->success_date ?>" placeholder="success date">
                     </div>
-                    <div class="form-group col-md-4 checker">
+                    <div class="form-group col-xs-4 checker">
                         <label>success at</label>
                         <input class="form-control" type="text" name="success_at" value="<?= $recharge->success_at ? date('Y-m-d H:i:s', $recharge->success_at) : '' ?>" placeholder="success at">
                     </div>
-                    <div class="form-group col-md-4 checker">
+                    <div class="form-group col-xs-4 checker">
                         <label>error code</label>
                         <input class="form-control" type="text" name="error_code" value="<?= $recharge->error_code ?>" placeholder="error code">
                     </div>

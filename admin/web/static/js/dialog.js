@@ -4,7 +4,7 @@ jQuery.warning = function(message) {
         type : BootstrapDialog.TYPE_DANGER,
         title : '<i class="fa fa-times fa-fw"></i>EXCEPTION',
         message : message,
-        size : BootstrapDialog.SIZE_SMALL,
+        size : BootstrapDialog.SIZE_NORMAL,
     });
 };
 
@@ -13,7 +13,7 @@ jQuery.success = function(message) {
         type : BootstrapDialog.TYPE_SUCCESS,
         title : '<i class="fa fa-check fa-fw"></i>SUCCESS',
         message : message,
-        size : BootstrapDialog.SIZE_SMALL,
+        size : BootstrapDialog.SIZE_NORMAL,
     });
 };
 
@@ -22,7 +22,7 @@ jQuery.alert = function(message, _function) {
         type : BootstrapDialog.TYPE_PRIMARY,
         title : '<i class="fa fa-gears fa-fw"></i>OPERATE',
         message : message,
-        size : BootstrapDialog.SIZE_SMALL,
+        size : BootstrapDialog.SIZE_NORMAL,
         buttons : [ {
             label : 'close',
             action : function(dialog) {

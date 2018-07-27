@@ -27,11 +27,11 @@ $this->setActiveNavigator('admin/list');
             <input class="form-control" type="text" name="username" value="<?= Render::value($data, 'username') ?>" placeholder="login name." <?= isset($data['id']) ? 'readonly' : '' ?>>
         </div>
         <div class="form-row">
-            <div class="form-group col-md-6 checker">
+            <div class="form-group col-xs-6 checker">
                 <label>password</label>
                 <input class="form-control" type="password" name="password_digest" value="" placeholder="password.">
             </div>
-            <div class="form-group col-md-6 checker">
+            <div class="form-group col-xs-6 checker">
                 <label>effect date</label>
                 <input class="form-control" type="text" name="effect_date" value="<?= Render::value($data, 'effect_date', date('Y-m-d', strtotime('+1 year'))) ?>" placeholder="end date.">
             </div>
@@ -41,11 +41,11 @@ $this->setActiveNavigator('admin/list');
             <?//= Render::select('role_id', AdminRole::identitySelector(), Render::value($data, 'role_id'), ['prompt' => '--']) ?>
         </div-->
         <div class="form-row">
-            <div class="form-group col-md-6 checker">
+            <div class="form-group col-xs-6 checker">
                 <label>realname</label>
                 <input class="form-control" type="text" name="realname" value="<?= Render::value($data, 'realname') ?>" placeholder="realname.">
             </div>
-            <div class="form-group col-md-6 checker">
+            <div class="form-group col-xs-6 checker">
                 <label>mobile</label>
                 <input class="form-control" type="text" name="mobile" value="<?= Render::value($data, 'mobile') ?>" placeholder="mobile.">
             </div>

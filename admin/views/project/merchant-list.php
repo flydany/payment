@@ -16,27 +16,27 @@ $this->addCrumbs('Project List', 'project/list');
 
 <div class="contenter">
     <div class="form-inline search clearfix" id="info-search">
-        <div class="input-group col-md-2">
+        <div class="input-group col-xs-2">
             <span class="input-group-addon"><i class="fa fa-book fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="title" placeholder="title">
         </div>
-        <div class="input-group col-md-2">
+        <div class="input-group col-xs-2">
             <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
             <?= Render::select('project_id', Project::selector(), null, ['prompt' => '--', 'placeholder' => 'project', 'class' => 'tabler picker', 'data-live-search' => 'true']) ?>
         </div>
-        <div class="input-group col-md-2">
+        <div class="input-group col-xs-2">
             <span class="input-group-addon"><i class="fa fa-thumb-tack fa-fw"></i></span>
             <?= Render::select('platform_id', Platform::$platformSelector, null, ['prompt' => '--', 'class' => 'tabler picker']) ?>
         </div>
-        <div class="input-group col-md-2">
+        <div class="input-group col-xs-2">
             <span class="input-group-addon"><i class="fa fa-recycle fa-fw"></i></span>
             <?= Render::select('paytype', Platform::$paytypeSelector, null, ['prompt' => '--', 'class' => 'tabler picker']) ?>
         </div>
-        <div class="input-group col-md-2">
+        <div class="input-group col-xs-2">
             <span class="input-group-addon"><i class="fa fa-check fa-fw"></i></span>
             <?= Render::select('status', ProjectMerchant::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler picker']) ?>
         </div>
-        <div class="input-group col-md-1"><button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button></div>
+        <div class="input-group col-xs-1"><button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button></div>
     </div>
 
     <table class="table table-bordered table-striped" id="info-table">

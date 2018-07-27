@@ -26,11 +26,11 @@ $this->setActiveNavigator('project/list');
             <input class="form-control" type="text" name="title" value="<?= Render::value($data, 'title') ?>" placeholder="project name.">
         </div>
         <div class="form-row">
-            <div class="form-group col-md-6 checker">
+            <div class="form-group col-xs-6 checker">
                 <label>effect date</label>
                 <input class="form-control" type="text" name="effect_date" value="<?= Render::value($data, 'effect_date') ?>" placeholder="effect date.">
             </div>
-            <div class="form-group col-md-6 checker">
+            <div class="form-group col-xs-6 checker">
                 <label>status</label>
                 <?= Render::select('status', Project::$statusSelector, Render::value($data, 'status'), ['class' => 'picker']) ?>
             </div>

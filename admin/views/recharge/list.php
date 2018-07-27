@@ -15,37 +15,37 @@ $this->addCrumbs('Recharge');
 
 <div class="contenter">
     <div class="form-inline search clearfix" id="info-search">
-        <div class="input-group col-md-3">
+        <div class="input-group col-xs-3">
             <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
             <?= Render::select('project_id', Project::selector(), null, ['prompt' => '--', 'placeholder' => 'project', 'class' => 'tabler picker', 'data-live-search' => 'true']) ?>
         </div>
-        <div class="input-group col-md-3">
+        <div class="input-group col-xs-3">
             <span class="input-group-addon"><i class="fa fa-cog fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="project_merchant_id" placeholder="project merchant">
         </div>
-        <div class="input-group col-md-2">
+        <div class="input-group col-xs-2">
             <span class="input-group-addon"><i class="fa fa-barcode fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="order_number" placeholder="order number">
         </div>
-        <div class="input-group col-md-2">
+        <div class="input-group col-xs-2">
             <span class="input-group-addon"><i class="fa fa-bullseye fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="source_order_number" placeholder="source order number">
         </div>
-        <div class="input-group col-md-2">
+        <div class="input-group col-xs-2">
             <span class="input-group-addon"><i class="fa fa-check fa-fw"></i></span>
             <?= Render::select('status', Recharge::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler picker']) ?>
         </div>
-        <div class="input-group col-md-2">
+        <div class="input-group col-xs-2">
             <span class="input-group-addon"><i class="fa fa-bank fa-fw"></i></span>
             <?= Render::select('bank_id', Platform::$bankSelector, null, ['prompt' => '--', 'class' => 'tabler picker']) ?>
         </div>
-        <div class="input-group col-md-6">
+        <div class="input-group col-xs-6">
             <span class="input-group-addon"><i class="fa fa-clock-o fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="star" placeholder="start time">
             <span class="input-group-addon"><i class="fa fa-caret-right fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="end" placeholder="end time">
         </div>
-        <div class="input-group col-md-1"><button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button></div>
+        <div class="input-group col-xs-1"><button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button></div>
     </div>
 
     <table class="table table-bordered table-striped" id="info-table">

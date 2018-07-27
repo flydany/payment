@@ -14,15 +14,15 @@ $this->addCrumbs('Project');
 
 <div class="contenter">
     <div class="form-inline search clearfix" id="info-search">
-        <div class="input-group col-md-2">
+        <div class="input-group col-xs-2">
             <span class="input-group-addon"><i class="fa fa-list fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="id" placeholder="id">
         </div>
-        <div class="input-group col-md-3">
+        <div class="input-group col-xs-3">
             <span class="input-group-addon"><i class="fa fa-book fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="title" placeholder="title">
         </div>
-        <div class="input-group col-md-2">
+        <div class="input-group col-xs-2">
             <span class="input-group-addon"><i class="fa fa-check fa-fw"></i></span>
             <?= Render::select('status', Project::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler picker']) ?>
         </div>
