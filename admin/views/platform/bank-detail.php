@@ -27,7 +27,7 @@ $this->setActiveNavigator('platform/bank-list');
         <div class="form-row">
             <div class="form-group col-xs-3 checker">
                 <label>platform</label>
-                <?= Render::select('platform_id', Platform::$platformSelector, Render::value($data, 'platform_id'), ['class' => 'picker']) ?>
+                <?= Render::select('platform_id', Platform::$platformSelector, Render::value($data, 'platform_id'), ['class' => 'select-picker']) ?>
             </div>
             <div class="form-group col-xs-6 checker">
                 <label>merchant number</label>
@@ -35,12 +35,12 @@ $this->setActiveNavigator('platform/bank-list');
             </div>
             <div class="form-group col-xs-3 checker">
                 <label>payment type</label>
-                <?= Render::select('paytype', Platform::$paytypeSelector, Render::value($data, 'paytype'), ['class' => 'picker']) ?>
+                <?= Render::select('paytype', Platform::$paytypeSelector, Render::value($data, 'paytype'), ['class' => 'select-picker']) ?>
             </div>
         </div>
         <div class="form-group checker">
             <label>bank</label>
-            <?= Render::select('bank_id', Platform::$bankSelector, Render::value($data, 'bank_id'), ['prompt' => '--', 'class' => 'picker']) ?>
+            <?= Render::select('bank_id', Platform::$bankSelector, Render::value($data, 'bank_id'), ['prompt' => '--', 'class' => 'select-picker']) ?>
         </div>
         <div class="panel panel-primary">
             <div class="panel-heading">bank priority</div>
@@ -103,7 +103,7 @@ $this->setActiveNavigator('platform/bank-list');
         </div>
         <div class="form-group checker">
             <label>status</label>
-            <?= Render::select('status', MerchantBank::$statusSelector, Render::value($data, 'status'), ['class' => 'picker']) ?>
+            <?= Render::select('status', MerchantBank::$statusSelector, Render::value($data, 'status'), ['class' => 'select-picker']) ?>
         </div>
         <div class="form-group checker">
             <label>remark</label>
@@ -120,8 +120,10 @@ $this->setActiveNavigator('platform/bank-list');
         <div class="input-group col-xs-11">
             <label class="input-group-addon">time slot</label>
             <input class="form-control" type="text" placeholder="start time">
+            <span class="input-group-addon"><i class="fa fa-clock-o fa-fw"></i></span>
             <span class="input-group-addon"><i class="fa fa-caret-right fa-fw"></i></span>
             <input class="form-control" type="text" placeholder="end time">
+            <span class="input-group-addon"><i class="fa fa-clock-o fa-fw"></i></span>
         </div>
         <div class="col-xs-1"><a class="label label-danger" onclick="deleteTimer(this);" href="javascript:;"><i class="fa fa-close fa-fw"></i>delete</a></div>
     </div>

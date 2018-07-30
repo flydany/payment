@@ -31,21 +31,21 @@ $this->setActiveNavigator('project/merchant-list');
         <div class="form-row">
             <div class="form-group col-xs-6 checker">
                 <label>project</label>
-                <?= Render::select('project_id', Project::selector(), Render::value($data, 'project_id'), ['class' => 'picker', 'data-live-search' => 'true']) ?>
+                <?= Render::select('project_id', Project::selector(), Render::value($data, 'project_id'), ['class' => 'select-picker', 'data-live-search' => 'true']) ?>
             </div>
             <div class="form-group col-xs-6 checker">
                 <label>merchant</label>
-                <?= Render::select('merchant_id', Merchant::selector(), Render::value($data, 'merchant_id'), ['class' => 'picker', 'data-live-search' => 'true']) ?>
+                <?= Render::select('merchant_id', Merchant::selector(), Render::value($data, 'merchant_id'), ['class' => 'select-picker', 'data-live-search' => 'true']) ?>
             </div>
         </div>
         <div class="form-row">
             <div class="form-group col-xs-6 checker">
                 <label>merchant</label>
-                <?= Render::select('paytype', Platform::$paytypeSelector, Render::value($data, 'paytype'), ['class' => 'picker']) ?>
+                <?= Render::select('paytype', Platform::$paytypeSelector, Render::value($data, 'paytype'), ['class' => 'select-picker']) ?>
             </div>
             <div class="form-group col-xs-6 checker">
                 <label>status</label>
-                <?= Render::select('status', ProjectMerchant::$statusSelector, Render::value($data, 'status'), ['class' => 'picker']) ?>
+                <?= Render::select('status', ProjectMerchant::$statusSelector, Render::value($data, 'status'), ['class' => 'select-picker']) ?>
             </div>
         </div>
         <div class="form-group checker">

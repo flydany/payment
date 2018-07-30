@@ -17,7 +17,7 @@ $this->addCrumbs('Recharge');
     <div class="form-inline search clearfix" id="info-search">
         <div class="input-group col-xs-3">
             <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
-            <?= Render::select('project_id', Project::selector(), null, ['prompt' => '--', 'placeholder' => 'project', 'class' => 'tabler picker', 'data-live-search' => 'true']) ?>
+            <?= Render::select('project_id', Project::selector(), null, ['prompt' => '--', 'placeholder' => 'project', 'class' => 'tabler select-picker', 'data-live-search' => 'true']) ?>
         </div>
         <div class="input-group col-xs-3">
             <span class="input-group-addon"><i class="fa fa-cog fa-fw"></i></span>
@@ -33,11 +33,11 @@ $this->addCrumbs('Recharge');
         </div>
         <div class="input-group col-xs-2">
             <span class="input-group-addon"><i class="fa fa-check fa-fw"></i></span>
-            <?= Render::select('status', Recharge::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler picker']) ?>
+            <?= Render::select('status', Recharge::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler select-picker']) ?>
         </div>
         <div class="input-group col-xs-2">
             <span class="input-group-addon"><i class="fa fa-bank fa-fw"></i></span>
-            <?= Render::select('bank_id', Platform::$bankSelector, null, ['prompt' => '--', 'class' => 'tabler picker']) ?>
+            <?= Render::select('bank_id', Platform::$bankSelector, null, ['prompt' => '--', 'class' => 'tabler select-picker']) ?>
         </div>
         <div class="input-group col-xs-6">
             <span class="input-group-addon"><i class="fa fa-clock-o fa-fw"></i></span>

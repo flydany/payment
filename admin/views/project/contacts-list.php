@@ -20,7 +20,7 @@ $this->addCrumbs('Project List', 'project/list');
         </div>
         <div class="input-group col-xs-2">
             <span class="input-group-addon"><i class="fa fa-user-circle fa-fw"></i></span>
-            <?= Render::select('identity', ProjectContacts::$identitySelector, null, ['prompt' => '--', 'class' => 'tabler picker']) ?>
+            <?= Render::select('identity', ProjectContacts::$identitySelector, null, ['prompt' => '--', 'class' => 'tabler select-picker']) ?>
         </div>
         <div class="input-group col-xs-2">
             <span class="input-group-addon"><i class="fa fa-address-card fa-fw"></i></span>

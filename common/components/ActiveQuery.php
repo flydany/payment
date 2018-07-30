@@ -5,8 +5,6 @@ namespace common\components;
 use Yii;
 use common\models\AdminResource;
 use common\models\Merchant;
-use common\models\MerchantBank;
-use common\models\MerchantBankMaintain;
 
 class ActiveQuery extends \yii\db\ActiveQuery {
     

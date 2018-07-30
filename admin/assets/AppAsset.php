@@ -18,6 +18,7 @@ class AppAsset extends AssetBundle {
         'admin\assets\FontAwesomeAsset',
         'admin\assets\DialogAsset',
         'admin\assets\SelecterAsset',
+        'dosamigos\datetimepicker\DateTimePickerAsset',
     ];
     
     public $css = [

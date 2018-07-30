@@ -27,7 +27,7 @@ $this->setActiveNavigator('platform/maintain-list');
         <div class="form-row">
             <div class="form-group col-xs-3 checker">
                 <label>platform</label>
-                <?= Render::select('platform_id', Platform::$platformSelector, Render::value($data, 'platform_id'), ['class' => 'picker']) ?>
+                <?= Render::select('platform_id', Platform::$platformSelector, Render::value($data, 'platform_id'), ['class' => 'select-picker']) ?>
             </div>
             <div class="form-group col-xs-6 checker">
                 <label>merchant number</label>
@@ -35,12 +35,12 @@ $this->setActiveNavigator('platform/maintain-list');
             </div>
             <div class="form-group col-xs-3 checker">
                 <label>payment type</label>
-                <?= Render::select('paytype', Platform::$paytypeSelector, Render::value($data, 'paytype'), ['class' => 'picker']) ?>
+                <?= Render::select('paytype', Platform::$paytypeSelector, Render::value($data, 'paytype'), ['class' => 'select-picker']) ?>
             </div>
         </div>
         <div class="form-group checker">
             <label>bank</label>
-            <?= Render::select('bank_id', Platform::$bankSelector, Render::value($data, 'bank_id'), ['prompt' => '--', 'class' => 'picker']) ?>
+            <?= Render::select('bank_id', Platform::$bankSelector, Render::value($data, 'bank_id'), ['prompt' => '--', 'class' => 'select-picker']) ?>
         </div>
         <div class="panel panel-primary">
             <div class="panel-heading">amount limit(yuan)</div>
@@ -64,11 +64,17 @@ $this->setActiveNavigator('platform/maintain-list');
             <div class="panel-body pb-zero form-row">
                 <div class="form-group col-xs-6 checker">
                     <label>maintain begin time</label>
-                    <input class="form-control" type="text" name="begin_time" value="<?= Render::value($data, 'begin_time') ?>" placeholder="begin time">
+                    <div class="input-group">
+                        <input class="form-control datetime-picker" data-date-format="yyyy-mm-dd hh:ii:ss" type="text" name="begin_time" value="<?= Render::value($data, 'begin_time') ?>" placeholder="begin time">
+                        <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
+                    </div>
                 </div>
                 <div class="form-group col-xs-6 checker">
                     <label>maintain finish time</label>
-                    <input class="form-control" type="text" name="finish_time" value="<?= Render::value($data, 'month_limit') ?>" placeholder="finish time">
+                    <div class="input-group">
+                        <input class="form-control datetime-picker" data-date-format="yyyy-mm-dd hh:ii:ss" type="text" name="finish_time" value="<?= Render::value($data, 'month_limit') ?>" placeholder="finish time">
+                        <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
+                    </div>
                 </div>
             </div>
             <div class="panel-heading default">disable time slot<a class="btn btn-default btn-sm ml-15px" id="insert-timer"><i class="fa fa-plus fa-fw"></i>insert</a><span class="text-danger"><i class="fa fa-long-arrow-left fa-fw ml-15px"></i>click this button to add a new timer</span></div>
@@ -76,7 +82,7 @@ $this->setActiveNavigator('platform/maintain-list');
         </div>
         <div class="form-group checker">
             <label>status</label>
-            <?= Render::select('status', MerchantBankMaintain::$statusSelector, Render::value($data, 'status'), ['class' => 'picker']) ?>
+            <?= Render::select('status', MerchantBankMaintain::$statusSelector, Render::value($data, 'status'), ['class' => 'select-picker']) ?>
         </div>
         <div class="form-group checker">
             <label>remark</label>
@@ -90,13 +96,15 @@ $this->setActiveNavigator('platform/maintain-list');
 
 <div id="timer-template" style="display:none;">
     <div class="form-group form-row timer">
-        <div class="input-group col-xs-11">
-            <label class="input-group-addon">time slot</label>
+        <div class="input-group col-xs-5">
+            <label class="input-group-addon">start time</label>
             <input class="form-control" type="text" placeholder="start time">
+            <span class="input-group-addon"><i class="fa fa-clock-o fa-fw"></i></span>
             <span class="input-group-addon"><i class="fa fa-caret-right fa-fw"></i></span>
             <input class="form-control" type="text" placeholder="end time">
+            <span class="input-group-addon"><i class="fa fa-clock-o fa-fw"></i></span>
         </div>
-        <div class="col-xs-1"><a class="label label-danger" onclick="deleteTimer(this);" href="javascript:;"><i class="fa fa-close fa-fw"></i>delete</a></div>
+        <div class="col-xs-2"><a class="label label-danger" onclick="deleteTimer(this);" href="javascript:;"><i class="fa fa-close fa-fw"></i>delete</a></div>
     </div>
 </div>
 

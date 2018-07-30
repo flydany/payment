@@ -45,11 +45,11 @@ $this->setActiveNavigator('project/list');
                 <div class="form-row">
                     <div class="form-group col-xs-6 checker">
                         <label>project</label>
-                        <?= Render::select('project_id', Project::selector(), $recharge->project_id, ['prompt' => '--', 'class' => 'picker', 'disabled' => 'disabled']) ?>
+                        <?= Render::select('project_id', Project::selector(), $recharge->project_id, ['prompt' => '--', 'class' => 'select-picker', 'disabled' => 'disabled']) ?>
                     </div>
                     <div class="form-group col-xs-6 checker">
                         <label>project merchant</label>
-                        <?= Render::select('project_merchant_id', ProjectMerchant::selector($recharge->project_id), $recharge->project_merchant_id, ['class' => 'picker', 'data-live-search' => 'true']) ?>
+                        <?= Render::select('project_merchant_id', ProjectMerchant::selector($recharge->project_id), $recharge->project_merchant_id, ['class' => 'select-picker', 'data-live-search' => 'true']) ?>
                     </div>
                 </div>
                 <div class="form-row">
@@ -104,7 +104,7 @@ $this->setActiveNavigator('project/list');
         </div>
         <div class="form-group">
             <label>recharge status</label>
-            <?= Render::select('status', Recharge::$statusSelector, $recharge->status, ['class' => 'picker']) ?>
+            <?= Render::select('status', Recharge::$statusSelector, $recharge->status, ['class' => 'select-picker']) ?>
         </div>
         <div class="form-group checker">
             <label>remark</label>

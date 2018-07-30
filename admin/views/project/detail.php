@@ -32,7 +32,7 @@ $this->setActiveNavigator('project/list');
             </div>
             <div class="form-group col-xs-6 checker">
                 <label>status</label>
-                <?= Render::select('status', Project::$statusSelector, Render::value($data, 'status'), ['class' => 'picker']) ?>
+                <?= Render::select('status', Project::$statusSelector, Render::value($data, 'status'), ['class' => 'select-picker']) ?>
             </div>
         </div>
         <div class="form-group checker">
