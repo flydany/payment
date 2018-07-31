@@ -92,6 +92,18 @@ class ProjectMerchant extends ActiveRecord {
     }
 
     /**
+     * 判断当前用户是否有此项目的权限
+     * @return boolean
+     */
+    public function getHasPermission()
+    {
+        if(Yii::$app->admin->isSupper) {
+            return true;
+        }
+        return $this->project->hasPermission && $this->merchant->hasPermission;
+    }
+
+    /**
      * 获取银行限额
      * @return object
      */

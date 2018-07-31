@@ -122,12 +122,12 @@ class Admin extends ActiveRecord {
     {
         return AdminResource::find()->where(['identity' => array_merge($this->identities, [$this->id])])->andFilterWhere(['type' => $type])->all();
     }
-    public function getResourceNumbers($type = '')
+    public function getResourcePowers($type = '')
     {
         return array_unique(
             array_map(
                 function($resource) {
-                    return $resource->item_id;
+                    return $resource->power;
                 },
                 $this->getResources($type)
             )

@@ -2,14 +2,15 @@
 
 namespace common\models;
 
-use common\components\ActiveQuery;
 use Yii;
 use yii\helpers\ArrayHelper;
+use common\components\ActiveQuery;
+use common\models\interfaces\ResourceInterface;
 
 /**
  * This is the model class for table "Project".
  */
-class Project extends ActiveRecord {
+class Project extends ActiveRecord implements ResourceInterface {
 
     const StatusNormal = '0';
     const StatusForbidden = '1';
@@ -78,7 +79,7 @@ class Project extends ActiveRecord {
             return false;
         }
         if($insert && ! Yii::$app->admin->isSupper) {
-            AdminResource::creator(Yii::$app->admin->id, $this->id, AdminResource::TypeProject);
+            AdminResource::creator(Yii::$app->admin->id, $this->id, static::resourceType());
         }
         return true;
     }
@@ -105,24 +106,38 @@ class Project extends ActiveRecord {
     }
 
     /**
+     * 返回权限类型
+     * @return mixed
+     */
+    public static function resourceType()
+    {
+        return AdminResource::TypeProject;
+    }
+
+    /**
+     * 返回权限标识
+     * @return mixed
+     */
+    public function getPower()
+    {
+        return $this->id;
+    }
+
+    /**
      * 判断当前用户是否有此项目的权限
      * @return boolean
      */
     public function getHasPermission()
     {
-        if(Yii::$app->admin->isSupper) {
-            return true;
-        }
-        return AdminResource::find()->where(['item_id' => $this->id, 'identity' => array_merge(Yii::$app->admin->identities, [Yii::$app->admin->id]), 'type' => AdminResource::TypeProject])->exists();
+        return AdminResource::hasPermission($this->power, static::resourceType());
     }
-
     /**
      * 获取项目已存在的负责人
      * @return array
      */
     public function getIdentities()
     {
-        return AdminResource::find()->select('identity')->where(['item_id' => $this->id, 'type' => AdminResource::TypeProject])->column();
+        return AdminResource::identities($this->power, static::resourceType());
     }
     
     /**
@@ -145,7 +160,7 @@ class Project extends ActiveRecord {
                 function($value) {
                     return ['id' => $value['id'], 'title' => $value['id'].'.'.$value['title']];
                 },
-                static::find()->select('id, title')->where(['status' => static::StatusNormal])->filterResource(AdminResource::TypeProject)->orderBy('id desc')->asArray()->all()),
+                static::find()->select('id, title')->where(['status' => static::StatusNormal])->filterResource(static::resourceType())->orderBy('id desc')->asArray()->all()),
             'id', 'title'
         );
     }

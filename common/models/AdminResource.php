@@ -20,8 +20,8 @@ class AdminResource extends ActiveRecord {
     public function rules()
     {
         return [
-            [['type', 'identity', 'item_id'], 'required'],
-            [['type', 'item_id'], 'integer'],
+            [['type', 'identity', 'power'], 'required'],
+            [['type', 'power'], 'integer'],
             [['identity'], 'string', 'max' => 64],
             [['identity'], 'match', 'pattern' => "/^[\w\-\_\.]+$/"],
         ];
@@ -35,7 +35,7 @@ class AdminResource extends ActiveRecord {
         return [
             'type' => 'resource type',
             'identity' => 'identity',
-            'item_id' => 'resource number',
+            'power' => 'resource number',
         ];
     }
     
@@ -51,7 +51,7 @@ class AdminResource extends ActiveRecord {
             'param' => [
                 'type' => ['resource type', ['int', 'required']],
                 'identity' => ['identity list', ['required']],
-                'item_id' => ['resource number', ['int', 'required']],
+                'power' => ['resource number', ['int', 'required']],
             ]
         ];
         return $rule;
@@ -69,15 +69,15 @@ class AdminResource extends ActiveRecord {
     {
         // 如果不存在数据，删除所有已存在的数据源
         if(empty($itemId)) {
-            return static::deleteAll(['item_id' => $itemId, 'type' => $type]);
+            return static::deleteAll(['power' => $itemId, 'type' => $type]);
         }
         // 获取已存在的权限
-        $powers = static::find()->select('id, identity')->where(['item_id' => $itemId, 'type' => $type])->asArray()->all();
+        $powers = static::find()->select('id, identity')->where(['power' => $itemId, 'type' => $type])->asArray()->all();
         $has = ArrayHelper::map($powers, 'id', 'identity');
         $insert = array_diff($identities, $has);
         $delete = array_diff($has, $identities);
         if($delete) {
-            if( ! static::deleteAll(['item_id' => $itemId, 'type' => $type, 'identity' => $delete])) {
+            if( ! static::deleteAll(['power' => $itemId, 'type' => $type, 'identity' => $delete])) {
                 return false;
             }
         }
@@ -87,7 +87,7 @@ class AdminResource extends ActiveRecord {
             foreach($insert as $identity) {
                 $params[] = [$type, $identity, $itemId, $time, $time];
             }
-            $result = Yii::$app->db->createCommand()->batchInsert(static::tableName(), ['type', 'identity', 'item_id', 'updated_at', 'created_at'], $params)->execute();
+            $result = Yii::$app->db->createCommand()->batchInsert(static::tableName(), ['type', 'identity', 'power', 'updated_at', 'created_at'], $params)->execute();
             if(empty($result)) {
                 return false;
             }
@@ -110,12 +110,12 @@ class AdminResource extends ActiveRecord {
            return static::deleteAll(['identity' => $identity, 'type' => $type]);
         }
         // 获取已存在的权限
-        $powers = static::find()->select('id, item_id')->where(['identity' => $identity, 'type' => $type])->asArray()->all();
-        $has = ArrayHelper::map($powers, 'id', 'item_id');
+        $powers = static::find()->select('id, power')->where(['identity' => $identity, 'type' => $type])->asArray()->all();
+        $has = ArrayHelper::map($powers, 'id', 'power');
         $insert = array_diff($items, $has);
         $delete = array_diff($has, $items);
         if($delete) {
-            if( ! static::deleteAll(['identity' => $identity, 'type' => $type, 'item_id' => $delete])) {
+            if( ! static::deleteAll(['identity' => $identity, 'type' => $type, 'power' => $delete])) {
                 return false;
             }
         }
@@ -125,7 +125,7 @@ class AdminResource extends ActiveRecord {
             foreach($insert as $itemId) {
                 $params[] = [$type, $identity, $itemId, $time, $time];
             }
-            $result = Yii::$app->db->createCommand()->batchInsert(static::tableName(), ['type', 'identity', 'item_id', 'updated_at', 'created_at'], $params)->execute();
+            $result = Yii::$app->db->createCommand()->batchInsert(static::tableName(), ['type', 'identity', 'power', 'updated_at', 'created_at'], $params)->execute();
             if(empty($result)) {
                 return false;
             }
@@ -136,17 +136,37 @@ class AdminResource extends ActiveRecord {
     /**
      * 添加权限
      * @param string $identity 身份标识
-     * @param integer $item_id 数据源编号
+     * @param integer $power 数据源编号
      * @param string $type 数据源类型
      * @return boolean
      */
-    public static function creator($identity, $item_id, $type = self::TypeProject)
+    public static function creator($identity, $power, $type = self::TypeProject)
     {
         $resource = new static();
-        $resource->loads(['type' => $type, 'identity' => (string)$identity, 'item_id' => $item_id]);
+        $resource->loads(['type' => $type, 'identity' => (string)$identity, 'power' => $power]);
         if($resource->validate() && $resource->save()) {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 判断当前用户是否有此项目的权限
+     * @return boolean
+     */
+    public static function hasPermission($power, $type)
+    {
+        if(Yii::$app->admin->isSupper) {
+            return true;
+        }
+        return AdminResource::find()->where(['power' => [0, $power], 'identity' => array_merge(Yii::$app->admin->identities, [Yii::$app->admin->id]), 'type' => $type])->exists();
+    }
+    /**
+     * 获取项目已存在的负责人
+     * @return array
+     */
+    public static function identities($power, $type)
+    {
+        return AdminResource::find()->select('identity')->where(['power' => [0, $power], 'type' => $type])->column();
     }
 }
