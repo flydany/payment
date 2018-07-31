@@ -78,12 +78,12 @@ class MerchantBank extends ActiveRecord {
                 'month_amount' => ['amount day limit', ['float', 'required']],
                 'day_count' => ['count day limit', ['int', 'required']],
                 'month_count' => ['count month limit', ['int', 'required']],
-                'weekday_start' => ['weekday usable start time'],
-                'weekday_end' => ['weekday usable end time'],
-                'weekend_start' => ['weekend usable start time'],
-                'weekend_end' => ['weekend usable end time'],
-                'holiday_start' => ['holiday usable start time'],
-                'holiday_end' => ['holiday usable end time'],
+                'weekday_start' => ['weekday usable start time', ['date' => 'H:i:s']],
+                'weekday_end' => ['weekday usable end time', ['date' => 'H:i:s']],
+                'weekend_start' => ['weekend usable start time', ['date' => 'H:i:s']],
+                'weekend_end' => ['weekend usable end time', ['date' => 'H:i:s']],
+                'holiday_start' => ['holiday usable start time', ['date' => 'H:i:s']],
+                'holiday_end' => ['holiday usable end time', ['date' => 'H:i:s']],
                 'remark' => ['remark', ['maxlength' => 255]],
                 'status' => ['status', ['in' => array_keys(static::$statusSelector), 'required']],
             ],
@@ -121,7 +121,7 @@ class MerchantBank extends ActiveRecord {
             return true;
         }
         return Merchant::find()->select('merchant_number')
-            ->where(['platform_id' => $this->platform_id, 'merchant_number' => $this->merchant_number, 'paytype' => ['', $this->paytype], 'id' => Yii::$app->admin->getResourceNumbers(AdminResource::TypeMerchant)])
+            ->where(['platform_id' => $this->platform_id, 'merchant_number' => ['', $this->merchant_number], 'paytype' => [0, $this->paytype], 'id' => Yii::$app->admin->getPowers(AdminResource::TypeMerchant)])
             ->exists();
     }
 }

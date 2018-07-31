@@ -2,6 +2,7 @@
 
 namespace admin\controllers;
 
+use common\helpers\Checker;
 use yii\web\UploadedFile;
 use common\helpers\Render;
 use common\models\Platform;
@@ -335,20 +336,25 @@ class PlatformController extends Controller {
     {
         $maintain = new MerchantBankMaintain();
         $params = $this->request->post();
+        $checker = Checker::authentication(MerchantBankMaintain::flyer(), $params);
+        if($checker['code'] != Checker::SuccessCode) {
+            return $this->error('params error, '.$checker['message'], 'platform/maintain-detail');
+        }
         foreach(['single_amount', 'day_amount', 'month_amount'] as $key) {
             $params[$key] = bcmul($params[$key], 100, 0);
         }
-        foreach(['weekday', 'weekend', 'holiday'] as $key) {
-            $times = [];
-            foreach($params[$key.'_start'] as $k => $start) {
-                if(empty($start) || empty($params[$key.'_end'][$k])) {
-                    $params[$key.'_times'] = '';
-                    continue;
-                }
-                $times[] = ['start' => $start, 'end' => $params[$key.'_end'][$k]];
-            }
-            $params[$key.'_times'] = json_encode($times);
+        foreach(['begin_at', 'finish_at'] as $time) {
+            $params[$time] = strtotime($params[$time]);
         }
+        $times = [];
+        foreach($params['start'] as $k => $start) {
+            if(empty($start) || empty($params['end'][$k])) {
+                $params['times'] = '';
+                continue;
+            }
+            $times[] = ['start' => $start, 'end' => $params['end'][$k]];
+        }
+        $params['times'] = json_encode($times);
         if ( ! $maintain->loadAttributes($params)->validate()) {
             // 参数异常，渲染错误页面
             return $this->error($maintain->errors(), 'platform/maintain-detail');
@@ -358,13 +364,13 @@ class PlatformController extends Controller {
         }
         if ($maintain->save()) {
             // 保存成功
-            return $this->success('maintain ('.Platform::$maintainSelector[$maintain->maintain_id].') insert successful', [
+            return $this->success('maintain ('.Platform::$platformSelector[$maintain->platform_id].':'.$maintain->merchant_number.') insert successful', [
                 ['title' => 'go to merchant maintain list page', 'url' => 'platform/maintain-list'],
                 ['title' => 'edit merchant maintain again', 'url' => 'platform/maintain-detail?id='.$maintain->id]
             ]);
         }
         // 参数异常，渲染错误页面
-        return $this->error('maintain ('.Platform::$maintainSelector[$maintain->maintain_id].') insert failed, please try again', 'platform/maintain-detail');
+        return $this->error('maintain ('.Platform::$platformSelector[$maintain->platform_id].':'.$maintain->merchant_number.') insert failed, please try again', 'platform/maintain-detail');
     }
     /**
      * merchant maintain detail show / update
@@ -378,24 +384,25 @@ class PlatformController extends Controller {
         if( ! $maintain = MerchantBankMaintain::finder($this->request->get('id'))) {
             return $this->error('invalid merchant maintain', 'platform/maintain-list');
         }
-        if($maintain && empty($maintain->hasPermission)) {
-            return $this->error('permission forbidden', 'platform/maintain-list');
+        if(empty($maintain->hasPermission)) {
+            return $this->error('you have no permission to editor this merchant bank maintain log', 'platform/maintain-list');
         }
         $params = $this->request->post();
         foreach(['single_amount', 'day_amount', 'month_amount'] as $key) {
             $params[$key] = bcmul($params[$key], 100, 0);
         }
-        foreach(['weekday', 'weekend', 'holiday'] as $key) {
-            $times = [];
-            foreach($params[$key.'_start'] as $k => $start) {
-                if(empty($start) || empty($params[$key.'_end'][$k])) {
-                    $params[$key.'_times'] = '';
-                    continue;
-                }
-                $times[] = ['start' => $start, 'end' => $params[$key.'_end'][$k]];
-            }
-            $params[$key.'_times'] = json_encode($times);
+        foreach(['begin_at', 'finish_at'] as $time) {
+            $params[$time] = strtotime($params[$time]);
         }
+        $times = [];
+        foreach($params['start'] as $k => $start) {
+            if(empty($start) || empty($params['end'][$k])) {
+                $params['times'] = '';
+                continue;
+            }
+            $times[] = ['start' => $start, 'end' => $params['end'][$k]];
+        }
+        $params['times'] = json_encode($times);
         if ( ! $maintain->loadAttributes($params)->validate()) {
             // 参数异常，渲染错误页面
             return $this->error($maintain->errors(), 'platform/maintain-detail?id='.$maintain->id);
@@ -405,13 +412,13 @@ class PlatformController extends Controller {
         }
         if ($maintain->save()) {
             // 保存成功
-            return $this->success('maintain ('.Platform::$maintainSelector[$maintain->maintain_id].') update successful', [
+            return $this->success('maintain ('.Platform::$platformSelector[$maintain->platform_id].':'.$maintain->merchant_number.') update successful', [
                 ['title' => 'go to merchant maintain list page', 'url' => 'platform/maintain-list'],
                 ['title' => 'edit merchant maintain again', 'url' => 'platform/maintain-detail?id='.$maintain->id],
             ]);
         }
         // 参数异常，渲染错误页面
-        return $this->error('maintain ('.Platform::$maintainSelector[$maintain->maintain_id].') update failed, please try again.', 'platform/maintain-detail?id='.$maintain->id);
+        return $this->error('maintain ('.Platform::$platformSelector[$maintain->platform_id].':'.$maintain->merchant_number.') update failed, please try again.', 'platform/maintain-detail?id='.$maintain->id);
     }
     /**
      * delete merchant maintain

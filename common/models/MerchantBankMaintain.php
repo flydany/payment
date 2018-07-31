@@ -21,11 +21,12 @@ class MerchantBankMaintain extends ActiveRecord {
     public function rules()
     {
         return [
-            [['platform_id', 'bank_id', 'paytype', 'single_amount', 'day_amount', 'month_amount', 'begin_time', 'finish_time'], 'required'],
-            [['platform_id', 'bank_id', 'paytype', 'single_amount', 'day_amount', 'month_amount', 'begin_time', 'finish_time', 'admin_id', 'status', 'deleted_at'], 'integer'],
+            [['platform_id', 'paytype', 'single_amount', 'day_amount', 'month_amount', 'begin_at', 'finish_at'], 'required'],
+            [['platform_id', 'bank_id', 'paytype', 'single_amount', 'day_amount', 'month_amount', 'begin_at', 'finish_at', 'admin_id', 'status', 'deleted_at'], 'integer'],
             [['merchant_number'], 'string', 'max' => 64],
             [['remark'], 'string', 'max' => 255],
             [['times'], 'string', 'max' => 512],
+            ['bank_id', 'default', 'value' => 0],
         ];
     }
     /**
@@ -60,15 +61,16 @@ class MerchantBankMaintain extends ActiveRecord {
         $rule = [
             'param' => [
                 'platform_id' => ['platform', ['int', 'required']],
-                'merchant_number' => ['merchant id', ['maxlength' => 64]],
+                'merchant_number' => ['merchant number', ['maxlength' => 64]],
                 'paytype' => ['payment type', ['in' => array_keys(Platform::$paytypeSelector), 'required']],
-                'bank_id' => ['bank id', ['int', 'required']],
+                'bank_id' => ['bank id', ['in' => array_keys(Platform::$bankSelector)]],
                 'single_amount' => ['amount single limit', ['float', 'required']],
                 'day_amount' => ['amount day limit', ['float', 'required']],
                 'month_amount' => ['amount day limit', ['float', 'required']],
-                'begin_time' => ['begin time', ['date' => 'Y-m-d H:i:s', 'required']],
-                'finish_time' => ['finish time', ['date' => 'Y-m-d H:i:s', 'required']],
-                'times' => ['times', ['maxlength' => 512]],
+                'begin_at' => ['begin time', ['date' => 'Y-m-d H:i:s', 'required']],
+                'finish_at' => ['finish time', ['date' => 'Y-m-d H:i:s', 'required']],
+                'start' => ['start time', ['date' => 'H:i:s']],
+                'end' => ['end time', ['date' => 'H:i:s']],
                 'remark' => ['remark', ['maxlength' => 255]],
                 'status' => ['status', ['in' => array_keys(static::$statusSelector), 'required']],
             ],
@@ -105,8 +107,8 @@ class MerchantBankMaintain extends ActiveRecord {
         if(Yii::$app->admin->isSupper) {
             return true;
         }
-        return Merchant::find()->select('merchant_number')
-            ->where(['platform_id' => $this->platform_id, 'merchant_number' => $this->merchant_number, 'paytype' => ['', $this->paytype], 'id' => Yii::$app->admin->getResourceNumbers(AdminResource::TypeMerchant)])
+        return Merchant::find()->select('id')
+            ->where(['platform_id' => $this->platform_id, 'merchant_number' => ['', $this->merchant_number], 'paytype' => [0, $this->paytype], 'id' => Yii::$app->admin->getPowers(AdminResource::TypeMerchant)])
             ->exists();
     }
 }

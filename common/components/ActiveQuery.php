@@ -24,14 +24,22 @@ class ActiveQuery extends \yii\db\ActiveQuery {
                 if($this->modelClass == 'common\models\Project') {
                     $id = 'id';
                 }
-                $ids = Yii::$app->admin->getResourceNumbers($type);
+                $ids = Yii::$app->admin->getPowers($type);
+                // 项目的超级权限
+                if(in_array(0, $ids)) {
+                    return true;
+                }
             } break;
             case AdminResource::TypeMerchant: {
-                $id = 'merchant_id';
+                $id = 'merchant_number';
                 if($this->modelClass == 'common\models\Merchant') {
                     $id = 'id';
                 }
-                $ids = Yii::$app->admin->getResourceNumbers($type);
+                $ids = Yii::$app->admin->getPowers($type);
+                // 商户号的超级权限
+                if(in_array(0, $ids)) {
+                    return $this;
+                }
                 if(in_array($this->modelClass, ['common\models\MerchantBank', 'common\models\MerchantBankMaintain'])) {
                     $id = 'merchant_number';
                     $ids = Merchant::find()->select('merchant_number')->where(['id' => $ids])->column();

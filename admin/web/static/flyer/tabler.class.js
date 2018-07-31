@@ -67,17 +67,23 @@ function dayShow(dayString, format)
 // 定义金额转换函数
 function fmoney(s, n)
 {
+    var t = '';
     if (!s) {
-        s = 0;
+        t = 0;
     }
-    // 金额单位转换
-    s /= 100;
-    s = parseFloat((s + "").replace(/[^\d\.-]/g, "")).toFixed(n) + "";
-    var l = s.split(".")[0].split("").reverse(),
-        r = s.split(".")[1];
-    t = "";
-    for (i = 0; i < l.length; ++i) {
-        t += l[i] + ((i + 1) % 3 == 0 && (i + 1) != l.length ? "," : "");
+    else {
+        // 金额单位转换
+        s /= 100;
+        s = parseFloat((s + "").replace(/[^\d\.-]/g, "")).toFixed(n) + "";
+        var l = s.split(".")[0].split("").reverse(),
+            r = s.split(".")[1];
+        for (i = 0; i < l.length; ++i) {
+            t += l[i] + ((i + 1) % 3 == 0 && (i + 1) != l.length ? "," : "");
+        }
+    }
+    if(n == undefined) {
+        n = 2;
+        r = '00';
     }
     return t.split("").reverse().join("") + (n > 0 ? "." + r : '');
 }

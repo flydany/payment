@@ -118,11 +118,11 @@ class Admin extends ActiveRecord {
      * 资源权限相关
      *
      */
-    public function getResources($type = '')
+    public function getResources($type = AdminResource::TypeProject)
     {
         return AdminResource::find()->where(['identity' => array_merge($this->identities, [$this->id])])->andFilterWhere(['type' => $type])->all();
     }
-    public function getResourceNumbers($type = '')
+    public function getResourcePowers($type = AdminResource::TypeProject)
     {
         return array_unique(
             array_map(
@@ -132,6 +132,20 @@ class Admin extends ActiveRecord {
                 $this->getResources($type)
             )
         );
+    }
+
+    /**
+     * 查询是否有资源权限
+     * @param string $power 权标
+     * @param string $type 分类
+     * @return boolean
+     */
+    public function hasResourcePower($power, $type = AdminResource::TypeProject)
+    {
+        if($this->isSupper) {
+            return true;
+        }
+        return AdminResource::find()->where(['identity' => array_merge($this->identities, [$this->id]), 'power' => AdminResource::slicePower($power)])->andFilterWhere(['type' => $type])->exists();
     }
     
     /**

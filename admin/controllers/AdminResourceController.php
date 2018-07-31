@@ -16,7 +16,7 @@ class AdminResourceController extends Controller {
     public function actionProject()
     {
         $target = 'project/list';
-        if( ! $project = Project::finder($this->request->get('item_id') ?? $this->request->post('item_id'))) {
+        if( ! $project = Project::finder($this->request->get('id') ?? $this->request->post('id'))) {
             return $this->error('invalid project', $target);
         }
         if(empty($project->hasPermission)) {
@@ -34,12 +34,16 @@ class AdminResourceController extends Controller {
     public function actionMerchant()
     {
         $target = 'platform/merchant-list';
-        if( ! $merchant = Merchant::finder($this->request->get('item_id') ?? $this->request->post('item_id'))) {
-            return $this->error('invalid project', $target);
+        $power = $this->request->get('power') ?? $this->request->post('power');
+        if(empty($power)) {
+            return $this->error('param error', $target);
         }
-        if(empty($merchant->hasPermission)) {
+        if( ! $this->admin->hasResourcePower($power)) {
             return $this->error('permission forbidden', $target);
         }
+        $merchant = new \Object();
+        $merchant->id = $power;
+        $merchant->identities = AdminResource::find()->select('identity')->where(['power' => AdminResource::slicePower($power), 'type' => AdminResource::TypeMerchant])->column();
         if($this->request->isGet) {
             return $this->render('resources', ['resource' => $merchant, 'commit' => 'merchant', 'type' => AdminResource::TypeMerchant, 'target' => $target]);
         }

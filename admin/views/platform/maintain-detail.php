@@ -4,7 +4,6 @@
 
 use common\helpers\Render;
 use common\models\Platform;
-use common\models\Merchant;
 use common\models\MerchantBankMaintain;
 
 
@@ -65,14 +64,14 @@ $this->setActiveNavigator('platform/maintain-list');
                 <div class="form-group col-xs-6 checker">
                     <label>maintain begin time</label>
                     <div class="input-group">
-                        <input class="form-control datetime-picker" data-date-format="yyyy-mm-dd hh:ii:ss" type="text" name="begin_time" value="<?= Render::value($data, 'begin_time') ?>" placeholder="begin time">
+                        <input class="form-control datetime-picker" data-date-format="yyyy-mm-dd hh:ii:ss" type="text" name="begin_at" value="<?= date('Y-m-d H:i:s', Render::value($data, 'begin_at', time())) ?>" placeholder="begin time">
                         <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
                     </div>
                 </div>
                 <div class="form-group col-xs-6 checker">
                     <label>maintain finish time</label>
                     <div class="input-group">
-                        <input class="form-control datetime-picker" data-date-format="yyyy-mm-dd hh:ii:ss" type="text" name="finish_time" value="<?= Render::value($data, 'month_limit') ?>" placeholder="finish time">
+                        <input class="form-control datetime-picker" data-date-format="yyyy-mm-dd hh:ii:ss" type="text" name="finish_at" value="<?= date('Y-m-d H:i:s', Render::value($data, 'finish_at', time() + 86400)) ?>" placeholder="finish time">
                         <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
                     </div>
                 </div>
@@ -96,7 +95,7 @@ $this->setActiveNavigator('platform/maintain-list');
 
 <div id="timer-template" style="display:none;">
     <div class="form-group form-row timer">
-        <div class="input-group col-xs-5">
+        <div class="input-group col-xs-11">
             <label class="input-group-addon">start time</label>
             <input class="form-control" type="text" placeholder="start time">
             <span class="input-group-addon"><i class="fa fa-clock-o fa-fw"></i></span>
@@ -104,7 +103,7 @@ $this->setActiveNavigator('platform/maintain-list');
             <input class="form-control" type="text" placeholder="end time">
             <span class="input-group-addon"><i class="fa fa-clock-o fa-fw"></i></span>
         </div>
-        <div class="col-xs-2"><a class="label label-danger" onclick="deleteTimer(this);" href="javascript:;"><i class="fa fa-close fa-fw"></i>delete</a></div>
+        <div class="col-xs-1"><a class="label label-danger" onclick="deleteTimer(this);" href="javascript:;"><i class="fa fa-close fa-fw"></i>delete</a></div>
     </div>
 </div>
 

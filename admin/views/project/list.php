@@ -90,7 +90,7 @@ $this->addCrumbs('Project');
         <td>
             <a class="label label-primary" href="/project/detail?id={{info.id}}"><i class="fa fa-edit fa-fw"></i>edit</a>
             <a class="label label-warning" href="/project/contacts-list?id={{info.id}}"><i class="fa fa-address-book fa-fw"></i>contacts</a>
-            <a class="label label-success" href="/admin-resource/project?item_id={{info.id}}"><i class="fa fa-superpowers fa-fw"></i>permission</a>
+            <a class="label label-success" href="/admin-resource/project?id={{info.id}}"><i class="fa fa-superpowers fa-fw"></i>permission</a>
             <a class="delete-data label label-danger" href="javascript:;"><i class="fa fa-trash fa-fw"></i>delete</a>
         </td>
     </tr>

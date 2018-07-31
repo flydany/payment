@@ -7,8 +7,6 @@
 
 namespace common\helpers;
 
-use Yii;
-
 class Checker {
 
     const SuccessCode = 200;
@@ -274,7 +272,7 @@ class Checker {
     public function singleCheck($rule, $name, $value)
     {
         if($this->_echo) {
-            echo 'check: name->', $name, ', value->', print_r($value), '<br>';
+            echo 'check: name->', $name, ', value->', var_dump($value), '<-<br>';
             print_r($rule);
             echo '<br>';
         }
@@ -283,8 +281,8 @@ class Checker {
             return ['code' => $oneStatus, 'message' => $oneMsg];
         }
         // 获取 参数值
-        if($value === '' || $value === null) {
-            if($rule[1] == 'required' || isset($rule[1]['required']) || (is_array($rule[1]) && in_array('required', $rule[1]))) {
+        if(static::checker_empty($value)) {
+            if($rule[1] == 'required' || (isset($rule[1]['required']) && $rule[1]['required'] == true) || (is_array($rule[1]) && in_array('required', $rule[1]))) {
                 $oneStatus = 'null';
                 $oneMsg[] = $this->getNotice($name, 'required');
             }
@@ -327,6 +325,9 @@ class Checker {
                 }
                 else {
                     foreach($value as $k => $v) {
+                        if(static::checker_empty($v)) {
+                            continue;
+                        }
                         if(($msg = call_user_func_array([$this, $func], [$v, $format])) !== true) {
                             $oneStatus = 'error';
                             $oneMsg[] = ($k + 1).'th('.$v.') '.$this->getNotice($name, $type);
@@ -343,7 +344,7 @@ class Checker {
             $oneMsg = $rule[0] .'：'. implode(', ', $oneMsg);
         }
         if($this->_echo) {
-            echo 'verify: status->', $oneStatus, ', message->', print_r($oneMsg), '<br>';
+            echo 'verify: status->', $oneStatus, ', message->', var_dump($oneMsg), '<br>';
         }
         return ['code' => $oneStatus, 'message' => $oneMsg];
     }

@@ -100,12 +100,12 @@ $this->addCrumbs('Merchant List', 'platform/merchant-list');
     {{each infos as info key}}
     <tr id="tr-{{info.id}}" data-id="{{info.id}}">
         <td class="platform">{{info.platform_id}}</td>
-        <td>{{if info.merchant_number}}{{info.merchant_number}}{{else}}all merchant usable{{/if}}</td>
+        <td>{{if info.merchant_number}}{{info.merchant_number}}{{else}}all{{/if}}</td>
         <td class="paytype">{{info.paytype}}</td>
         <td class="bank">{{info.bank_id}}</td>
         <td>{{info.priority}}/{{info.weekend_priority}}/{{info.priority_threshold}}</td>
-        <td>{{info.single_amount}}</td>
-        <td>{{info.day_amount}}</td>
+        <td>{{info.single_amount | fmoney}}</td>
+        <td>{{info.day_amount | fmoney}}</td>
         <td class="status">{{info.status}}</td>
         <td>
             <a class="label label-primary" href="/platform/bank-detail?id={{info.id}}"><i class="fa fa-edit fa-fw"></i>edit</a>

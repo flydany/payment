@@ -98,8 +98,8 @@ $this->addCrumbs('Platform');
         <td>{{info.id}}</td>
         <td>{{info.title}}</td>
         <td class="platform">{{info.platform_id}}</td>
-        <td>{{info.merchant_number}}</td>
-        <td class="paytype">{{info.paytype}}</td>
+        <td>{{if info.merchant_number}}{{info.merchant_number}}{{else}}all{{/if}}</td>
+        <td class="paytype">{{if info.paytype != 0}}{{info.paytype}}{{else}}all{{/if}}</td>
         <td class="status">{{info.status}}</td>
         <td>{{info.updated_at | dateShow: 'minute'}}</td>
         <td>

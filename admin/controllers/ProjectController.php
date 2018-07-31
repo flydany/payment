@@ -251,7 +251,7 @@ class ProjectController extends Controller {
         if($merchantId && ( ! $merchant = ProjectMerchant::finder($merchantId))) {
             return $this->error('invalid project merchant', 'project/merchant-list');
         }
-        if($merchant && empty($merchant->project->hasPermission)) {
+        if($merchant && empty($merchant->hasPermission)) {
             return $this->error('permission forbidden', 'project/merchant-list');
         }
         return $this->render('merchant-detail', ['data' => $merchant]);
@@ -261,21 +261,20 @@ class ProjectController extends Controller {
      */
     public function actionMerchantInsert()
     {
-        $project = Project::finder($this->request->post('project_id'));
-        if(empty($project)) {
-            return $this->error('unknown project', 'project/merchant-list');
-        }
-        if(empty($project->hasPermission)) {
-            return $this->error('permission forbidden', 'project/merchant-list');
-        }
         $merchant = new ProjectMerchant();
         if ( ! $merchant->loadAttributes($this->request->post())->validate()) {
             // 参数异常，渲染错误页面
             return $this->error($merchant->errors(), 'project/merchant-detail');
         }
+        if(empty($merchant->project)) {
+            return $this->error('unknown project', 'project/merchant-list');
+        }
         if(empty($merchant->merchant)) {
             // 参数异常，渲染错误页面
             return $this->error('unknow merchant configurate', 'project/merchant-detail');
+        }
+        if(empty($merchant->hasPermission)) {
+            return $this->error('permission forbidden', 'project/merchant-list');
         }
         if ($merchant->save()) {
             // 保存成功
@@ -310,7 +309,7 @@ class ProjectController extends Controller {
         if(empty($merchant->project)) {
             return $this->error('unknown project', 'project/merchant-list');
         }
-        if(empty($merchant->project->hasPermission)) {
+        if(empty($merchant->hasPermission)) {
             return $this->error('permission forbidden', 'project/merchant-list');
         }
         if ($merchant->save()) {

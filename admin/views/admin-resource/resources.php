@@ -57,7 +57,7 @@ $this->setActiveNavigator($target);
         <button class="btn btn-primary" id="save-button"><i class="fa fa-save fa-fw"></i>save</button>
         <input type="hidden" name="_csrf" value="<?=Yii::$app->request->getCsrfToken() ?>">
         <input type="hidden" name="type" value="<?= $type ?>">
-        <input type="hidden" name="item_id" value="<?= $resource->id ?>">
+        <input type="hidden" name="power" value="<?= $resource->id ?>">
     </form>
 </div>
 
