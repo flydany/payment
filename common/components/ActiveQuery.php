@@ -20,33 +20,35 @@ class ActiveQuery extends \yii\db\ActiveQuery {
         }
         switch($type) {
             case AdminResource::TypeProject: {
-                $id = 'project_id';
+                $key = 'project_id';
                 if($this->modelClass == 'common\models\Project') {
-                    $id = 'id';
+                    $key = 'id';
                 }
-                $ids = Yii::$app->admin->getResourcePowers($type);
+                $powers = Yii::$app->admin->getResourcePowers($type);
                 // 项目超级权限
-                if(in_array(0, $ids)) {
+                if(in_array('0', $powers)) {
                     return $this;
                 }
             } break;
             case AdminResource::TypeMerchant: {
-                $id = 'merchant_id';
-                if($this->modelClass == 'common\models\Merchant') {
-                    $id = 'id';
-                }
-                $ids = Yii::$app->admin->getResourcePowers($type);
+                $powers = Yii::$app->admin->getResourcePowers($type);
                 // 商户号超级权限
-                if(in_array(0, $ids)) {
+                if(in_array('0', $powers)) {
                     return $this;
                 }
-                if(in_array($this->modelClass, ['common\models\MerchantBank', 'common\models\MerchantBankMaintain'])) {
-                    $id = 'merchant_number';
-                    $ids = Merchant::find()->select('merchant_number')->where(['id' => $ids])->column();
+                $condition = AdminResource::powerCondition($powers);
+                array_unshift($condition, 'or');
+                if(in_array($this->modelClass, ['common\models\ProjectMerchant'])) {
+                    $key = 'merchant_id';
+                    $powers = Merchant::find()->select('id')->where($condition)->column();
+                }
+                else {
+                    $this->andWhere($condition);
+                    return $this;
                 }
             } break;
         }
-        $this->andWhere([$this->modelClass::tableName().'.'.$id => $ids]);
+        $this->andWhere([$this->modelClass::tableName().'.'.$key => $powers]);
         return $this;
     }
 }

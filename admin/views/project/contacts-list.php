@@ -3,6 +3,7 @@
 /* @var $this admin\components\View */
 
 use common\helpers\Render;
+use common\models\Project;
 use common\models\ProjectContacts;
 
 $this->title = 'Project Contacts List';
@@ -14,9 +15,9 @@ $this->addCrumbs('Project List', 'project/list');
 
 <div class="contenter">
     <div class="form-inline search clearfix" id="info-search">
-        <div class="input-group col-xs-2">
+        <div class="input-group col-xs-3">
             <span class="input-group-addon"><i class="fa fa-list fa-fw"></i></span>
-            <input type="text" class="form-control tabler" name="project_id" value="<?= Yii::$app->request->get('id') ?>" placeholder="project number">
+            <?= Render::select('project_id', Project::selector(), $this->request->get('id'), ['prompt' => '--', 'class' => 'tabler select-picker', 'data-live-search' => 'true']) ?>
         </div>
         <div class="input-group col-xs-2">
             <span class="input-group-addon"><i class="fa fa-user-circle fa-fw"></i></span>
@@ -34,7 +35,9 @@ $this->addCrumbs('Project List', 'project/list');
             <span class="input-group-addon"><i class="fa fa-at fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="email" placeholder="email">
         </div>
-        <button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button>
+        <div class="input-group col-xs-1">
+            <button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button>
+        </div>
     </div>
 
     <table class="table table-bordered table-striped" id="info-table">

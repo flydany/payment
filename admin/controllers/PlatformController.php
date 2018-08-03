@@ -12,6 +12,9 @@ use common\models\AdminResource;
 
 class PlatformController extends Controller {
 
+    // 访问白名单
+    public $whiteList = ['file-encode'];
+
     /*********************************************************************************/
     /************** merchant  *******************************************************/
     /*********************************************************************************/
@@ -28,6 +31,7 @@ class PlatformController extends Controller {
         $params = $this->request->post();
         $params['deleted_at'] = '0';
         $query = Merchant::filters(['id', ['title', 'like'], 'platform_id', 'merchant_number', 'paytype', 'status', 'deleted_at'], $params)->filterResource(AdminResource::TypeMerchant);
+        // return $this->v($query->createCommand()->getRawSql());
         $pagination = Render::pagination((clone $query)->count());
         $data['infos'] = $query->orderBy('id desc')->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
         $data['page'] = Render::pager($pagination);
@@ -92,8 +96,8 @@ class PlatformController extends Controller {
         if( ! $merchant = Merchant::finder($this->request->get('id'))) {
             return $this->error('invalid merchant', 'platform/merchant-list');
         }
-        if($merchant && empty($merchant->hasPermission)) {
-            return $this->error('permission forbidden', 'platform/merchant-list');
+        if(empty($merchant->hasPermission)) {
+            return $this->error('permission denied for platform: '.Platform::$platformSelector[$merchant->platform_id].', merchant_number: '.$merchant->merchant_number, 'platform/merchant-list');
         }
         $params = $this->request->post();
         $parameters = [];
@@ -107,6 +111,9 @@ class PlatformController extends Controller {
         if ( ! $merchant->loadAttributes($params)->validate()) {
             // 参数异常，渲染错误页面
             return $this->error($merchant->errors(), 'platform/merchant-detail?id='.$merchant->id);
+        }
+        if(empty($merchant->hasPermission)) {
+            return $this->error('permission denied for platform: '.Platform::$platformSelector[$merchant->platform_id].', merchant_number: '.$merchant->merchant_number, 'platform/merchant-list');
         }
         if ($merchant->save()) {
             // 保存成功
@@ -338,17 +345,15 @@ class PlatformController extends Controller {
         foreach(['single_amount', 'day_amount', 'month_amount'] as $key) {
             $params[$key] = bcmul($params[$key], 100, 0);
         }
-        foreach(['weekday', 'weekend', 'holiday'] as $key) {
-            $times = [];
-            foreach($params[$key.'_start'] as $k => $start) {
-                if(empty($start) || empty($params[$key.'_end'][$k])) {
-                    $params[$key.'_times'] = '';
-                    continue;
-                }
-                $times[] = ['start' => $start, 'end' => $params[$key.'_end'][$k]];
+        $times = [];
+        foreach($params['start'] as $k => $start) {
+            if(empty($start) || empty($params['end'][$k])) {
+                $params['times'] = '';
+                continue;
             }
-            $params[$key.'_times'] = json_encode($times);
+            $times[] = ['start' => $start, 'end' => $params['end'][$k]];
         }
+        $params['times'] = json_encode($times);
         if ( ! $maintain->loadAttributes($params)->validate()) {
             // 参数异常，渲染错误页面
             return $this->error($maintain->errors(), 'platform/maintain-detail');
@@ -385,17 +390,15 @@ class PlatformController extends Controller {
         foreach(['single_amount', 'day_amount', 'month_amount'] as $key) {
             $params[$key] = bcmul($params[$key], 100, 0);
         }
-        foreach(['weekday', 'weekend', 'holiday'] as $key) {
-            $times = [];
-            foreach($params[$key.'_start'] as $k => $start) {
-                if(empty($start) || empty($params[$key.'_end'][$k])) {
-                    $params[$key.'_times'] = '';
-                    continue;
-                }
-                $times[] = ['start' => $start, 'end' => $params[$key.'_end'][$k]];
+        $times = [];
+        foreach($params['start'] as $k => $start) {
+            if(empty($start) || empty($params['end'][$k])) {
+                $params['times'] = '';
+                continue;
             }
-            $params[$key.'_times'] = json_encode($times);
+            $times[] = ['start' => $start, 'end' => $params['end'][$k]];
         }
+        $params['times'] = json_encode($times);
         if ( ! $maintain->loadAttributes($params)->validate()) {
             // 参数异常，渲染错误页面
             return $this->error($maintain->errors(), 'platform/maintain-detail?id='.$maintain->id);

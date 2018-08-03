@@ -24,9 +24,9 @@ class Project extends ActiveRecord implements ResourceInterface {
     public function rules()
     {
         return [
-            [['title', 'effect_date', 'public_key', 'status'], 'required'],
+            [['title', 'effect_date', 'key', 'public_key', 'status'], 'required'],
             [['status', 'deleted_at'], 'integer'],
-            [['title'], 'string', 'max' => 64],
+            [['title', 'key'], 'string', 'max' => 64],
             [['effect_date'], 'string', 'max' => 16],
             [['remark'], 'string', 'max' => 255],
             [['public_key'], 'string', 'max' => 1024],
@@ -41,6 +41,7 @@ class Project extends ActiveRecord implements ResourceInterface {
         return [
             'title' => 'title',
             'effect_date' => 'effect date',
+            'key' => 'key',
             'public_key' => 'rsa public',
             'status' => 'status',
             'remark' => 'remark',
@@ -59,7 +60,10 @@ class Project extends ActiveRecord implements ResourceInterface {
             'param' => [
                 'title' => ['title', ['maxlength' => 64, 'required']],
                 'effect_date' => ['effect date', ['date' => 'Y-m-d', 'required']],
+                'key' => ['key', ['maxlength' => 64, 'required']],
                 'public_key' => ['rsa public', ['maxlength' => 1024, 'required']],
+                'start' => ['time solt start', ['preg' => "/^\d{2}:\d{2}$/"]],
+                'end' => ['time solt end', ['preg' => "/^\d{2}:\d{2}$/"]],
                 'remark' => ['remark', ['maxlength' => 255, 'required']],
                 'status' => ['status', ['in' => array_keys(static::$statusSelector), 'required']],
             ],

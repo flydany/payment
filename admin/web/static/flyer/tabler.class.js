@@ -315,11 +315,10 @@ var tabler = function() {
             dataType: 'json',
             // ajax请求完毕之后执行(失败成功都会执行)
             complete: function() {
-
+                tablerClass.loaded();
             },
             // 加载信息异常提示
             error: function() {
-                tablerClass.loaded();
                 jQuery.warning('search program error');
                 // layer.msg('search program error', { shift: 6 });
                 tablerClass.showError('search program error', 'fa fa-times');
@@ -355,8 +354,6 @@ var tabler = function() {
                 }
                 // 请求前函数调用
                 tablerClass.trigger(tablerClass.afterPost);
-                // 数据加载完毕
-                tablerClass.loaded();
             }
         });
     }

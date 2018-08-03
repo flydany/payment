@@ -130,7 +130,7 @@ class Merchant extends ActiveRecord implements ResourceInterface {
      */
     public function getPower()
     {
-        return $this->id;
+        return $this->platform_id.'.'.$this->merchant_number;
     }
 
     /**
@@ -141,8 +141,9 @@ class Merchant extends ActiveRecord implements ResourceInterface {
     {
         return AdminResource::hasPermission($this->power, static::resourceType());
     }
+
     /**
-     * 获取项目已存在的负责人
+     * 获取商户号已存在的负责人
      * @return array
      */
     public function getIdentities()

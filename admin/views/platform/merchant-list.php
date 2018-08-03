@@ -84,7 +84,7 @@ $this->addCrumbs('Platform');
             afterPost: function(param) {
                 // 名称显示
                 tableHandler.renderCategory({ category: $(param.tabler).find('.platform'), select: 'platform_id' });
-                tableHandler.renderCategory({ category: $(param.tabler).find('.paytype'), select: 'paytype' });
+                tableHandler.renderCategory({ category: $(param.tabler).find('.paytype'), select: 'paytype', default: 'all' });
                 tableHandler.renderCategory({ category: $(param.tabler).find('.status'), select: 'status' });
                 // 初始化 删除按钮事件
                 tableHandler.requestSingle({ button: $(param.tabler).find('.delete-data'), url: $('.delete-mult:first').data('href'), isKeep: false });

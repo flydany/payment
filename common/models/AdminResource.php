@@ -159,7 +159,7 @@ class AdminResource extends ActiveRecord {
         if(Yii::$app->admin->isSupper) {
             return true;
         }
-        return AdminResource::find()->where(['power' => [0, $power], 'identity' => array_merge(Yii::$app->admin->identities, [Yii::$app->admin->id]), 'type' => $type])->exists();
+        return AdminResource::find()->where(['power' => static::slicePower($power), 'identity' => array_merge(Yii::$app->admin->identities, [Yii::$app->admin->id]), 'type' => $type])->exists();
     }
     /**
      * 获取项目已存在的负责人
@@ -167,6 +167,45 @@ class AdminResource extends ActiveRecord {
      */
     public static function identities($power, $type)
     {
-        return AdminResource::find()->select('identity')->where(['power' => [0, $power], 'type' => $type])->column();
+        return AdminResource::find()->select('identity')->where(['power' => static::slicePower($power), 'type' => $type])->column();
+    }
+
+    /**
+     * 分解权标查询条件
+     * @param string $power 权限标识
+     * @return array
+     */
+    public static function powerCondition($powers)
+    {
+        $conditions = [];
+        $powers = array_unique($powers);
+        foreach($powers as $power) {
+            $powers = explode('.', $power);
+            if(isset($powers[1])) {
+                $conditions[$powers[0]]['platform_id'] = $powers[0];
+                $conditions[$powers[0]]['merchant_number'][] = $powers[1];
+            }
+            else {
+                $conditions[$powers[0]] = ['platform_id' => $powers[0]];
+            }
+        }
+        return $conditions;
+    }
+
+    /**
+     * 分解权限
+     * @param string $power 权标
+     * @return array
+     */
+    public static function slicePower($power)
+    {
+        $powers = explode('.', $power);
+        $response = ['0'];
+        $per = [];
+        foreach($powers as $p) {
+            $per[] = $p;
+            $response[] = implode('.', $per);
+        }
+        return $response;
     }
 }

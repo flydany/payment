@@ -96,7 +96,7 @@ $this->setActiveNavigator('platform/maintain-list');
 
 <div id="timer-template" style="display:none;">
     <div class="form-group form-row timer">
-        <div class="input-group col-xs-5">
+        <div class="input-group col-xs-11">
             <label class="input-group-addon">start time</label>
             <input class="form-control" type="text" placeholder="start time">
             <span class="input-group-addon"><i class="fa fa-clock-o fa-fw"></i></span>
@@ -104,7 +104,7 @@ $this->setActiveNavigator('platform/maintain-list');
             <input class="form-control" type="text" placeholder="end time">
             <span class="input-group-addon"><i class="fa fa-clock-o fa-fw"></i></span>
         </div>
-        <div class="col-xs-2"><a class="label label-danger" onclick="deleteTimer(this);" href="javascript:;"><i class="fa fa-close fa-fw"></i>delete</a></div>
+        <div class="col-xs-1"><a class="label label-danger" onclick="deleteTimer(this);" href="javascript:;"><i class="fa fa-close fa-fw"></i>delete</a></div>
     </div>
 </div>
 

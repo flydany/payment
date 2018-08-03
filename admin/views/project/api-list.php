@@ -4,51 +4,55 @@
 
 use common\helpers\Render;
 use common\models\Project;
+use common\models\ProjectApi;
 
-$this->title = 'Project List';
+$this->title = 'Project Contacts List';
 $this->addCrumbs('Project');
+$this->addCrumbs('Project List', 'project/list');
 
 \admin\assets\TablerAsset::register($this);
-
 ?>
 
 <div class="contenter">
     <div class="form-inline search clearfix" id="info-search">
-        <div class="input-group col-xs-2">
-            <span class="input-group-addon"><i class="fa fa-list fa-fw"></i></span>
-            <input type="text" class="form-control tabler" name="id" placeholder="id">
-        </div>
         <div class="input-group col-xs-3">
-            <span class="input-group-addon"><i class="fa fa-book fa-fw"></i></span>
-            <input type="text" class="form-control tabler" name="title" placeholder="title">
+            <span class="input-group-addon"><i class="fa fa-list fa-fw"></i></span>
+            <?= Render::select('project_id', Project::selector(), $this->request->get('id'), ['prompt' => '--', 'class' => 'tabler select-picker', 'data-live-search' => 'true']) ?>
+        </div>
+        <div class="input-group col-xs-2">
+            <span class="input-group-addon"><i class="fa fa-ravelry fa-fw"></i></span>
+            <?= Render::select('api', ProjectApi::$apiSelector, null, ['prompt' => '--', 'class' => 'tabler select-picker']) ?>
         </div>
         <div class="input-group col-xs-2">
             <span class="input-group-addon"><i class="fa fa-check fa-fw"></i></span>
-            <?= Render::select('status', Project::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler select-picker']) ?>
+            <?= Render::select('status', ProjectApi::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler select-picker']) ?>
         </div>
-        <button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button>
+        <div class="input-group col-xs-1">
+            <button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button>
+        </div>
     </div>
 
     <table class="table table-bordered table-striped" id="info-table">
         <thead>
         <tr>
-            <th><i class="fa fa-list fa-fw"></i></th>
-            <th><i class="fa fa-book fa-fw"></i>title</th>
-            <th><i class="fa fa-calendar-times-o fa-fw"></i>effect date</th>
-            <th><i class="fa fa-check fa-fw"></i>status</th>
+            <th><i class="fa fa-list fa-fw"></i>project</th>
+            <th><i class="fa fa-user-circle fa-fw"></i>identity</th>
+            <th><i class="fa fa-address-card fa-fw"></i>name</th>
+            <th><i class="fa fa-phone-square fa-fw"></i>mobile</th>
+            <th><i class="fa fa-at fa-fw"></i>email</th>
             <th><i class="fa fa-clock-o fa-fw"></i>updated at</th>
             <th><i class="fa fa-gear fa-fw"></i>operation</th>
         </tr>
         </thead>
         <tbody>
         <tr>
-            <td colspan="6"><i class="fa fa-search fa-fw"></i>click on the search button to search data.</td>
+            <td colspan="7"><i class="fa fa-search fa-fw"></i>click on the search button to search data.</td>
         </tr>
         </tbody>
     </table>
     <div class="btn-toolbar" id="info-page">
         <div class="btn-group" role="group">
-            <a type="button" class="btn btn-default" href="/project/detail"><i class="fa fa-plus fa-fw"></i>insert</a>
+            <a type="button" class="btn btn-default" href="/project/api-detail"><i class="fa fa-plus fa-fw"></i>insert</a>
             <button type="button" class="btn btn-default"><i class="fa fa-check-square fa-fw"></i>check all</button>
             <button type="button" class="btn btn-default"><i class="fa fa-minus-square fa-fw"></i>inverse</button>
             <button type="button" class="btn btn-default"><i class="fa fa-trash fa-fw"></i>batch delete</button>
@@ -64,7 +68,7 @@ $this->addCrumbs('Project');
         // 初始化表格异步加载事件
         (new tabler).init({
             // 请求地址
-            url: '/project/list',
+            url: '/project/api-list',
             // 数据渲染配置
             table: '#info-table', page: '#info-page', template: 'info-template', search: '#info-search', button: '#search-button',
             // 全选、反选按钮、页面加载完毕自动loading
@@ -72,7 +76,7 @@ $this->addCrumbs('Project');
             // param => tabler
             afterPost: function(param) {
                 // 所属权组名称显示
-                tableHandler.renderCategory({ category: $(param.tabler).find('.status'), select: 'status' });
+                tableHandler.renderCategory({ category: $(param.tabler).find('.identity'), select: 'identity' });
                 // 初始化 删除按钮事件
                 tableHandler.requestSingle({ button: $(param.tabler).find('.delete-data'), url: $('.delete-mult:first').data('href'), isKeep: false });
             }
@@ -82,16 +86,14 @@ $this->addCrumbs('Project');
 <script id="info-template" type="text/html">
     {{each infos as info key}}
     <tr id="tr-{{info.id}}" data-id="{{info.id}}">
-        <td>{{info.id}}</td>
-        <td>{{info.title}}</td>
-        <td>{{info.effect_date}}</td>
-        <td class="status">{{info.status}}</td>
+        <td><a href="/project/detail?id={{info.project_id}}">{{info.project_id}}/{{info.project.title}}</a></td>
+        <td class="identity">{{info.identity}}</td>
+        <td>{{info.name}}</td>
+        <td>{{info.mobile}}</td>
+        <td>{{info.email}}</td>
         <td>{{info.updated_at | dateShow: 'minute'}}</td>
         <td>
-            <a class="label label-warning" href="/project/api-list?id={{info.id}}"><i class="fa fa-ravelry fa-fw"></i>api</a>
-            <a class="label label-primary" href="/project/detail?id={{info.id}}"><i class="fa fa-edit fa-fw"></i>edit</a>
-            <a class="label label-warning" href="/project/contacts-list?id={{info.id}}"><i class="fa fa-address-book fa-fw"></i>contacts</a>
-            <a class="label label-success" href="/admin-resource/project?id={{info.id}}"><i class="fa fa-superpowers fa-fw"></i>permission</a>
+            <a class="label label-primary" href="/project/api-detail?id={{info.id}}"><i class="fa fa-edit fa-fw"></i>edit</a>
             <a class="delete-data label label-danger" href="javascript:;"><i class="fa fa-trash fa-fw"></i>delete</a>
         </td>
     </tr>
