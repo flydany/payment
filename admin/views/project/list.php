@@ -9,7 +9,6 @@ $this->title = 'Project List';
 $this->addCrumbs('Project');
 
 \admin\assets\TablerAsset::register($this);
-
 ?>
 
 <div class="contenter">

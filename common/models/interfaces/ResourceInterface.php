@@ -33,4 +33,10 @@ interface ResourceInterface {
      * @return mixed
      */
     public function getIdentities();
+
+    /**
+     * 获取管理员的当前资源的直接相关权限
+     * @return mixed
+     */
+    // public function getCurrentIdentity();
 }

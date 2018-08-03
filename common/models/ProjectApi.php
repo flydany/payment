@@ -32,9 +32,10 @@ class ProjectApi extends ActiveRecord {
     public function rules()
     {
         return [
-            [['project_id', 'api'], 'required'],
+            [['title', 'project_id', 'api'], 'required'],
             [['project_id', 'api', 'admin_id', 'deleted_at', 'status'], 'integer'],
-            [['remark', 'parameters'], 'string', 'max' => 255],
+            [['title', 'parameters', 'remark'], 'string', 'max' => 255],
+            [['times'], 'string', 'max' => 512],
             [['parameters'], 'string', 'max' => 65535],
         ];
     }
@@ -45,8 +46,10 @@ class ProjectApi extends ActiveRecord {
     public function attributeLabels()
     {
         return [
+            'title' => 'project api title',
             'project_id' => 'project number',
             'api' => 'api',
+            'times' => 'usable time solt',
             'parameters' => 'parameter config',
             'deleted_at' => 'deleted at',
             'remark' => 'remark',
@@ -63,11 +66,14 @@ class ProjectApi extends ActiveRecord {
     {
         $rule = [
             'param' => [
-                'project_id' => ['project number', ['int', 'required']],
-                'api' => ['identity', ['in' => array_keys(static::$apiSelector), 'required']],
+                'title' => ['project api title', ['maxlength' => 255, 'required']],
+                'project_id' => ['project', ['int', 'required']],
+                'api' => ['api', ['in' => array_keys(static::$apiSelector), 'required']],
+                'start' => ['time solt start', ['preg' => "/^\d{2}:\d{2}$/"]],
+                'end' => ['time solt end', ['preg' => "/^\d{2}:\d{2}$/"]],
                 'parameter_name' => ['parameter name', ['maxlength' => 64]],
                 'parameter_value' => ['parameter value', ['maxlength' => 1024]],
-                'remark' => ['email', ['maxlength' => 255, 'required']],
+                'remark' => ['remark', ['maxlength' => 255]],
             ],
         ];
         return $rule;

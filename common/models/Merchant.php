@@ -121,7 +121,7 @@ class Merchant extends ActiveRecord implements ResourceInterface {
      */
     public static function resourceType()
     {
-        return AdminResource::TypeMerchant;
+        return AdminResource::TypePlatform;
     }
 
     /**

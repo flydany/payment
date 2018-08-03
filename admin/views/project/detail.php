@@ -46,10 +46,6 @@ $this->setActiveNavigator('project/list');
                 </div>
             </div>
         </div>
-        <div class="panel panel-primary">
-            <div class="panel-heading default">usable time slot<a class="btn btn-default btn-sm ml-15px" id="insert-timer"><i class="fa fa-plus fa-fw"></i>insert</a><span class="text-danger"><i class="fa fa-long-arrow-left fa-fw ml-15px"></i>click this button to add a new timer</span></div>
-            <div class="panel-body pb-zero" id="timers-list"></div>
-        </div>
         <div class="form-group checker">
             <label>remark</label>
             <textarea class="form-control" name="remark" placeholder="remark."><?= Render::value($data, 'remark') ?></textarea>
@@ -62,20 +58,6 @@ $this->setActiveNavigator('project/list');
         <textarea id="info-detail-json" data-form="#info-detail" style="display:none;"><?= Project::checker() ?></textarea>
         <input type="hidden" name="_csrf" value="<?=Yii::$app->request->getCsrfToken() ?>">
     </form>
-</div>
-
-<div id="timer-template" style="display:none;">
-    <div class="form-group form-row timer">
-        <div class="input-group col-xs-11">
-            <label class="input-group-addon">start time</label>
-            <input class="form-control" type="text" placeholder="start time">
-            <span class="input-group-addon"><i class="fa fa-clock-o fa-fw"></i></span>
-            <span class="input-group-addon"><i class="fa fa-caret-right fa-fw"></i></span>
-            <input class="form-control" type="text" placeholder="end time">
-            <span class="input-group-addon"><i class="fa fa-clock-o fa-fw"></i></span>
-        </div>
-        <div class="col-xs-1"><a class="label label-danger" onclick="deleteTimer(this);" href="javascript:;"><i class="fa fa-close fa-fw"></i>delete</a></div>
-    </div>
 </div>
 
 <script>

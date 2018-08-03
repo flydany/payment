@@ -2,6 +2,7 @@
 
 namespace admin\controllers;
 
+use Yii;
 use yii\web\UploadedFile;
 use common\helpers\Render;
 use common\models\Platform;
@@ -14,6 +15,24 @@ class PlatformController extends Controller {
 
     // 访问白名单
     public $whiteList = ['file-encode'];
+
+    /*********************************************************************************/
+    /************** platform  *******************************************************/
+    /*********************************************************************************/
+    /**
+     * this action showing platform list
+     * @param request type request->isAjax?
+     * @return html|json
+     */
+    public function actionList()
+    {
+        $powers = array_unique(
+            AdminResource::find()->select('power')
+                ->where(['identity' => Yii::$app->admin->identity, 'type' => AdminResource::TypePlatform, 'power' => array_keys(Platform::$platformSelector)])
+                ->column()
+        );
+        return $this->render('list', ['powers' => $powers]);
+    }
 
     /*********************************************************************************/
     /************** merchant  *******************************************************/
@@ -30,7 +49,7 @@ class PlatformController extends Controller {
         }
         $params = $this->request->post();
         $params['deleted_at'] = '0';
-        $query = Merchant::filters(['id', ['title', 'like'], 'platform_id', 'merchant_number', 'paytype', 'status', 'deleted_at'], $params)->filterResource(AdminResource::TypeMerchant);
+        $query = Merchant::filters(['id', ['title', 'like'], 'platform_id', 'merchant_number', 'paytype', 'status', 'deleted_at'], $params)->filterResource(AdminResource::TypePlatform);
         // return $this->v($query->createCommand()->getRawSql());
         $pagination = Render::pagination((clone $query)->count());
         $data['infos'] = $query->orderBy('id desc')->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
@@ -171,7 +190,7 @@ class PlatformController extends Controller {
         }
         $params = $this->request->post();
         $params['deleted_at'] = '0';
-        $query = MerchantBank::filters(['id', 'platform_id', 'merchant_number', 'paytype', 'status', 'deleted_at'], $params)->filterResource(AdminResource::TypeMerchant);
+        $query = MerchantBank::filters(['id', 'platform_id', 'merchant_number', 'paytype', 'status', 'deleted_at'], $params)->filterResource(AdminResource::TypePlatform);
         $pagination = Render::pagination((clone $query)->count());
         $data['infos'] = $query->orderBy(['id' => 'desc'])->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
         $data['page'] = Render::pager($pagination);
@@ -311,7 +330,7 @@ class PlatformController extends Controller {
         }
         $params = $this->request->post();
         $params['deleted_at'] = '0';
-        $query = MerchantBankMaintain::filters(['id', 'platform_id', 'merchant_number', 'paytype', 'status', 'deleted_at'], $params)->filterResource(AdminResource::TypeMerchant);
+        $query = MerchantBankMaintain::filters(['id', 'platform_id', 'merchant_number', 'paytype', 'status', 'deleted_at'], $params)->filterResource(AdminResource::TypePlatform);
         $pagination = Render::pagination((clone $query)->count());
         $data['infos'] = $query->orderBy(['id' => 'desc'])->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
         $data['page'] = Render::pager($pagination);

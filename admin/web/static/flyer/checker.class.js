@@ -568,7 +568,9 @@ var checker = function() {
                     for(var i = 0; i < valueLength; ++i) {
                         var singleValue = value[i];
                         if(checker_empty(singleValue)) {
-                            // continue;
+                            if( ! this.isRuleRequired(rule[1])) {
+                                continue;
+                            }
                         }
                         // type规则校验
                         var message = eval('checker_' + type + '(singleValue, format)');

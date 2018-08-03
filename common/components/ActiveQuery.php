@@ -30,7 +30,7 @@ class ActiveQuery extends \yii\db\ActiveQuery {
                     return $this;
                 }
             } break;
-            case AdminResource::TypeMerchant: {
+            case AdminResource::TypePlatform: {
                 $powers = Yii::$app->admin->getResourcePowers($type);
                 // 商户号超级权限
                 if(in_array('0', $powers)) {

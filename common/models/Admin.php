@@ -79,6 +79,10 @@ class Admin extends ActiveRecord {
     {
         return array_column($this->adminPermissionGroups, 'identity');
     }
+    public function getIdentity()
+    {
+        return array_merge($this->identities, [$this->id]);
+    }
     public function getPermissionGroups()
     {
         return AdminRole::find()->where(['identity' => $this->identities])->all();

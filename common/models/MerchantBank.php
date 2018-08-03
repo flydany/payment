@@ -127,7 +127,7 @@ class MerchantBank extends ActiveRecord implements ResourceInterface {
      */
     public static function resourceType()
     {
-        return AdminResource::TypeMerchant;
+        return AdminResource::TypePlatform;
     }
 
     /**
@@ -145,6 +145,6 @@ class MerchantBank extends ActiveRecord implements ResourceInterface {
      */
     public function getHasPermission()
     {
-        return AdminResource::hasPermission($this->power, AdminResource::TypeMerchant);
+        return AdminResource::hasPermission($this->power, AdminResource::TypePlatform);
     }
 }

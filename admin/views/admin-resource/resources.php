@@ -44,7 +44,7 @@ $this->setActiveNavigator($target);
                 <label class="btn btn-primary w-p100">administrator list</label>
             </div>
             <?php
-            foreach(Admin::find()->select('id, username')->asArray()->all() as $admin) {
+            foreach(Admin::find()->select('id, username')->andWhere(['!=', 'id', '0'])->asArray()->all() as $admin) {
                 ?>
                 <div class="checkbox">
                     <input id="tid-<?= $admin['id'] ?>" type="checkbox" name="identity[]" value="<?= $admin['id'] ?>"<?= in_array($admin['id'], $resource->identities) ? ' checked' : '' ?> autocomplete="off">

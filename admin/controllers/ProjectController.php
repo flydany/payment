@@ -4,7 +4,6 @@ namespace admin\controllers;
 
 use Yii;
 use common\helpers\Render;
-use common\helpers\Checker;
 use common\models\Project;
 use common\models\ProjectApi;
 use common\models\ProjectContacts;
@@ -58,17 +57,7 @@ class ProjectController extends Controller {
     public function actionInsert()
     {
         $project = new Project();
-        $params = $this->request->post();
-        $times = [];
-        foreach($params['start'] as $k => $start) {
-            if(empty($start) || empty($params['end'][$k])) {
-                $params['times'] = '';
-                continue;
-            }
-            $times[] = ['start' => $start, 'end' => $params['end'][$k]];
-        }
-        $params['times'] = json_encode($times);
-        if ( ! $project->loadAttributes($params)->validate()) {
+        if ( ! $project->loadAttributes($this->request->post())->validate()) {
             // 参数异常，渲染错误页面
             return $this->error($project->errors(), 'project/detail');
         }
@@ -97,17 +86,7 @@ class ProjectController extends Controller {
         if(empty($project->hasPermission)) {
             return $this->error('permission forbidden', 'project/list');
         }
-        $params = $this->request->post();
-        $times = [];
-        foreach($params['start'] as $k => $start) {
-            if(empty($start) || empty($params['end'][$k])) {
-                $params['times'] = '';
-                continue;
-            }
-            $times[] = ['start' => $start, 'end' => $params['end'][$k]];
-        }
-        $params['times'] = json_encode($times);
-        if ( ! $project->loadAttributes($params)->validate()) {
+        if ( ! $project->loadAttributes($this->request->post)->validate()) {
             // 参数异常，渲染错误页面
             return $this->error($project->errors(), 'project/detail?id='.$project->id);
         }
@@ -151,7 +130,7 @@ class ProjectController extends Controller {
             return $this->render('api-list');
         }
         $params = $this->request->post();
-        $query = ProjectApi::filters(['project_id', 'api'], $params)->filterResource(AdminResource::TypeProject);
+        $query = ProjectApi::filters([['title', 'like'], 'project_id', 'api'], $params)->filterResource(AdminResource::TypeProject);
         $pagination = Render::pagination((clone $query)->count());
         $data['infos'] = $query->with('project')->orderBy('id desc')->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
         $data['page'] = Render::pager($pagination);
@@ -165,42 +144,56 @@ class ProjectController extends Controller {
      */
     public function actionApiDetail()
     {
-        $contacts = null;
-        $contactsId = $this->request->get('id');
-        if($contactsId && ( ! $contacts = ProjectContacts::finder($contactsId))) {
-            return $this->error('invalid project contacts', 'project/contacts-list');
+        $api = null;
+        $apiId = $this->request->get('id');
+        if($apiId && ( ! $api = ProjectApi::finder($apiId))) {
+            return $this->error('invalid project api', 'project/api-list');
         }
-        if($contacts && empty($contacts->project->hasPermission)) {
-            return $this->error('permission forbidden', 'project/contacts-list');
+        if($api && empty($api->project->hasPermission)) {
+            return $this->error('permission forbidden', 'project/api-list');
         }
-        return $this->render('contacts-detail', ['data' => $contacts]);
+        return $this->render('api-detail', ['data' => $api]);
     }
     /**
      * insert project
      */
     public function actionApiInsert()
     {
-        $project = Project::finder($this->request->post('project_id'));
-        if(empty($project)) {
-            return $this->error('unknown project', 'project/contacts-list');
+        $api = new ProjectApi();
+        $params = $this->request->post();
+        $times = [];
+        foreach($params['start'] as $k => $start) {
+            if(empty($start) || empty($params['end'][$k])) {
+                $params['times'] = '';
+                continue;
+            }
+            $times[] = ['start' => $start, 'end' => $params['end'][$k]];
         }
-        if(empty($project->hasPermission)) {
-            return $this->error('permission forbidden', 'project/contacts-list');
+        $params['times'] = json_encode($times);
+        $parameters = [];
+        foreach($params['parameter_name'] as $k => $name) {
+            if(empty($name)) {
+                continue;
+            }
+            $parameters[$name] = $params['parameter_value'][$k];
         }
-        $contacts = new ProjectContacts();
-        if ( ! $contacts->loadAttributes($this->request->post())->validate()) {
+        $params['parameters'] = json_encode($parameters);
+        if ( ! $api->loadAttributes($params)->validate()) {
             // 参数异常，渲染错误页面
-            return $this->error($contacts->errors(), 'project/contacts-detail');
+            return $this->error($api->errors(), 'project/api-detail');
         }
-        if ($contacts->save()) {
+        if(empty($api->project->hasPermission)) {
+            return $this->error('permission denied of project: '.$api->project->title, 'project/api-list');
+        }
+        if ($api->save()) {
             // 保存成功
-            return $this->success('project contacts ('.$contacts->name.') insert successful', [
-                ['title' => 'go to project contacts list page', 'url' => 'project/contacts-list'],
-                ['title' => 'edit project contacts again', 'url' => 'project/contacts-detail?id='.$contacts->id]
+            return $this->success('project api ('.$api->title.') insert successful', [
+                ['title' => 'go to project api list page', 'url' => 'project/api-list'],
+                ['title' => 'edit project api again', 'url' => 'project/api-detail?id='.$api->id]
             ]);
         }
         // 参数异常，渲染错误页面
-        return $this->error('project contacts ('.$contacts->name.') insert failed, please try again', 'project/contacts-detail');
+        return $this->error('project api ('.$api->title.') insert failed, please try again', 'project/api-detail');
     }
     /**
      * project detail show / update
@@ -208,31 +201,49 @@ class ProjectController extends Controller {
      */
     public function actionApiUpdate()
     {
-        /* @var $contacts ProjectContacts */
+        /* @var $api ProjectApi */
         // id 为必填项，判断管理员存在状态
         // 未得到，渲染错误页面
-        if( ! $contacts = ProjectContacts::finder($this->request->get('id'))) {
-            return $this->error('invalid project contacts', 'project/contacts-list');
+        if( ! $api = ProjectApi::finder($this->request->get('id'))) {
+            return $this->error('invalid project api', 'project/api-list');
         }
-        if ( ! $contacts->loadAttributes($this->request->post())->validate()) {
+        if(empty($api->project->hasPermission)) {
+            return $this->error('permission denied of project: '.$api->project->title, 'project/api-list');
+        }
+        $params = $this->request->post();
+        $times = [];
+        foreach($params['start'] as $k => $start) {
+            if(empty($start) || empty($params['end'][$k])) {
+                $params['times'] = '';
+                continue;
+            }
+            $times[] = ['start' => $start, 'end' => $params['end'][$k]];
+        }
+        $params['times'] = json_encode($times);
+        $parameters = [];
+        foreach($params['parameter_name'] as $k => $name) {
+            if(empty($name)) {
+                continue;
+            }
+            $parameters[$name] = $params['parameter_value'][$k];
+        }
+        $params['parameters'] = json_encode($parameters);
+        if ( ! $api->loadAttributes($params)->validate()) {
             // 参数异常，渲染错误页面
-            return $this->error($contacts->errors(), 'project/contacts-detail?id='.$contacts->id);
+            return $this->error($api->errors(), 'project/api-detail?id='.$api->id);
         }
-        if(empty($contacts->project)) {
-            return $this->error('unknown project', 'project/contacts-list');
+        if(empty($api->project->hasPermission)) {
+            return $this->error('permission denied of project: '.$api->project->title, 'project/api-list');
         }
-        if(empty($contacts->project->hasPermission)) {
-            return $this->error('permission forbidden', 'project/contacts-list');
-        }
-        if ($contacts->save()) {
+        if ($api->save()) {
             // 保存成功
-            return $this->success('project ('.$contacts->name.') update successful', [
-                ['title' => 'go to project contacts list page', 'url' => 'project/contacts-list'],
-                ['title' => 'edit project contacts again', 'url' => 'project/contacts-detail?id='.$contacts->id],
+            return $this->success('project ('.$api->title.') update successful', [
+                ['title' => 'go to project api list page', 'url' => 'project/api-list'],
+                ['title' => 'edit project api again', 'url' => 'project/api-detail?id='.$api->id],
             ]);
         }
         // 参数异常，渲染错误页面
-        return $this->error('project contacts ('.$contacts->name.') update failed, please try again.', 'project/contacts-detail?id='.$contacts->id);
+        return $this->error('project api ('.$api->title.') update failed, please try again.', 'project/api-detail?id='.$api->id);
     }
     /**
      * delete project
@@ -240,12 +251,12 @@ class ProjectController extends Controller {
     public function actionApiDelete()
     {
         if( ! ($ids = $this->request->post('id'))) {
-            return $this->json('invalid.param', 'you must choice at least one project contacts.');
+            return $this->json('invalid.param', 'you must choice at least one project api.');
         }
-        if(ProjectContacts::trashAll(['id' => $ids])) {
-            return $this->json(SuccessCode, 'project contacts delete successful.');
+        if(ProjectApi::trashAll(['id' => $ids])) {
+            return $this->json(SuccessCode, 'project api delete successful.');
         }
-        return $this->json('system.error', 'project contacts delete failed.');
+        return $this->json('system.error', 'project api delete failed.');
     }
 
     /*********************************************************************************/

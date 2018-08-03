@@ -31,10 +31,6 @@ $this->addCrumbs('Project List', 'project/list');
             <span class="input-group-addon"><i class="fa fa-phone-square fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="mobile" placeholder="mobile">
         </div>
-        <div class="input-group col-xs-2">
-            <span class="input-group-addon"><i class="fa fa-at fa-fw"></i></span>
-            <input type="text" class="form-control tabler" name="email" placeholder="email">
-        </div>
         <div class="input-group col-xs-1">
             <button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button>
         </div>

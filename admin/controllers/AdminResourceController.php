@@ -2,7 +2,9 @@
 
 namespace admin\controllers;
 
+use Yii;
 use common\helpers\Checker;
+use common\models\Platform;
 use common\models\Project;
 use common\models\Merchant;
 use common\models\AdminResource;
@@ -24,6 +26,25 @@ class AdminResourceController extends Controller {
         }
         if($this->request->isGet) {
             return $this->render('resources', ['resource' => $project, 'target' => $target]);
+        }
+        return $this->resources($target);
+    }
+    /**
+     * 设置单个通道的授权对象
+     * @return string
+     */
+    public function actionPlatform()
+    {
+        $target = 'platform/list';
+        $platform = Platform::builder($this->request->get('id'));
+        if(empty($platform)) {
+            return $this->error('invalid platform', $target);
+        }
+        if(empty($platform->hasPermission)) {
+            return $this->error('permission forbidden', $target);
+        }
+        if($this->request->isGet) {
+            return $this->render('resources', ['resource' => $platform, 'target' => $target]);
         }
         return $this->resources($target);
     }

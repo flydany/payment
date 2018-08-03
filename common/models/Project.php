@@ -62,8 +62,6 @@ class Project extends ActiveRecord implements ResourceInterface {
                 'effect_date' => ['effect date', ['date' => 'Y-m-d', 'required']],
                 'key' => ['key', ['maxlength' => 64, 'required']],
                 'public_key' => ['rsa public', ['maxlength' => 1024, 'required']],
-                'start' => ['time solt start', ['preg' => "/^\d{2}:\d{2}$/"]],
-                'end' => ['time solt end', ['preg' => "/^\d{2}:\d{2}$/"]],
                 'remark' => ['remark', ['maxlength' => 255, 'required']],
                 'status' => ['status', ['in' => array_keys(static::$statusSelector), 'required']],
             ],

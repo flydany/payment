@@ -9,10 +9,10 @@ class AdminResource extends ActiveRecord {
     
     // 数据源常量定义
     const TypeProject = '1';
-    const TypeMerchant = '2';
+    const TypePlatform = '2';
     public static $typeSelector = [
         self::TypeProject => 'project',
-        self::TypeMerchant => 'merchant',
+        self::TypePlatform => 'merchant',
     ];
     
     // only define rules for those attributes that
@@ -159,7 +159,7 @@ class AdminResource extends ActiveRecord {
         if(Yii::$app->admin->isSupper) {
             return true;
         }
-        return AdminResource::find()->where(['power' => static::slicePower($power), 'identity' => array_merge(Yii::$app->admin->identities, [Yii::$app->admin->id]), 'type' => $type])->exists();
+        return AdminResource::find()->where(['power' => static::slicePower($power), 'identity' => Yii::$app->admin->identity, 'type' => $type])->exists();
     }
     /**
      * 获取项目已存在的负责人
@@ -167,7 +167,16 @@ class AdminResource extends ActiveRecord {
      */
     public static function identities($power, $type)
     {
-        return AdminResource::find()->select('identity')->where(['power' => static::slicePower($power), 'type' => $type])->column();
+        return array_unique(AdminResource::find()->select('identity')->where(['power' => static::slicePower($power), 'type' => $type])->column());
+    }
+
+    /**
+     * 获取负责人的资源
+     * @return array
+     */
+    public static function powers($type)
+    {
+        return array_unique(AdminResource::find()->select('power')->where(['identity' => Yii::$app->admin->identity, 'type' => $type])->column());
     }
 
     /**

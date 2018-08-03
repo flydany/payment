@@ -282,9 +282,10 @@ class Checker {
         if( ! isset($rule[1])) {
             return ['code' => $oneStatus, 'message' => $oneMsg];
         }
+        $isRequired = $rule[1] == 'required' || isset($rule[1]['required']) || (is_array($rule[1]) && in_array('required', $rule[1]));
         // 获取 参数值
-        if($value === '' || $value === null) {
-            if($rule[1] == 'required' || isset($rule[1]['required']) || (is_array($rule[1]) && in_array('required', $rule[1]))) {
+        if(static::checker_empty($value)) {
+            if($isRequired) {
                 $oneStatus = 'null';
                 $oneMsg[] = $this->getNotice($name, 'required');
             }
@@ -327,6 +328,11 @@ class Checker {
                 }
                 else {
                     foreach($value as $k => $v) {
+                        if(static::checker_empty($v)) {
+                            if( ! $isRequired) {
+                                continue;
+                            }
+                        }
                         if(($msg = call_user_func_array([$this, $func], [$v, $format])) !== true) {
                             $oneStatus = 'error';
                             $oneMsg[] = ($k + 1).'th('.$v.') '.$this->getNotice($name, $type);
