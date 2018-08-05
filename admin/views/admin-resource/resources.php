@@ -18,7 +18,7 @@ $this->setActiveNavigator($target);
 <div class="contenter">
     <div class="alert alert-info mt" role="alert">
         <p><strong>Heads up!</strong></p>
-        <p>set administrator resource: <i class="fa fa-superpowers fa-fw"></i><?= AdminResource::$typeSelector[$resource->resourceType()] ?> data <?= $resource->id ?>'s permission.</p>
+        <p>set administrator resource: <i class="fa fa-superpowers fa-fw"></i><?= AdminResource::$typeSelector[$resource->resourceType()] ?> data power <?= $resource->power ?>'s permission.</p>
         <p>1. when selecting a column, all permissions under the current column are included, including other rights that may be extended later.</p>
     </div>
     <form id="info-detail" action="/admin-resource/<?= Yii::$app->controller->action->id ?>?id=<?= $resource->id ?>" method="post">

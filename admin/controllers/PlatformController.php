@@ -364,6 +364,9 @@ class PlatformController extends Controller {
         foreach(['single_amount', 'day_amount', 'month_amount'] as $key) {
             $params[$key] = bcmul($params[$key], 100, 0);
         }
+        foreach(['begin_at', 'finish_at'] as $key) {
+            $params[$key] = strtotime($params[$key]);
+        }
         $times = [];
         foreach($params['start'] as $k => $start) {
             if(empty($start) || empty($params['end'][$k])) {
@@ -382,13 +385,13 @@ class PlatformController extends Controller {
         }
         if ($maintain->save()) {
             // 保存成功
-            return $this->success('maintain ('.Platform::$maintainSelector[$maintain->maintain_id].') insert successful', [
+            return $this->success('maintain ('.Platform::$platformSelector[$maintain->platform_id].') insert successful', [
                 ['title' => 'go to merchant maintain list page', 'url' => 'platform/maintain-list'],
                 ['title' => 'edit merchant maintain again', 'url' => 'platform/maintain-detail?id='.$maintain->id]
             ]);
         }
         // 参数异常，渲染错误页面
-        return $this->error('maintain ('.Platform::$maintainSelector[$maintain->maintain_id].') insert failed, please try again', 'platform/maintain-detail');
+        return $this->error('maintain ('.Platform::$platformSelector[$maintain->platform_id].') insert failed, please try again', 'platform/maintain-detail');
     }
     /**
      * merchant maintain detail show / update
@@ -409,6 +412,9 @@ class PlatformController extends Controller {
         foreach(['single_amount', 'day_amount', 'month_amount'] as $key) {
             $params[$key] = bcmul($params[$key], 100, 0);
         }
+        foreach(['begin_at', 'finish_at'] as $key) {
+            $params[$key] = strtotime($params[$key]);
+        }
         $times = [];
         foreach($params['start'] as $k => $start) {
             if(empty($start) || empty($params['end'][$k])) {
@@ -427,13 +433,13 @@ class PlatformController extends Controller {
         }
         if ($maintain->save()) {
             // 保存成功
-            return $this->success('maintain ('.Platform::$maintainSelector[$maintain->maintain_id].') update successful', [
+            return $this->success('maintain ('.Platform::$platformSelector[$maintain->platform_id].') update successful', [
                 ['title' => 'go to merchant maintain list page', 'url' => 'platform/maintain-list'],
                 ['title' => 'edit merchant maintain again', 'url' => 'platform/maintain-detail?id='.$maintain->id],
             ]);
         }
         // 参数异常，渲染错误页面
-        return $this->error('maintain ('.Platform::$maintainSelector[$maintain->maintain_id].') update failed, please try again.', 'platform/maintain-detail?id='.$maintain->id);
+        return $this->error('maintain ('.Platform::$platformSelector[$maintain->platform_id].') update failed, please try again.', 'platform/maintain-detail?id='.$maintain->id);
     }
     /**
      * delete merchant maintain

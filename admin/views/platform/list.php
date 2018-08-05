@@ -14,7 +14,7 @@ $this->addCrumbs('Platform');
 <div class="contenter">
     <div class="alert alert-info" role="alert">
         <p><strong>Heads up!</strong></p>
-        <p>1. set platform\'s permission.</p>
+        <p>1. set platform's permission.</p>
     </div>
     <table class="table table-bordered table-striped" id="info-table">
         <thead>

@@ -22,11 +22,12 @@ class MerchantBankMaintain extends ActiveRecord implements ResourceInterface {
     public function rules()
     {
         return [
-            [['platform_id', 'bank_id', 'paytype', 'single_amount', 'day_amount', 'month_amount', 'begin_time', 'finish_time'], 'required'],
-            [['platform_id', 'bank_id', 'paytype', 'single_amount', 'day_amount', 'month_amount', 'begin_time', 'finish_time', 'admin_id', 'status', 'deleted_at'], 'integer'],
+            [['platform_id', 'paytype', 'single_amount', 'day_amount', 'month_amount', 'begin_at', 'finish_at'], 'required'],
+            [['platform_id', 'bank_id', 'paytype', 'single_amount', 'day_amount', 'month_amount', 'begin_at', 'finish_at', 'admin_id', 'status', 'deleted_at'], 'integer'],
             [['merchant_number'], 'string', 'max' => 64],
             [['remark'], 'string', 'max' => 255],
             [['times'], 'string', 'max' => 512],
+            ['bank_id', 'default', 'value' => 0],
         ];
     }
     /**
@@ -63,12 +64,12 @@ class MerchantBankMaintain extends ActiveRecord implements ResourceInterface {
                 'platform_id' => ['platform', ['int', 'required']],
                 'merchant_number' => ['merchant id', ['maxlength' => 64]],
                 'paytype' => ['payment type', ['in' => array_keys(Platform::$paytypeSelector), 'required']],
-                'bank_id' => ['bank id', ['int', 'required']],
+                'bank_id' => ['bank id', ['in' => array_keys(Platform::$bankSelector)]],
                 'single_amount' => ['amount single limit', ['float', 'required']],
                 'day_amount' => ['amount day limit', ['float', 'required']],
                 'month_amount' => ['amount day limit', ['float', 'required']],
-                'begin_time' => ['begin time', ['date' => 'Y-m-d H:i:s', 'required']],
-                'finish_time' => ['finish time', ['date' => 'Y-m-d H:i:s', 'required']],
+                'begin_at' => ['maintain begin at', ['date' => 'Y-m-d H:i:s', 'required']],
+                'finish_at' => ['maintain finish at', ['date' => 'Y-m-d H:i:s', 'required']],
                 'start' => ['time solt start', ['preg' => "/^\d{2}:\d{2}$/"]],
                 'end' => ['time solt end', ['preg' => "/^\d{2}:\d{2}$/"]],
                 'remark' => ['remark', ['maxlength' => 255]],

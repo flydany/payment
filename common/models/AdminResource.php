@@ -12,7 +12,7 @@ class AdminResource extends ActiveRecord {
     const TypePlatform = '2';
     public static $typeSelector = [
         self::TypeProject => 'project',
-        self::TypePlatform => 'merchant',
+        self::TypePlatform => 'platform',
     ];
     
     // only define rules for those attributes that
