@@ -3,11 +3,12 @@
 namespace common\models;
 
 use Yii;
+use common\models\interfaces\ResourceInterface;
 
 /**
  * This is the model class for table "MerchantBankMaintain".
  */
-class MerchantBankMaintain extends ActiveRecord {
+class MerchantBankMaintain extends ActiveRecord implements ResourceInterface {
 
     const StatusNormal = '0';
     const StatusForbidden = '1';
@@ -67,10 +68,10 @@ class MerchantBankMaintain extends ActiveRecord {
                 'single_amount' => ['amount single limit', ['float', 'required']],
                 'day_amount' => ['amount day limit', ['float', 'required']],
                 'month_amount' => ['amount day limit', ['float', 'required']],
-                'begin_at' => ['begin time', ['date' => 'Y-m-d H:i:s', 'required']],
-                'finish_at' => ['finish time', ['date' => 'Y-m-d H:i:s', 'required']],
-                'start' => ['start time', ['date' => 'H:i:s']],
-                'end' => ['end time', ['date' => 'H:i:s']],
+                'begin_at' => ['maintain begin at', ['date' => 'Y-m-d H:i:s', 'required']],
+                'finish_at' => ['maintain finish at', ['date' => 'Y-m-d H:i:s', 'required']],
+                'start' => ['time solt start', ['preg' => "/^\d{2}:\d{2}$/"]],
+                'end' => ['time solt end', ['preg' => "/^\d{2}:\d{2}$/"]],
                 'remark' => ['remark', ['maxlength' => 255]],
                 'status' => ['status', ['in' => array_keys(static::$statusSelector), 'required']],
             ],
@@ -99,16 +100,38 @@ class MerchantBankMaintain extends ActiveRecord {
     }
 
     /**
+     * 组装权标
+     * @return mixed|string
+     */
+    public function getPower()
+    {
+        return $this->platform_id.'.'.$this->merchant_number;
+    }
+
+    /**
+     * 返回权限类型
+     * @return mixed
+     */
+    public static function resourceType()
+    {
+        return AdminResource::TypePlatform;
+    }
+
+    /**
+     * 获取项目已存在的负责人
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return AdminResource::identities($this->power, static::resourceType());
+    }
+
+    /**
      * 判断用户是否有权限
      * @return boolean
      */
     public function getHasPermission()
     {
-        if(Yii::$app->admin->isSupper) {
-            return true;
-        }
-        return Merchant::find()->select('id')
-            ->where(['platform_id' => $this->platform_id, 'merchant_number' => ['', $this->merchant_number], 'paytype' => [0, $this->paytype], 'id' => Yii::$app->admin->getPowers(AdminResource::TypeMerchant)])
-            ->exists();
+        return AdminResource::hasPermission($this->power, AdminResource::TypePlatform);
     }
 }

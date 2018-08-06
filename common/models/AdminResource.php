@@ -9,10 +9,10 @@ class AdminResource extends ActiveRecord {
     
     // 数据源常量定义
     const TypeProject = '1';
-    const TypeMerchant = '2';
+    const TypePlatform = '2';
     public static $typeSelector = [
         self::TypeProject => 'project',
-        self::TypeMerchant => 'platform',
+        self::TypePlatform => 'platform',
     ];
     
     // only define rules for those attributes that
@@ -21,8 +21,8 @@ class AdminResource extends ActiveRecord {
     {
         return [
             [['type', 'identity', 'power'], 'required'],
-            [['type'], 'integer'],
-            [['identity', 'power'], 'string', 'max' => 64],
+            [['type', 'power'], 'integer'],
+            [['identity'], 'string', 'max' => 64],
             [['identity'], 'match', 'pattern' => "/^[\w\-\_\.]+$/"],
         ];
     }
@@ -35,7 +35,7 @@ class AdminResource extends ActiveRecord {
         return [
             'type' => 'resource type',
             'identity' => 'identity',
-            'power' => 'power describe',
+            'power' => 'resource number',
         ];
     }
     
@@ -51,7 +51,7 @@ class AdminResource extends ActiveRecord {
             'param' => [
                 'type' => ['resource type', ['int', 'required']],
                 'identity' => ['identity list', ['required']],
-                'power' => ['power describe', ['maxlength' => 64, 'required']],
+                'power' => ['resource number', ['int', 'required']],
             ]
         ];
         return $rule;
@@ -151,20 +151,70 @@ class AdminResource extends ActiveRecord {
     }
 
     /**
-     * 分割权限
+     * 判断当前用户是否有此项目的权限
+     * @return boolean
+     */
+    public static function hasPermission($power, $type)
+    {
+        if(Yii::$app->admin->isSupper) {
+            return true;
+        }
+        return AdminResource::find()->where(['power' => static::slicePower($power), 'identity' => Yii::$app->admin->identity, 'type' => $type])->exists();
+    }
+    /**
+     * 获取项目已存在的负责人
+     * @return array
+     */
+    public static function identities($power, $type)
+    {
+        return array_unique(AdminResource::find()->select('identity')->where(['power' => static::slicePower($power), 'type' => $type])->column());
+    }
+
+    /**
+     * 获取负责人的资源
+     * @return array
+     */
+    public static function powers($type)
+    {
+        return array_unique(AdminResource::find()->select('power')->where(['identity' => Yii::$app->admin->identity, 'type' => $type])->column());
+    }
+
+    /**
+     * 分解权标查询条件
+     * @param string $power 权限标识
+     * @return array
+     */
+    public static function powerCondition($powers)
+    {
+        $conditions = [];
+        $powers = array_unique($powers);
+        foreach($powers as $power) {
+            $powers = explode('.', $power);
+            if(isset($powers[1])) {
+                $conditions[$powers[0]]['platform_id'] = $powers[0];
+                $conditions[$powers[0]]['merchant_number'][] = $powers[1];
+            }
+            else {
+                $conditions[$powers[0]] = ['platform_id' => $powers[0]];
+            }
+        }
+        return $conditions;
+    }
+
+    /**
+     * 分解权限
      * @param string $power 权标
      * @return array
      */
     public static function slicePower($power)
     {
-
         $powers = explode('.', $power);
-        $search = [0];
-        $c = '';
-        foreach($powers as $power) {
-            $c[] = $power;
-            $search[] = implode('.', $c);
+        $response = ['0'];
+        $per = [];
+        foreach($powers as $p) {
+            $per[] = $p;
+            $response[] = implode('.', $per);
         }
-        return $search;
+        return $response;
     }
 }

@@ -3,8 +3,9 @@
 namespace common\models;
 
 use Yii;
+use common\models\interfaces\ResourceInterface;
 
-class Platform extends ActiveRecord {
+class Platform extends \yii\base\Model implements ResourceInterface {
     
     // 通道常量
     const PlatformYeepay = '1';
@@ -30,6 +31,24 @@ class Platform extends ActiveRecord {
         self::PaytypeWithdraw => 'withdraw',
         self::PaytypeAgreement => 'agreement',
     ];
+
+    /**
+     * 通道实例化配置
+     * @param integer $id 编号
+     * @param string $title 名称
+     */
+    public $id;
+    public $title;
+    public static function builder($id)
+    {
+        if(empty(static::$platformSelector[$id])) {
+            return null;
+        }
+        $platform = new Platform();
+        $platform->id = $id;
+        $platform->title = static::$platformSelector[$id];
+        return $platform;
+    }
 
     // 银行列表
     public static $bankSelector = [
@@ -57,4 +76,40 @@ class Platform extends ActiveRecord {
         '22' => '江西银行',
         '23' => '上海农商银行',
     ];
+
+    /**
+     * 返回权限类型
+     * @return mixed
+     */
+    public static function resourceType()
+    {
+        return AdminResource::TypePlatform;
+    }
+
+    /**
+     * 返回权限标识
+     * @return mixed
+     */
+    public function getPower()
+    {
+        return $this->id;
+    }
+
+    /**
+     * 判断当前用户是否有此项目的权限
+     * @return boolean
+     */
+    public function getHasPermission()
+    {
+        return AdminResource::hasPermission($this->power, static::resourceType());
+    }
+
+    /**
+     * 获取商户号已存在的负责人
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return AdminResource::identities($this->power, static::resourceType());
+    }
 }

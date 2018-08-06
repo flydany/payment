@@ -236,25 +236,7 @@ class ActiveRecord extends \yii\db\ActiveRecord {
         }
         return $data['deleted_at'] > 0 ? true : false;
     }
-    
-    /**
-     * 使用get数据创建查询条件
-     * @param $tabkey array 生成条件规则
-     * @return array
-     */
-    public static function initGetCondition($tabkey)
-    {
-        return static::initCondition($tabkey, Yii::$app->getRequest()->get());
-    }
-    /**
-     * 使用post数据创建查询条件
-     * @param $tabkey array 生成条件规则
-     * @return array
-     */
-    public static function initPostCondition($tabkey)
-    {
-        return static::initCondition($tabkey, Yii::$app->getRequest()->post());
-    }
+
     // 初始化查询条件
     // @param $tableKey array 需要组建条件的 key 转换
     // @describe $tableKey like ['search key', 'search key' => ['search key', 'handle'], ['db key', 'handle', 'search key']]
@@ -297,7 +279,7 @@ class ActiveRecord extends \yii\db\ActiveRecord {
     public static function buliders($tabkey, $params = null)
     {
         if($params === null) {
-            $params = Yii::$app->getRequest()->post();
+            $params = Yii::$app->getRequest()->getBodyParams();
         }
         $conditions = static::initCondition($tabkey, $params);
         $query = static::find();
@@ -327,7 +309,7 @@ class ActiveRecord extends \yii\db\ActiveRecord {
     public static function filters($tabkey, $params = null)
     {
         if($params === null) {
-            $params = Yii::$app->getRequest()->post();
+            $params = Yii::$app->getRequest()->getBodyParams();
         }
         $conditions = static::initCondition($tabkey, $params);
         $query = static::find();

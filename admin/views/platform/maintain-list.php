@@ -86,7 +86,7 @@ $this->addCrumbs('Merchant List', 'platform/merchant-list');
             afterPost: function(param) {
                 // 名称显示
                 tableHandler.renderCategory({ category: $(param.tabler).find('.platform'), select: 'platform_id' });
-                tableHandler.renderCategory({ category: $(param.tabler).find('.paytype'), select: 'paytype' });
+                tableHandler.renderCategory({ category: $(param.tabler).find('.paytype'), select: 'paytype', default: 'all' });
                 tableHandler.renderCategory({ category: $(param.tabler).find('.bank'), select: 'bank_id' });
                 tableHandler.renderCategory({ category: $(param.tabler).find('.status'), select: 'status' });
                 // 初始化 删除按钮事件

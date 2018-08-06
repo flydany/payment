@@ -221,30 +221,10 @@ var tableHandler = {
                             status = $(option).attr('data-status') ? $(option).attr('data-status') : '';
                         }
                         else {
-                            value = text;
+                            value = (param.default == undefined) ? text : param.default;
                         }
                     }
                     _html.push(value);
-                    // if (value && value != text) {
-                    //     var icon = '';
-                    //     if (icon_class) {
-                    //         icon = '<i class="icon-fw icon-' + icon_class + '"></i>';
-                    //     }
-                    //     if(param.color || (param.color == undefined)) {
-                    //         _html.push('<span class="flyer-status ' + (status ? status : 'blue') + ' thin mr-5px">' + icon + $.trim(value) + '</span>');
-                    //     }
-                    //     else {
-                    //         _html.push($.trim(icon + value));
-                    //     }
-                    // }
-                    // else {
-                    //     if(param.color || (param.color == undefined)) {
-                    //         _html.push('<span class="flyer-status red thin mr-5px">unknow：' + value + '</span>');
-                    //     }
-                    //     else {
-                    //         _html.push(value);
-                    //     }
-                    // }
                 }
                 $(this).html(_html.join(param.splite ? param.splite : ''));
             }

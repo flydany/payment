@@ -9,7 +9,6 @@ $this->title = 'Project List';
 $this->addCrumbs('Project');
 
 \admin\assets\TablerAsset::register($this);
-
 ?>
 
 <div class="contenter">
@@ -88,6 +87,7 @@ $this->addCrumbs('Project');
         <td class="status">{{info.status}}</td>
         <td>{{info.updated_at | dateShow: 'minute'}}</td>
         <td>
+            <a class="label label-warning" href="/project/api-list?id={{info.id}}"><i class="fa fa-ravelry fa-fw"></i>api</a>
             <a class="label label-primary" href="/project/detail?id={{info.id}}"><i class="fa fa-edit fa-fw"></i>edit</a>
             <a class="label label-warning" href="/project/contacts-list?id={{info.id}}"><i class="fa fa-address-book fa-fw"></i>contacts</a>
             <a class="label label-success" href="/admin-resource/project?id={{info.id}}"><i class="fa fa-superpowers fa-fw"></i>permission</a>

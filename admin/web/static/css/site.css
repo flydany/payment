@@ -117,6 +117,11 @@ ul.pagination {
 	float:right;
 }
 
+/* button */
+.btn-circle {
+	border-radius:100%;
+}
+
 /* checkbox group */
 .checkbox-group {
 	margin-bottom:15px;

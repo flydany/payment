@@ -79,6 +79,10 @@ class Admin extends ActiveRecord {
     {
         return array_column($this->adminPermissionGroups, 'identity');
     }
+    public function getIdentity()
+    {
+        return array_merge($this->identities, [$this->id]);
+    }
     public function getPermissionGroups()
     {
         return AdminRole::find()->where(['identity' => $this->identities])->all();
@@ -122,12 +126,12 @@ class Admin extends ActiveRecord {
     {
         return AdminResource::find()->where(['identity' => array_merge($this->identities, [$this->id])])->andFilterWhere(['type' => $type])->all();
     }
-    public function getResourcePowers($type = AdminResource::TypeProject)
+    public function getResourcePowers($type = '')
     {
         return array_unique(
             array_map(
                 function($resource) {
-                    return $resource->item_id;
+                    return $resource->power;
                 },
                 $this->getResources($type)
             )
@@ -147,7 +151,7 @@ class Admin extends ActiveRecord {
         }
         return AdminResource::find()->where(['identity' => array_merge($this->identities, [$this->id]), 'power' => AdminResource::slicePower($power)])->andFilterWhere(['type' => $type])->exists();
     }
-    
+
     /**
      * do some thing before save this admin object
      * @param $insert boolean update params
@@ -269,7 +273,7 @@ class Admin extends ActiveRecord {
     public static function finder($id, $condition = [])
     {
         // id 为必填项，判断数据存在状态
-        if($id == 1) {
+        if(in_array($id, [0, 1])) {
             // 参数异常，渲染错误页面
             return false;
         }

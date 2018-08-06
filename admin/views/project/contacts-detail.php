@@ -10,7 +10,7 @@ use common\models\ProjectContacts;
 $this->addCrumbs('Project');
 $this->addCrumbs('Project List', 'project/list');
 $this->addCrumbs('Project Contacts List', 'project/contacts-list');
-$this->title = (isset($data['id']) ? 'Update' : 'Insert'). ' Project';
+$this->title = (isset($data['id']) ? 'Update' : 'Insert'). ' Project Contacts';
 $this->setActiveNavigator('project/list');
 
 \admin\assets\CheckerAsset::register($this);
@@ -24,8 +24,8 @@ $this->setActiveNavigator('project/list');
     </div>
     <form id="info-detail" method="post" action="/project/contacts-<?= isset($data['id']) ? 'update?id='.$data['id'] : 'insert' ?>">
         <div class="form-group checker">
-            <label>project number</label>
-            <input class="form-control" type="text" name="project_id" value="<?= Render::value($data, 'project_id') ?>" placeholder="project number">
+            <label>project</label>
+            <?= Render::select('project_id', Project::selector(), $this->request->get('id'), ['class' => 'tabler select-picker', 'data-live-search' => 'true']) ?>
         </div>
         <div class="form-group checker">
             <label>identity</label>

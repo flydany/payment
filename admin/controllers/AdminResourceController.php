@@ -2,7 +2,9 @@
 
 namespace admin\controllers;
 
+use Yii;
 use common\helpers\Checker;
+use common\models\Platform;
 use common\models\Project;
 use common\models\Merchant;
 use common\models\AdminResource;
@@ -16,14 +18,33 @@ class AdminResourceController extends Controller {
     public function actionProject()
     {
         $target = 'project/list';
-        if( ! $project = Project::finder($this->request->get('id') ?? $this->request->post('id'))) {
+        if( ! $project = Project::finder($this->request->get('id'))) {
             return $this->error('invalid project', $target);
         }
         if(empty($project->hasPermission)) {
             return $this->error('permission forbidden', $target);
         }
         if($this->request->isGet) {
-            return $this->render('resources', ['resource' => $project, 'commit' => 'project', 'type' => AdminResource::TypeProject, 'target' => $target]);
+            return $this->render('resources', ['resource' => $project, 'target' => $target]);
+        }
+        return $this->resources($target);
+    }
+    /**
+     * 设置单个通道的授权对象
+     * @return string
+     */
+    public function actionPlatform()
+    {
+        $target = 'platform/list';
+        $platform = Platform::builder($this->request->get('id'));
+        if(empty($platform)) {
+            return $this->error('invalid platform', $target);
+        }
+        if(empty($platform->hasPermission)) {
+            return $this->error('permission forbidden', $target);
+        }
+        if($this->request->isGet) {
+            return $this->render('resources', ['resource' => $platform, 'target' => $target]);
         }
         return $this->resources($target);
     }
@@ -34,18 +55,14 @@ class AdminResourceController extends Controller {
     public function actionMerchant()
     {
         $target = 'platform/merchant-list';
-        $power = $this->request->get('power') ?? $this->request->post('power');
-        if(empty($power)) {
-            return $this->error('param error', $target);
+        if( ! $merchant = Merchant::finder($this->request->get('id'))) {
+            return $this->error('invalid project', $target);
         }
-        if( ! $this->admin->hasResourcePower($power)) {
+        if(empty($merchant->hasPermission)) {
             return $this->error('permission forbidden', $target);
         }
-        $merchant = new \Object();
-        $merchant->id = $power;
-        $merchant->identities = AdminResource::find()->select('identity')->where(['power' => AdminResource::slicePower($power), 'type' => AdminResource::TypeMerchant])->column();
         if($this->request->isGet) {
-            return $this->render('resources', ['resource' => $merchant, 'commit' => 'merchant', 'type' => AdminResource::TypeMerchant, 'target' => $target]);
+            return $this->render('resources', ['resource' => $merchant, 'target' => $target]);
         }
         return $this->resources($target);
     }
@@ -62,10 +79,10 @@ class AdminResourceController extends Controller {
         if($checker['code'] != Checker::SuccessCode) {
             return $this->error($checker['message'], $backUrl);
         }
-        if(AdminResource::setResources($params['item_id'], $params['identity'], $params['type'])) {
-            return $this->success('administrator resource: '.AdminResource::$typeSelector[$params['type']].' '.$params['item_id'].'\'s permission update successful.', $backUrl);
+        if(AdminResource::setResources($params['power'], $params['identity'], $params['type'])) {
+            return $this->success('administrator resource: '.AdminResource::$typeSelector[$params['type']].' '.$params['power'].'\'s permission update successful.', $backUrl);
         }
-        return $this->error('administrator resource: '.AdminResource::$typeSelector[$params['type']].' '.$params['item_id'].'\'s permission update failed.', $backUrl);
+        return $this->error('administrator resource: '.AdminResource::$typeSelector[$params['type']].' '.$params['power'].'\'s permission update failed.', $backUrl);
     }
 
     /**
@@ -80,9 +97,9 @@ class AdminResourceController extends Controller {
         if($checker['code'] != Checker::SuccessCode) {
             return $this->error($checker['message'], $backUrl);
         }
-        if(AdminResource::setPermissions($params['item_id'], $params['identity'], $params['type'])) {
-            return $this->success('administrator resource: '.AdminResource::$typeSelector[$params['type']].' '.$params['item_id'].'\'s permission update successful.', $backUrl);
+        if(AdminResource::setPermissions($params['powers'], $params['identity'], $params['type'])) {
+            return $this->success('administrator resource: '.AdminResource::$typeSelector[$params['type']].' '.$params['identity'].'\'s permission update successful.', $backUrl);
         }
-        return $this->error('administrator resource: '.AdminResource::$typeSelector[$params['type']].' '.$params['item_id'].'\'s permission update failed.', $backUrl);
+        return $this->error('administrator resource: '.AdminResource::$typeSelector[$params['type']].' '.$params['identity'].'\'s permission update failed.', $backUrl);
     }
 }

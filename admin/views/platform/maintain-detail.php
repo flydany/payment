@@ -4,6 +4,7 @@
 
 use common\helpers\Render;
 use common\models\Platform;
+use common\models\Merchant;
 use common\models\MerchantBankMaintain;
 
 
@@ -62,16 +63,16 @@ $this->setActiveNavigator('platform/maintain-list');
             <div class="panel-heading">maintain time</div>
             <div class="panel-body pb-zero form-row">
                 <div class="form-group col-xs-6 checker">
-                    <label>maintain begin time</label>
+                    <label>maintain begin at</label>
                     <div class="input-group">
-                        <input class="form-control datetime-picker" data-date-format="yyyy-mm-dd hh:ii:ss" type="text" name="begin_at" value="<?= date('Y-m-d H:i:s', Render::value($data, 'begin_at', time())) ?>" placeholder="begin time">
+                        <input class="form-control datetime-picker" data-date-format="yyyy-mm-dd hh:ii:ss" type="text" name="begin_at" value="<?= date('Y-m-d H:i:s', Render::value($data, 'begin_at', time())) ?>" placeholder="begin at">
                         <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
                     </div>
                 </div>
                 <div class="form-group col-xs-6 checker">
-                    <label>maintain finish time</label>
+                    <label>maintain finish at</label>
                     <div class="input-group">
-                        <input class="form-control datetime-picker" data-date-format="yyyy-mm-dd hh:ii:ss" type="text" name="finish_at" value="<?= date('Y-m-d H:i:s', Render::value($data, 'finish_at', time() + 86400)) ?>" placeholder="finish time">
+                        <input class="form-control datetime-picker" data-date-format="yyyy-mm-dd hh:ii:ss" type="text" name="finish_at" value="<?= date('Y-m-d H:i:s', Render::value($data, 'begin_at', strtotime('+1 days'))) ?>" placeholder="finish at">
                         <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
                     </div>
                 </div>

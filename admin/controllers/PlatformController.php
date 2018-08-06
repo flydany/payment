@@ -2,7 +2,7 @@
 
 namespace admin\controllers;
 
-use common\helpers\Checker;
+use Yii;
 use yii\web\UploadedFile;
 use common\helpers\Render;
 use common\models\Platform;
@@ -12,6 +12,27 @@ use common\models\MerchantBankMaintain;
 use common\models\AdminResource;
 
 class PlatformController extends Controller {
+
+    // 访问白名单
+    public $whiteList = ['file-encode'];
+
+    /*********************************************************************************/
+    /************** platform  *******************************************************/
+    /*********************************************************************************/
+    /**
+     * this action showing platform list
+     * @param request type request->isAjax?
+     * @return html|json
+     */
+    public function actionList()
+    {
+        $powers = array_unique(
+            AdminResource::find()->select('power')
+                ->where(['identity' => Yii::$app->admin->identity, 'type' => AdminResource::TypePlatform, 'power' => array_keys(Platform::$platformSelector)])
+                ->column()
+        );
+        return $this->render('list', ['powers' => $powers]);
+    }
 
     /*********************************************************************************/
     /************** merchant  *******************************************************/
@@ -28,7 +49,8 @@ class PlatformController extends Controller {
         }
         $params = $this->request->post();
         $params['deleted_at'] = '0';
-        $query = Merchant::filters(['id', ['title', 'like'], 'platform_id', 'merchant_number', 'paytype', 'status', 'deleted_at'], $params)->filterResource(AdminResource::TypeMerchant);
+        $query = Merchant::filters(['id', ['title', 'like'], 'platform_id', 'merchant_number', 'paytype', 'status', 'deleted_at'], $params)->filterResource(AdminResource::TypePlatform);
+        // return $this->v($query->createCommand()->getRawSql());
         $pagination = Render::pagination((clone $query)->count());
         $data['infos'] = $query->orderBy('id desc')->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
         $data['page'] = Render::pager($pagination);
@@ -93,8 +115,8 @@ class PlatformController extends Controller {
         if( ! $merchant = Merchant::finder($this->request->get('id'))) {
             return $this->error('invalid merchant', 'platform/merchant-list');
         }
-        if($merchant && empty($merchant->hasPermission)) {
-            return $this->error('permission forbidden', 'platform/merchant-list');
+        if(empty($merchant->hasPermission)) {
+            return $this->error('permission denied for platform: '.Platform::$platformSelector[$merchant->platform_id].', merchant_number: '.$merchant->merchant_number, 'platform/merchant-list');
         }
         $params = $this->request->post();
         $parameters = [];
@@ -108,6 +130,9 @@ class PlatformController extends Controller {
         if ( ! $merchant->loadAttributes($params)->validate()) {
             // 参数异常，渲染错误页面
             return $this->error($merchant->errors(), 'platform/merchant-detail?id='.$merchant->id);
+        }
+        if(empty($merchant->hasPermission)) {
+            return $this->error('permission denied for platform: '.Platform::$platformSelector[$merchant->platform_id].', merchant_number: '.$merchant->merchant_number, 'platform/merchant-list');
         }
         if ($merchant->save()) {
             // 保存成功
@@ -165,7 +190,7 @@ class PlatformController extends Controller {
         }
         $params = $this->request->post();
         $params['deleted_at'] = '0';
-        $query = MerchantBank::filters(['id', 'platform_id', 'merchant_number', 'paytype', 'status', 'deleted_at'], $params)->filterResource(AdminResource::TypeMerchant);
+        $query = MerchantBank::filters(['id', 'platform_id', 'merchant_number', 'paytype', 'status', 'deleted_at'], $params)->filterResource(AdminResource::TypePlatform);
         $pagination = Render::pagination((clone $query)->count());
         $data['infos'] = $query->orderBy(['id' => 'desc'])->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
         $data['page'] = Render::pager($pagination);
@@ -305,7 +330,7 @@ class PlatformController extends Controller {
         }
         $params = $this->request->post();
         $params['deleted_at'] = '0';
-        $query = MerchantBankMaintain::filters(['id', 'platform_id', 'merchant_number', 'paytype', 'status', 'deleted_at'], $params)->filterResource(AdminResource::TypeMerchant);
+        $query = MerchantBankMaintain::filters(['id', 'platform_id', 'merchant_number', 'paytype', 'status', 'deleted_at'], $params)->filterResource(AdminResource::TypePlatform);
         $pagination = Render::pagination((clone $query)->count());
         $data['infos'] = $query->orderBy(['id' => 'desc'])->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
         $data['page'] = Render::pager($pagination);
@@ -343,8 +368,8 @@ class PlatformController extends Controller {
         foreach(['single_amount', 'day_amount', 'month_amount'] as $key) {
             $params[$key] = bcmul($params[$key], 100, 0);
         }
-        foreach(['begin_at', 'finish_at'] as $time) {
-            $params[$time] = strtotime($params[$time]);
+        foreach(['begin_at', 'finish_at'] as $key) {
+            $params[$key] = strtotime($params[$key]);
         }
         $times = [];
         foreach($params['start'] as $k => $start) {
@@ -364,13 +389,13 @@ class PlatformController extends Controller {
         }
         if ($maintain->save()) {
             // 保存成功
-            return $this->success('maintain ('.Platform::$platformSelector[$maintain->platform_id].':'.$maintain->merchant_number.') insert successful', [
+            return $this->success('maintain ('.Platform::$platformSelector[$maintain->platform_id].') insert successful', [
                 ['title' => 'go to merchant maintain list page', 'url' => 'platform/maintain-list'],
                 ['title' => 'edit merchant maintain again', 'url' => 'platform/maintain-detail?id='.$maintain->id]
             ]);
         }
         // 参数异常，渲染错误页面
-        return $this->error('maintain ('.Platform::$platformSelector[$maintain->platform_id].':'.$maintain->merchant_number.') insert failed, please try again', 'platform/maintain-detail');
+        return $this->error('maintain ('.Platform::$platformSelector[$maintain->platform_id].') insert failed, please try again', 'platform/maintain-detail');
     }
     /**
      * merchant maintain detail show / update
@@ -391,8 +416,8 @@ class PlatformController extends Controller {
         foreach(['single_amount', 'day_amount', 'month_amount'] as $key) {
             $params[$key] = bcmul($params[$key], 100, 0);
         }
-        foreach(['begin_at', 'finish_at'] as $time) {
-            $params[$time] = strtotime($params[$time]);
+        foreach(['begin_at', 'finish_at'] as $key) {
+            $params[$key] = strtotime($params[$key]);
         }
         $times = [];
         foreach($params['start'] as $k => $start) {
@@ -412,13 +437,13 @@ class PlatformController extends Controller {
         }
         if ($maintain->save()) {
             // 保存成功
-            return $this->success('maintain ('.Platform::$platformSelector[$maintain->platform_id].':'.$maintain->merchant_number.') update successful', [
+            return $this->success('maintain ('.Platform::$platformSelector[$maintain->platform_id].') update successful', [
                 ['title' => 'go to merchant maintain list page', 'url' => 'platform/maintain-list'],
                 ['title' => 'edit merchant maintain again', 'url' => 'platform/maintain-detail?id='.$maintain->id],
             ]);
         }
         // 参数异常，渲染错误页面
-        return $this->error('maintain ('.Platform::$platformSelector[$maintain->platform_id].':'.$maintain->merchant_number.') update failed, please try again.', 'platform/maintain-detail?id='.$maintain->id);
+        return $this->error('maintain ('.Platform::$platformSelector[$maintain->platform_id].') update failed, please try again.', 'platform/maintain-detail?id='.$maintain->id);
     }
     /**
      * delete merchant maintain

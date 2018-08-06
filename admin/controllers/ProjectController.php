@@ -2,16 +2,19 @@
 
 namespace admin\controllers;
 
-use common\models\AdminResource;
 use Yii;
 use common\helpers\Render;
-use common\helpers\Checker;
 use common\models\Project;
+use common\models\ProjectApi;
 use common\models\ProjectContacts;
 use common\models\ProjectMerchant;
+use common\models\AdminResource;
 
 class ProjectController extends Controller {
-    
+
+    /*********************************************************************************/
+    /************** project  *********************************************************/
+    /*********************************************************************************/
     /**
      * this action showing project list
      * @param request type request->isAjax?
@@ -80,10 +83,10 @@ class ProjectController extends Controller {
         if( ! $project = Project::finder($this->request->get('id'))) {
             return $this->error('invalid project', 'project/list');
         }
-        if($project && empty($project->hasPermission)) {
+        if(empty($project->hasPermission)) {
             return $this->error('permission forbidden', 'project/list');
         }
-        if ( ! $project->loadAttributes($this->request->post())->validate()) {
+        if ( ! $project->loadAttributes($this->request->post)->validate()) {
             // 参数异常，渲染错误页面
             return $this->error($project->errors(), 'project/detail?id='.$project->id);
         }
@@ -113,6 +116,152 @@ class ProjectController extends Controller {
         return $this->json('system.error', 'project delete failed.');
     }
 
+    /*********************************************************************************/
+    /************** project api  ****************************************************/
+    /*********************************************************************************/
+    /**
+     * this action showing project api list
+     * @param request type request->isAjax?
+     * @return html|json
+     */
+    public function actionApiList()
+    {
+        if( ! $this->request->isAjax) {
+            return $this->render('api-list');
+        }
+        $params = $this->request->post();
+        $query = ProjectApi::filters([['title', 'like'], 'project_id', 'api'], $params)->filterResource(AdminResource::TypeProject);
+        $pagination = Render::pagination((clone $query)->count());
+        $data['infos'] = $query->with('project')->orderBy('id desc')->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
+        $data['page'] = Render::pager($pagination);
+        return $this->json($data);
+    }
+
+    /**
+     * show project detail
+     * @param id int  - project id by get request
+     * @return string
+     */
+    public function actionApiDetail()
+    {
+        $api = null;
+        $apiId = $this->request->get('id');
+        if($apiId && ( ! $api = ProjectApi::finder($apiId))) {
+            return $this->error('invalid project api', 'project/api-list');
+        }
+        if($api && empty($api->project->hasPermission)) {
+            return $this->error('permission forbidden', 'project/api-list');
+        }
+        return $this->render('api-detail', ['data' => $api]);
+    }
+    /**
+     * insert project
+     */
+    public function actionApiInsert()
+    {
+        $api = new ProjectApi();
+        $params = $this->request->post();
+        $times = [];
+        foreach($params['start'] as $k => $start) {
+            if(empty($start) || empty($params['end'][$k])) {
+                $params['times'] = '';
+                continue;
+            }
+            $times[] = ['start' => $start, 'end' => $params['end'][$k]];
+        }
+        $params['times'] = json_encode($times);
+        $parameters = [];
+        foreach($params['parameter_name'] as $k => $name) {
+            if(empty($name)) {
+                continue;
+            }
+            $parameters[$name] = $params['parameter_value'][$k];
+        }
+        $params['parameters'] = json_encode($parameters);
+        if ( ! $api->loadAttributes($params)->validate()) {
+            // 参数异常，渲染错误页面
+            return $this->error($api->errors(), 'project/api-detail');
+        }
+        if(empty($api->project->hasPermission)) {
+            return $this->error('permission denied of project: '.$api->project->title, 'project/api-list');
+        }
+        if ($api->save()) {
+            // 保存成功
+            return $this->success('project api ('.$api->title.') insert successful', [
+                ['title' => 'go to project api list page', 'url' => 'project/api-list'],
+                ['title' => 'edit project api again', 'url' => 'project/api-detail?id='.$api->id]
+            ]);
+        }
+        // 参数异常，渲染错误页面
+        return $this->error('project api ('.$api->title.') insert failed, please try again', 'project/api-detail');
+    }
+    /**
+     * project detail show / update
+     * use get(id) to find project
+     */
+    public function actionApiUpdate()
+    {
+        /* @var $api ProjectApi */
+        // id 为必填项，判断管理员存在状态
+        // 未得到，渲染错误页面
+        if( ! $api = ProjectApi::finder($this->request->get('id'))) {
+            return $this->error('invalid project api', 'project/api-list');
+        }
+        if(empty($api->project->hasPermission)) {
+            return $this->error('permission denied of project: '.$api->project->title, 'project/api-list');
+        }
+        $params = $this->request->post();
+        $times = [];
+        foreach($params['start'] as $k => $start) {
+            if(empty($start) || empty($params['end'][$k])) {
+                $params['times'] = '';
+                continue;
+            }
+            $times[] = ['start' => $start, 'end' => $params['end'][$k]];
+        }
+        $params['times'] = json_encode($times);
+        $parameters = [];
+        foreach($params['parameter_name'] as $k => $name) {
+            if(empty($name)) {
+                continue;
+            }
+            $parameters[$name] = $params['parameter_value'][$k];
+        }
+        $params['parameters'] = json_encode($parameters);
+        if ( ! $api->loadAttributes($params)->validate()) {
+            // 参数异常，渲染错误页面
+            return $this->error($api->errors(), 'project/api-detail?id='.$api->id);
+        }
+        if(empty($api->project->hasPermission)) {
+            return $this->error('permission denied of project: '.$api->project->title, 'project/api-list');
+        }
+        if ($api->save()) {
+            // 保存成功
+            return $this->success('project ('.$api->title.') update successful', [
+                ['title' => 'go to project api list page', 'url' => 'project/api-list'],
+                ['title' => 'edit project api again', 'url' => 'project/api-detail?id='.$api->id],
+            ]);
+        }
+        // 参数异常，渲染错误页面
+        return $this->error('project api ('.$api->title.') update failed, please try again.', 'project/api-detail?id='.$api->id);
+    }
+    /**
+     * delete project
+     */
+    public function actionApiDelete()
+    {
+        if( ! ($ids = $this->request->post('id'))) {
+            return $this->json('invalid.param', 'you must choice at least one project api.');
+        }
+        if(ProjectApi::trashAll(['id' => $ids])) {
+            return $this->json(SuccessCode, 'project api delete successful.');
+        }
+        return $this->json('system.error', 'project api delete failed.');
+    }
+
+    /*********************************************************************************/
+    /************** project contacts  **********************************************/
+    /*********************************************************************************/
     /**
      * this action showing project contacts list
      * @param request type request->isAjax?
@@ -232,7 +381,7 @@ class ProjectController extends Controller {
             return $this->render('merchant-list');
         }
         $params = $this->request->post();
-        $query = ProjectMerchant::filters(['id', ['title', 'like'], 'project_id', 'status'], $params)->filterResource(AdminResource::TypeProject);
+        $query = ProjectMerchant::filters(['id', ['title', 'like'], 'project_id', 'platform_id', 'paytype', 'status'], $params)->filterResource(AdminResource::TypeProject);
         $pagination = Render::pagination((clone $query)->count());
         $data['infos'] = $query->with('project')->with('merchant')->orderBy('id desc')->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
         $data['page'] = Render::pager($pagination);

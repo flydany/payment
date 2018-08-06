@@ -4,8 +4,9 @@ namespace common\models;
 
 use Yii;
 use yii\helpers\ArrayHelper;
+use common\models\interfaces\ResourceInterface;
 
-class Merchant extends ActiveRecord {
+class Merchant extends ActiveRecord implements ResourceInterface {
     
     // 私钥格式
     const PrivateTypePFX = 'pfx';
@@ -110,17 +111,26 @@ class Merchant extends ActiveRecord {
     {
         parent::afterSave($insert, $changedAttributes);
         if($insert && ( ! Yii::$app->admin->isSupper)) {
-            AdminResource::creator(Yii::$app->admin->id, $this->id, AdminResource::TypeMerchant);
+            AdminResource::creator(Yii::$app->admin->id, $this->id, static::resourceType());
         }
     }
 
     /**
-     * 获取项目已存在的负责人
-     * @return array
+     * 返回权限类型
+     * @return mixed
      */
-    public function getIdentities()
+    public static function resourceType()
     {
-        return AdminResource::find()->select('identity')->where(['item_id' => $this->id, 'type' => AdminResource::TypeMerchant])->column();
+        return AdminResource::TypePlatform;
+    }
+
+    /**
+     * 返回权限标识
+     * @return mixed
+     */
+    public function getPower()
+    {
+        return $this->platform_id.'.'.$this->merchant_number;
     }
 
     /**
@@ -129,10 +139,16 @@ class Merchant extends ActiveRecord {
      */
     public function getHasPermission()
     {
-        if(Yii::$app->admin->isSupper) {
-            return true;
-        }
-        return AdminResource::find()->where(['item_id' => $this->id, 'identity' => array_merge(Yii::$app->admin->identities, [Yii::$app->admin->id]), 'type' => AdminResource::TypeMerchant])->exists();
+        return AdminResource::hasPermission($this->power, static::resourceType());
+    }
+
+    /**
+     * 获取商户号已存在的负责人
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return AdminResource::identities($this->power, static::resourceType());
     }
 
     /**
@@ -194,7 +210,7 @@ class Merchant extends ActiveRecord {
                 function($value) {
                     return ['id' => $value['id'], 'title' => $value['id'].'.'.$value['title'].'.'.$value['merchant_number']];
                 },
-                static::find()->select('id, title, merchant_number')->where(['status' => static::StatusNormal])->filterResource(AdminResource::TypeMerchant)->orderBy('id desc')->asArray()->all()),
+                static::find()->select('id, title, merchant_number')->where(['status' => static::StatusNormal])->filterResource(static::resourceType())->orderBy('id desc')->asArray()->all()),
             'id', 'title'
         );
     }

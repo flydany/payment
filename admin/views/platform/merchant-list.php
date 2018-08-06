@@ -84,7 +84,7 @@ $this->addCrumbs('Platform');
             afterPost: function(param) {
                 // 名称显示
                 tableHandler.renderCategory({ category: $(param.tabler).find('.platform'), select: 'platform_id' });
-                tableHandler.renderCategory({ category: $(param.tabler).find('.paytype'), select: 'paytype' });
+                tableHandler.renderCategory({ category: $(param.tabler).find('.paytype'), select: 'paytype', default: 'all' });
                 tableHandler.renderCategory({ category: $(param.tabler).find('.status'), select: 'status' });
                 // 初始化 删除按钮事件
                 tableHandler.requestSingle({ button: $(param.tabler).find('.delete-data'), url: $('.delete-mult:first').data('href'), isKeep: false });
@@ -104,7 +104,7 @@ $this->addCrumbs('Platform');
         <td>{{info.updated_at | dateShow: 'minute'}}</td>
         <td>
             <a class="label label-primary" href="/platform/merchant-detail?id={{info.id}}"><i class="fa fa-edit fa-fw"></i>edit</a>
-            <a class="label label-success" href="/admin-resource/merchant?item_id={{info.id}}"><i class="fa fa-superpowers fa-fw"></i>permission</a>
+            <a class="label label-success" href="/admin-resource/merchant?id={{info.id}}"><i class="fa fa-superpowers fa-fw"></i>permission</a>
             <a class="label label-warning" href="/platform/bank-list?platform_id={{info.platform_id}}&merchant_number={{info.merchant_number}}&paytype={{info.paytype}}"><i class="fa fa-bank fa-fw"></i>banks</a>
             <a class="delete-data label label-danger" href="javascript:;"><i class="fa fa-trash fa-fw"></i>delete</a>
         </td>

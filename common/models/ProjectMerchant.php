@@ -92,7 +92,7 @@ class ProjectMerchant extends ActiveRecord {
     }
 
     /**
-     * 判断用户是否有权限
+     * 判断当前用户是否有此项目的权限
      * @return boolean
      */
     public function getHasPermission()

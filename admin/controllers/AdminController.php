@@ -30,7 +30,7 @@ class AdminController extends Controller {
         }
         $params = $this->request->post();
         $params['deleted_at'] = '0';
-        $query = Admin::filters(['username', 'role_id', 'mobile', 'deleted_at'], $params);
+        $query = Admin::filters(['username', 'role_id', 'mobile', 'deleted_at'], $params)->andWhere(['!=', 'id', '0']);
         $pagination = Render::pagination((clone $query)->count());
         $data['infos'] = $query->orderBy('id desc')->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
         $data['page'] = Render::pager($pagination);
@@ -162,7 +162,7 @@ class AdminController extends Controller {
         }
         $params = $this->request->post();
         $params['deleted_at'] = '0';
-        $query = AdminRole::filters(['identity', ['title', 'like'], 'deleted_at'], $params);
+        $query = AdminRole::filters(['identity', ['title', 'like'], 'deleted_at'], $params)->andWhere(['!=', 'id', '1']);
         $pagination = Render::pagination((clone $query)->count());
         $data['infos'] = $query->orderBy('id desc')->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
         $data['page'] = Render::pager($pagination);

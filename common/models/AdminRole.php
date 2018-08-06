@@ -101,7 +101,7 @@ class AdminRole extends ActiveRecord {
     public static function finder($id, $condition = [])
     {
         // id 为必填项，判断数据存在状态
-        if($id == 1) {
+        if(in_array($id, [0, 1])) {
             // 参数异常，渲染错误页面
             return false;
         }
