@@ -38,6 +38,6 @@ class Application extends \yii\web\Application {
                 return false;
             }
         }
-        return Admin::isValid($this->admin) ? true : false;
+        return $this->admin->valid();
     }
 }

@@ -193,7 +193,7 @@ class Admin extends ActiveRecord {
     {
         return password_verify($password.Yii::$app->params['passwordDigest'], $this->password_digest);
     }
-    
+
     /**
      * check wether this admin was out of time
      * @return boolean
@@ -204,18 +204,6 @@ class Admin extends ActiveRecord {
     }
 
     /**
-     * check wether this admin was out of time
-     * @return boolean
-     */
-    public static function isValid($admin)
-    {
-        if(empty($admin)) {
-            return false;
-        }
-        return ($admin['effect_date'] >= date('Y-m-d') || in_array($admin['effect_date'], [date('Y-m-d'), '0000-00-00'])) ? true : false;
-    }
-
-    /**
      * 设置登陆态
      * @return boolean
      */
@@ -223,7 +211,7 @@ class Admin extends ActiveRecord {
     {
         return Yii::$app->session->set('admin', $this);
         $cache = $this->attributes;
-        $cache['adminRole'] = $this->adminRole->attributes;
+        $cache['identity'] = $this->identity;
         $cache['expire_time'] = time() + 3600 * 24;
         return Yii::$app->session->set('admin', $cache);
     }
