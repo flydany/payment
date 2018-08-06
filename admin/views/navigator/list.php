@@ -23,7 +23,7 @@ $this->registerCss('
 <div class="alert alert-info" role="alert">
     <p><strong>Heads up!</strong></p>
     <p>navigation editor</p>
-    <p>1. at present, the navigation system only supports three level navigation, and one level of navigation is not allowed to add.</p>
+    <p>1. at present, the navigation system only supports three level, and the first level of navigation is not allowed to add.</p>
     <p>2. the function menu will not be displayed in the navigation bar.</p>
 </div>
 <table class="table table-bordered table-condensed" id="info-table">
