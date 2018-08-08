@@ -22,11 +22,13 @@ $this->registerJs("
 ?>
 <style>
     #website-name {
+        display:none;
         height:57px;
         line-height:57px;
         padding-left:15px;
         font-size:24px;
         cursor:pointer;
+        border-bottom:1px solid #D9DEE4;
     }
     #website-name a {
         color:#ECF0F1;
@@ -38,7 +40,9 @@ $this->registerJs("
         border-radius: 50%;
     }
     #admin-name {
-        margin-top:5px;
+        /*margin-top:5px;*/
+        padding-bottom:1px;
+        border-bottom:1px solid #D9DEE4;
     }
     #admin-name .photo {
         width:35%;
@@ -49,13 +53,13 @@ $this->registerJs("
         background: #fff;
         z-index: 1000;
         position: inherit;
-        margin-top: 20px;
+        margin-top: 8px;
         margin-left:15px;
         border: 1px solid rgba(52,73,94,.44);
         padding: 4px;
     }
     #admin-name .info {
-        padding:12px 10px 10px;
+        padding:0 10px 10px;
         width:65%;
         float:left;
     }
@@ -106,13 +110,16 @@ $this->registerJs("
         cursor: pointer;
     }
     #sidebar-menu .side-menu > li.active {
-        border-right:3px solid #1ABB9C;
+        border-left:3px solid #1ABB9C;
     }
     #sidebar-menu .side-menu > li > a {
         display: block;
         margin-bottom: 6px;
         padding: 13px 15px 12px;
         color:#F2F5F7;
+    }
+    #sidebar-menu .side-menu > li.active > a {
+        padding-left:12px;
     }
     #sidebar-menu .side-menu > li.active > a {
         text-shadow: rgba(0,0,0,.25) 0 -1px 0;
@@ -136,7 +143,7 @@ $this->registerJs("
     }
     #sidebar-menu .side-menu li.active a .toggle {
         text-align: right !important;
-        margin-right: 3px;
+        margin-right: 7px;
     }
     #sidebar-menu .child-menu {
         display: none;
@@ -146,7 +153,7 @@ $this->registerJs("
         padding:0;
     }
     #sidebar-menu .child-menu li {
-        padding-left: 36px;
+        padding-left: 33px;
     }
     #sidebar-menu .child-menu li:hover,
     #sidebar-menu .child-menu li.active {
@@ -225,7 +232,6 @@ $this->registerJs("
             left:67px;
             width:230px;
             min-height:120px;
-            border-left: 3px solid #1ABB9C;
             background-color:#2A3F54;
             text-align:left;
             border-radius:0 5px 5px 0;
@@ -234,7 +240,7 @@ $this->registerJs("
             display:block;
         }
         #sidebar-menu .side-menu > li:hover {
-            border-right: 3px solid #1ABB9C;
+            border-left: 3px solid #1ABB9C;
         }
         #sidebar-menu .side-menu > li > a {
             padding:10px 0;

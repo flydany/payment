@@ -43,7 +43,7 @@ use yii\helpers\Html;
         background: #EDEDED;
         border-bottom: 1px solid #D9DEE4;
         margin-bottom: 15px;
-        padding:5px 0;
+        padding:10px 0;
         width: 100%;
     }
     #sidebar-toggle {
