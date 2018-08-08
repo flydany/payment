@@ -4,7 +4,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use common\helpers\Render;
+use admin\helpers\Render;
 use common\models\Withdraw;
 
 $this->title = '提现列表';

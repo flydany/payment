@@ -2,7 +2,7 @@
 
 /* @var $this admin\components\View */
 
-use common\helpers\Render;
+use admin\helpers\Render;
 use common\models\Platform;
 use common\models\Merchant;
 
@@ -17,23 +17,23 @@ $this->addCrumbs('Merchant List', 'platform/merchant-list');
 <div class="contenter">
     <div class="form-inline search clearfix" id="info-search">
         <div class="input-group col-xs-2">
-            <span class="input-group-addon"><i class="fa fa-thumb-tack fa-fw"></i></span>
+            <span class="input-group-addon">platform</span>
             <?= Render::select('platform_id', Platform::$platformSelector, $this->request->get('platform_id'), ['prompt' => '--', 'class' => 'tabler select-picker']) ?>
         </div>
         <div class="input-group col-xs-2">
-            <span class="input-group-addon"><i class="fa fa-shopping-bag fa-fw"></i></span>
+            <span class="input-group-addon">merchant</span>
             <input type="text" class="form-control tabler" name="merchant_number" value="<?= $this->request->get('merchant_number') ?>" placeholder="merchant number">
         </div>
         <div class="input-group col-xs-2">
-            <span class="input-group-addon"><i class="fa fa-recycle fa-fw"></i></span>
+            <span class="input-group-addon">payment</span>
             <?= Render::select('paytype', Platform::$paytypeSelector, $this->request->get('paytype'), ['prompt' => '--', 'class' => 'tabler select-picker']) ?>
         </div>
         <div class="input-group col-xs-2">
-            <span class="input-group-addon"><i class="fa fa-book fa-fw"></i></span>
+            <span class="input-group-addon">bank</span>
             <?= Render::select('bank_id', Platform::$bankSelector, null, ['prompt' => '--', 'class' => 'tabler select-picker']) ?>
         </div>
         <div class="input-group col-xs-2">
-            <span class="input-group-addon"><i class="fa fa-check fa-fw"></i></span>
+            <span class="input-group-addon">status</span>
             <?= Render::select('status', Merchant::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler select-picker']) ?>
         </div>
         <div class="input-group col-xs-1"><button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button></div>
@@ -42,15 +42,15 @@ $this->addCrumbs('Merchant List', 'platform/merchant-list');
         <table class="table table-bordered table-striped" id="info-table">
             <thead>
             <tr>
-                <th><i class="fa fa-thumb-tack fa-fw"></i>platform</th>
-                <th><i class="fa fa-shopping-bag fa-fw"></i>merchant</th>
-                <th><i class="fa fa-recycle fa-fw"></i>payment</th>
-                <th><i class="fa fa-bank fa-fw"></i>bank</th>
-                <th><i class="fa fa-sort-alpha-asc fa-fw"></i>priority</th>
-                <th><i class="fa fa-filter fa-fw"></i>single</th>
-                <th><i class="fa fa-filter fa-fw"></i>day</th>
-                <th><i class="fa fa-check fa-fw"></i>status</th>
-                <th><i class="fa fa-gear fa-fw"></i>operation</th>
+                <th>platform</th>
+                <th>merchant</th>
+                <th>payment</th>
+                <th>bank</th>
+                <th>priority</th>
+                <th>single</th>
+                <th>day</th>
+                <th>status</th>
+                <th>operation</th>
             </tr>
             </thead>
             <tbody>

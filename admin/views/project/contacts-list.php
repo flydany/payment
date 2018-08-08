@@ -2,7 +2,7 @@
 
 /* @var $this admin\components\View */
 
-use common\helpers\Render;
+use admin\helpers\Render;
 use common\models\Project;
 use common\models\ProjectContacts;
 
@@ -16,19 +16,19 @@ $this->addCrumbs('Project List', 'project/list');
 <div class="contenter">
     <div class="form-inline search clearfix" id="info-search">
         <div class="input-group col-xs-3">
-            <span class="input-group-addon"><i class="fa fa-list fa-fw"></i></span>
+            <span class="input-group-addon">project</span>
             <?= Render::select('project_id', Project::selector(), $this->request->get('id'), ['prompt' => '--', 'class' => 'tabler select-picker', 'data-live-search' => 'true']) ?>
         </div>
         <div class="input-group col-xs-2">
-            <span class="input-group-addon"><i class="fa fa-user-circle fa-fw"></i></span>
+            <span class="input-group-addon">identity</span>
             <?= Render::select('identity', ProjectContacts::$identitySelector, null, ['prompt' => '--', 'class' => 'tabler select-picker']) ?>
         </div>
         <div class="input-group col-xs-2">
-            <span class="input-group-addon"><i class="fa fa-address-card fa-fw"></i></span>
+            <span class="input-group-addon">name</span>
             <input type="text" class="form-control tabler" name="name" placeholder="name">
         </div>
         <div class="input-group col-xs-2">
-            <span class="input-group-addon"><i class="fa fa-phone-square fa-fw"></i></span>
+            <span class="input-group-addon">mobile</span>
             <input type="text" class="form-control tabler" name="mobile" placeholder="mobile">
         </div>
         <div class="input-group col-xs-1">
@@ -39,13 +39,13 @@ $this->addCrumbs('Project List', 'project/list');
     <table class="table table-bordered table-striped" id="info-table">
         <thead>
         <tr>
-            <th><i class="fa fa-list fa-fw"></i>project</th>
-            <th><i class="fa fa-user-circle fa-fw"></i>identity</th>
-            <th><i class="fa fa-address-card fa-fw"></i>name</th>
-            <th><i class="fa fa-phone-square fa-fw"></i>mobile</th>
-            <th><i class="fa fa-at fa-fw"></i>email</th>
-            <th><i class="fa fa-clock-o fa-fw"></i>updated at</th>
-            <th><i class="fa fa-gear fa-fw"></i>operation</th>
+            <th>project</th>
+            <th>identity</th>
+            <th>name</th>
+            <th>mobile</th>
+            <th>email</th>
+            <th>updated at</th>
+            <th>operation</th>
         </tr>
         </thead>
         <tbody>

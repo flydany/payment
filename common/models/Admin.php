@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\helpers\Render;
 use Yii;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
@@ -14,7 +15,7 @@ class Admin extends ActiveRecord {
     {
         return [
             [['username', 'realname', 'mobile', 'email', 'effect_date'], 'required'],
-            [['username', 'password_digest'], 'string', 'length' => [4, 128]],
+            [['username', 'password_digest', 'photo'], 'string', 'length' => [4, 128]],
             [['mobile'], 'match', 'pattern' => "/^1\d{10}$/"],
             [['username', 'mobile'], 'unique'],
         ];
@@ -31,6 +32,7 @@ class Admin extends ActiveRecord {
             'realname' => 'realname',
             'mobile' => 'mobile',
             'email' => 'email',
+            'photo' => 'photo',
             'effect_date' => 'effect date',
         ];
     }
@@ -50,6 +52,7 @@ class Admin extends ActiveRecord {
                 'realname' => ['realname', ['maxlength' => 64, 'required']],
                 'mobile' => ['mobile', ['mobile', 'required']],
                 'email' => ['email', ['email', 'required']],
+                'photo' => ['photo', ['url']],
                 'effect_date' => ['effect date', ['date' => 'Y-m-d', 'required']],
             ],
         ];
@@ -204,16 +207,33 @@ class Admin extends ActiveRecord {
     }
 
     /**
+     * 获取头像
+     * @return string
+     */
+    public function getPicture()
+    {
+        if($this->photo) {
+            return Render::upload($this->photo);
+        }
+        return Render::static('image/photo.jpg');
+    }
+
+    /**
      * 设置登陆态
      * @return boolean
      */
     public function login()
     {
-        return Yii::$app->session->set('admin', $this);
-        $cache = $this->attributes;
-        $cache['identity'] = $this->identity;
-        $cache['expire_time'] = time() + 3600 * 24;
-        return Yii::$app->session->set('admin', $cache);
+        return Yii::$app->session->set('admin', ['id' => $this->id]);
+    }
+
+    /**
+     * 取消登录
+     * @return boolean
+     */
+    public function logout()
+    {
+        return Yii::$app->session->del('admin');
     }
     
     /**

@@ -43,7 +43,6 @@ use yii\helpers\Html;
         background: #EDEDED;
         border-bottom: 1px solid #D9DEE4;
         margin-bottom: 15px;
-        padding:10px 0;
         width: 100%;
     }
     #sidebar-toggle {
@@ -55,6 +54,32 @@ use yii\helpers\Html;
     .breadcrumb {
         background-color:#EDEDED;
         margin-bottom:0;
+        padding:15px;
+    }
+    #admin-info {
+        height:50px;
+        line-height:50px;
+        padding:0 15px;
+        cursor:pointer;
+    }
+    #admin-info img {
+        height:30px;
+        line-height:30px;
+        cursor:pointer;
+        margin-right:5px;
+    }
+    #admin-info:hover,
+    #top-panel .dropdown.open #admin-info {
+        background-color:#D9DEE4;
+    }
+    #top-panel .dropdown-menu {
+        margin-top:1px;
+        border-top:0;
+        border-top-left-radius:0;
+        border-top-right-radius:0;
+    }
+    #top-panel .dropdown-menu li i {
+        margin-top:3px;
     }
 </style>
 <div class="col-xs-3" id="left-panel">
@@ -62,9 +87,23 @@ use yii\helpers\Html;
 </div>
 
 <div id="right-panel">
-    <div class="wrap" id="top-panel">
+    <div id="top-panel">
+        <div class="dropdown pull-right">
+            <div class="dropdown-toggle" id="admin-info" data-toggle="dropdown">
+                <img src="<?= $this->admin->picture ?>" class="img-circle">
+                <?= $this->admin->username ?>
+                <span class="caret"></span>
+            </div>
+            <ul class="dropdown-menu pull-right" aria-labelledby="admin-info">
+                <li><a href="#">Setting</a></li>
+                <li><a href="#">Information</a></li>
+                <li><a href="#">Reset Password</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="/site/logout"><i class="fa fa-sign-out float-right"></i>Logout</a></li>
+            </ul>
+        </div>
         <!--span id="sidebar-toggle"><i class="fa fa-bars"></i></span-->
-        <ol class="breadcrumb">
+        <ul class="breadcrumb">
             <li><i class="fa fa-home fa-fw"></i><a href="/site/index"><?= $this->context->module->name ?></a></li>
             <?php if( ! empty($this->crumbs)) {
                 foreach($this->crumbs as $crumbs) {
@@ -77,7 +116,7 @@ use yii\helpers\Html;
                 }
             } ?>
             <li><?= $this->title ?></li>
-        </ol>
+        </ul>
     </div>
     <div class="wrap">
         <?= $content ?>

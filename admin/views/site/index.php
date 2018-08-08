@@ -1,7 +1,7 @@
 <?php
 
 /* @var $this yii\web\View */
-use common\helpers\Render;
+use admin\helpers\Render;
 use common\models\Admin;
 
 $this->title = 'welcome';

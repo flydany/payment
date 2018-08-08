@@ -2,7 +2,7 @@
 
 /* @var $this admin\components\View */
 
-use common\helpers\Render;
+use admin\helpers\Render;
 use common\models\Project;
 use common\models\ProjectApi;
 
@@ -16,15 +16,15 @@ $this->addCrumbs('Project List', 'project/list');
 <div class="contenter">
     <div class="form-inline search clearfix" id="info-search">
         <div class="input-group col-xs-3">
-            <span class="input-group-addon"><i class="fa fa-list fa-fw"></i></span>
+            <span class="input-group-addon">project</span>
             <?= Render::select('project_id', Project::selector(), $this->request->get('id'), ['prompt' => '--', 'class' => 'tabler select-picker', 'data-live-search' => 'true']) ?>
         </div>
         <div class="input-group col-xs-2">
-            <span class="input-group-addon"><i class="fa fa-ravelry fa-fw"></i></span>
+            <span class="input-group-addon">api</span>
             <?= Render::select('api', ProjectApi::$apiSelector, null, ['prompt' => '--', 'class' => 'tabler select-picker']) ?>
         </div>
         <div class="input-group col-xs-2">
-            <span class="input-group-addon"><i class="fa fa-check fa-fw"></i></span>
+            <span class="input-group-addon">status</span>
             <?= Render::select('status', ProjectApi::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler select-picker']) ?>
         </div>
         <div class="input-group col-xs-1">
@@ -35,12 +35,12 @@ $this->addCrumbs('Project List', 'project/list');
     <table class="table table-bordered table-striped" id="info-table">
         <thead>
         <tr>
-            <th><i class="fa fa-list fa-fw"></i>title</th>
-            <th><i class="fa fa-shopping-cart fa-fw"></i>project</th>
-            <th><i class="fa fa-ravelry fa-fw"></i>api</th>
-            <th><i class="fa fa-check fa-fw"></i>status</th>
-            <th><i class="fa fa-clock-o fa-fw"></i>updated at</th>
-            <th><i class="fa fa-gear fa-fw"></i>operation</th>
+            <th>title</th>
+            <th>project</th>
+            <th>api</th>
+            <th>status</th>
+            <th>updated at</th>
+            <th>operation</th>
         </tr>
         </thead>
         <tbody>

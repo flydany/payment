@@ -2,7 +2,7 @@
 
 /* @var $this admin\components\View */
 
-use common\helpers\Render;
+use admin\helpers\Render;
 use common\models\Platform;
 
 $this->title = 'Platform List';
@@ -19,8 +19,8 @@ $this->addCrumbs('Platform');
     <table class="table table-bordered table-striped" id="info-table">
         <thead>
         <tr>
-            <th><i class="fa fa-list fa-fw"></i>platform name</th>
-            <th><i class="fa fa-gear fa-fw"></i>operation</th>
+            <th>platform</th>
+            <th>operation</th>
         </tr>
         </thead>
         <tbody>

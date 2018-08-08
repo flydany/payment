@@ -2,7 +2,7 @@
 
 namespace admin\controllers;
 
-use common\helpers\Render;
+use admin\helpers\Render;
 use common\models\Recharge;
 use common\models\RechargeLog;
 use common\models\AdminResource;

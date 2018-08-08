@@ -3,7 +3,7 @@
 /* @var $this yii\web\View */
 
 use yii\helpers\Url;
-use common\helpers\Render;
+use admin\helpers\Render;
 
 $this->title = 'Login In';
 ?>

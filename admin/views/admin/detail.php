@@ -2,7 +2,7 @@
 
 /* @var $this \admin\components\View */
 
-use common\helpers\Render;
+use admin\helpers\Render;
 use common\models\Admin;
 use common\models\AdminRole;
 

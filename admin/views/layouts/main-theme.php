@@ -18,7 +18,7 @@ use yii\helpers\Html;
     <?= Html::csrfMetaTags() ?>
     <title><?= $this->context->module->name.' '.Html::encode($this->title) ?></title>
     <?php $this->head() ?>
-    <link rel="stylesheet" href="<?= \common\helpers\Render::static('css/theme.css') ?>">
+    <link rel="stylesheet" href="<?= \admin\helpers\Render::static('css/theme.css') ?>">
 </head>
 <body class="nav-md">
 <?php $this->beginBody() ?>

@@ -5,7 +5,7 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use common\helpers\Render;
+use admin\helpers\Render;
 use common\models\Message;
 
 $this->addCrumbs('站内信列表', 'message/message-list');

@@ -16,6 +16,7 @@ class AppAsset extends AssetBundle {
     public $depends = [
         'admin\assets\BootstrapAsset',
         'admin\assets\FontAwesomeAsset',
+        // 'admin\assets\GentelellaAsset',
         'admin\assets\DialogAsset',
         'admin\assets\SelecterAsset',
         'dosamigos\datetimepicker\DateTimePickerAsset',

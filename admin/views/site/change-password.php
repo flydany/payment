@@ -6,7 +6,7 @@
 /* @var $exception Exception */
 
 use yii\helpers\Url;
-use common\helpers\Render;
+use admin\helpers\Render;
 
 $this->addCrumbs('个人中心');
 $this->title = '修改密码';

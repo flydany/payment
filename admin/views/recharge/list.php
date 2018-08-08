@@ -2,7 +2,7 @@
 
 /* @var $this admin\components\View */
 
-use common\helpers\Render;
+use admin\helpers\Render;
 use common\models\Project;
 use common\models\Platform;
 use common\models\Recharge;
@@ -16,31 +16,31 @@ $this->addCrumbs('Recharge');
 <div class="contenter">
     <div class="form-inline search clearfix" id="info-search">
         <div class="input-group col-xs-3">
-            <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
+            <span class="input-group-addon">project</span>
             <?= Render::select('project_id', Project::selector(), null, ['prompt' => '--', 'placeholder' => 'project', 'class' => 'tabler select-picker', 'data-live-search' => 'true']) ?>
         </div>
         <div class="input-group col-xs-3">
-            <span class="input-group-addon"><i class="fa fa-cog fa-fw"></i></span>
+            <span class="input-group-addon">project merchant</span>
             <input type="text" class="form-control tabler" name="project_merchant_id" placeholder="project merchant">
         </div>
         <div class="input-group col-xs-2">
-            <span class="input-group-addon"><i class="fa fa-barcode fa-fw"></i></span>
+            <span class="input-group-addon">order</span>
             <input type="text" class="form-control tabler" name="order_number" placeholder="order number">
         </div>
         <div class="input-group col-xs-2">
-            <span class="input-group-addon"><i class="fa fa-bullseye fa-fw"></i></span>
+            <span class="input-group-addon">source order</span>
             <input type="text" class="form-control tabler" name="source_order_number" placeholder="source order number">
         </div>
         <div class="input-group col-xs-2">
-            <span class="input-group-addon"><i class="fa fa-check fa-fw"></i></span>
+            <span class="input-group-addon">status</span>
             <?= Render::select('status', Recharge::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler select-picker']) ?>
         </div>
         <div class="input-group col-xs-2">
-            <span class="input-group-addon"><i class="fa fa-bank fa-fw"></i></span>
+            <span class="input-group-addon">bank</span>
             <?= Render::select('bank_id', Platform::$bankSelector, null, ['prompt' => '--', 'class' => 'tabler select-picker']) ?>
         </div>
         <div class="input-group col-xs-6">
-            <span class="input-group-addon"><i class="fa fa-clock-o fa-fw"></i></span>
+            <span class="input-group-addon">time</span>
             <input type="text" class="form-control tabler" name="star" placeholder="start time">
             <span class="input-group-addon"><i class="fa fa-caret-right fa-fw"></i></span>
             <input type="text" class="form-control tabler" name="end" placeholder="end time">
@@ -51,16 +51,16 @@ $this->addCrumbs('Recharge');
     <table class="table table-bordered table-striped" id="info-table">
         <thead>
         <tr>
-            <th><i class="fa fa-list fa-fw"></i></th>
-            <th><i class="fa fa-shopping-cart fa-fw"></i>project</th>
-            <th><i class="fa fa-shopping-bag fa-fw"></i>merchant</th>
-            <th><i class="fa fa-barcode fa-fw"></i>order</th>
-            <th><i class="fa fa-bullseye fa-fw"></i>source</th>
-            <th><i class="fa fa-bank fa-fw"></i>bank</th>
-            <th><i class="fa fa-cny fa-fw"></i>amount</th>
-            <th><i class="fa fa-check fa-fw"></i>status</th>
-            <th><i class="fa fa-clock-o fa-fw"></i>created at</th>
-            <th><i class="fa fa-gear fa-fw"></i>operation</th>
+            <th>id</th>
+            <th>project</th>
+            <th>merchant</th>
+            <th>order</th>
+            <th>source</th>
+            <th>bank</th>
+            <th>amount</th>
+            <th>status</th>
+            <th>created at</th>
+            <th>operation</th>
         </tr>
         </thead>
         <tbody>

@@ -2,7 +2,7 @@
 
 /* @var $this admin\components\View */
 
-use common\helpers\Render;
+use admin\helpers\Render;
 use common\models\Project;
 
 $this->title = 'Project List';
@@ -14,15 +14,15 @@ $this->addCrumbs('Project');
 <div class="contenter">
     <div class="form-inline search clearfix" id="info-search">
         <div class="input-group col-xs-2">
-            <span class="input-group-addon"><i class="fa fa-list fa-fw"></i></span>
+            <span class="input-group-addon">id</span>
             <input type="text" class="form-control tabler" name="id" placeholder="id">
         </div>
         <div class="input-group col-xs-3">
-            <span class="input-group-addon"><i class="fa fa-book fa-fw"></i></span>
+            <span class="input-group-addon">title</span>
             <input type="text" class="form-control tabler" name="title" placeholder="title">
         </div>
         <div class="input-group col-xs-2">
-            <span class="input-group-addon"><i class="fa fa-check fa-fw"></i></span>
+            <span class="input-group-addon">status</span>
             <?= Render::select('status', Project::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler select-picker']) ?>
         </div>
         <button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button>
@@ -31,12 +31,12 @@ $this->addCrumbs('Project');
     <table class="table table-bordered table-striped" id="info-table">
         <thead>
         <tr>
-            <th><i class="fa fa-list fa-fw"></i></th>
-            <th><i class="fa fa-book fa-fw"></i>title</th>
-            <th><i class="fa fa-calendar-times-o fa-fw"></i>effect date</th>
-            <th><i class="fa fa-check fa-fw"></i>status</th>
-            <th><i class="fa fa-clock-o fa-fw"></i>updated at</th>
-            <th><i class="fa fa-gear fa-fw"></i>operation</th>
+            <th>id</th>
+            <th>title</th>
+            <th>effect date</th>
+            <th>status</th>
+            <th>updated at</th>
+            <th>operation</th>
         </tr>
         </thead>
         <tbody>

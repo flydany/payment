@@ -5,7 +5,7 @@ namespace admin\controllers;
 use common\models\AdminResource;
 use Yii;
 use yii\helpers\ArrayHelper;
-use common\helpers\Render;
+use admin\helpers\Render;
 use common\helpers\Checker;
 use common\models\Admin;
 use common\models\AdminRole;

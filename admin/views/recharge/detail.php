@@ -3,7 +3,7 @@
 /* @var $this yii\web\View */
 
 use yii\helpers\Url;
-use common\helpers\Render;
+use admin\helpers\Render;
 use common\models\Project;
 use common\models\Recharge;
 use common\models\RechargeLog;
@@ -121,10 +121,10 @@ $this->setActiveNavigator('project/list');
                 <thead>
                 <tr>
                     <th class="first"><i class="fa fa-user fa-fw"></i>operator</th>
-                    <th><i class="fa fa-gear fa-fw"></i>event</th>
-                    <th><i class="fa fa-location-arrow fa-fw"></i>IP</th>
-                    <th><i class="fa fa-gavel fa-fw"></i>operation</th>
-                    <th><i class="fa fa-clock-o fa-fw"></i>time</th>
+                    <th>event</th>
+                    <th>IP</th>
+                    <th>operation</th>
+                    <th>time</th>
                 </tr>
                 </thead>
                 <tbody>

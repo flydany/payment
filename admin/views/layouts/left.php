@@ -22,59 +22,24 @@ $this->registerJs("
 ?>
 <style>
     #website-name {
-        display:none;
         height:57px;
         line-height:57px;
         padding-left:15px;
         font-size:24px;
         cursor:pointer;
-        border-bottom:1px solid #D9DEE4;
     }
     #website-name a {
         color:#ECF0F1;
         text-decoration:none;
     }
+    #website-name span {
+        padding-left:15px;
+    }
     #website-name i {
-        border: 1px solid #EAEAEA;
-        padding: 5px 6px;
+        border: 2px solid #EAEAEA;
+        padding: 6px 7px;
         border-radius: 50%;
     }
-    #admin-name {
-        /*margin-top:5px;*/
-        padding-bottom:1px;
-        border-bottom:1px solid #D9DEE4;
-    }
-    #admin-name .photo {
-        width:35%;
-        float:left;
-    }
-    #admin-name .photo img {
-        width: 70%;
-        background: #fff;
-        z-index: 1000;
-        position: inherit;
-        margin-top: 8px;
-        margin-left:15px;
-        border: 1px solid rgba(52,73,94,.44);
-        padding: 4px;
-    }
-    #admin-name .info {
-        padding:0 10px 10px;
-        width:65%;
-        float:left;
-    }
-    #admin-name .info span {
-        font-size: 13px;
-        line-height: 30px;
-        color: #BAB8B8;
-    }
-    #admin-name .info h2 {
-        font-size: 14px;
-        color: #ECF0F1;
-        margin: 0;
-        font-weight: 300;
-    }
-
     #sidebar-menu {
         margin-top:30px;
     }
@@ -87,7 +52,7 @@ $this->registerJs("
         font-size: 18px;
     }
     #sidebar-menu .menu-section {
-        margin-bottom: 30px
+        margin-bottom: 20px
     }
     #sidebar-menu .menu-section h3 {
         padding-left: 15px;
@@ -120,8 +85,6 @@ $this->registerJs("
     }
     #sidebar-menu .side-menu > li.active > a {
         padding-left:12px;
-    }
-    #sidebar-menu .side-menu > li.active > a {
         text-shadow: rgba(0,0,0,.25) 0 -1px 0;
         background: linear-gradient(#334556,#2C4257),#2A3F54;
         box-shadow: rgba(0,0,0,.25) 0 1px 0,inset rgba(255,255,255,.16) 0 1px 0
@@ -153,7 +116,7 @@ $this->registerJs("
         padding:0;
     }
     #sidebar-menu .child-menu li {
-        padding-left: 33px;
+        padding-left: 30px;
     }
     #sidebar-menu .child-menu li:hover,
     #sidebar-menu .child-menu li.active {
@@ -188,7 +151,6 @@ $this->registerJs("
     @media (max-width: 1193px) {
         #left-panel,
         #website-name,
-        #admin-name,
         #sidebar-menu {
             width:70px;
             text-align:center;
@@ -200,7 +162,6 @@ $this->registerJs("
             margin-left:70px;
         }
         #website-name span,
-        #admin-name,
         #sidebar-menu .menu-section > h3,
         #sidebar-menu .toggle,
         #sidebar-menu li.active > ul.child-menu {
@@ -245,25 +206,16 @@ $this->registerJs("
         #sidebar-menu .side-menu > li > a {
             padding:10px 0;
         }
+        #sidebar-menu .side-menu > li.active > a {
+            padding-left:0;
+        }
     }
 </style>
 
-<div class="clearfix">
+<div class="clearfix" style="width:100%;">
     <div  id="website-name">
-        <a href="/index.php"><i class="fa fa-paw"></i><span> <?= $this->context->module->name ?></span></a>
+        <a href="/index.php"><i class="fa fa-paw"></i><span><?= $this->context->module->name ?></span></a>
     </div>
-
-    <!-- menu profile quick info -->
-    <div class="clearfix" id="admin-name">
-        <div class="photo">
-            <img src="<?= Render::static('image/icon.png') ?>" alt="Pay Point" class="img-circle">
-        </div>
-        <div class="info">
-            <span>Welcome,</span>
-            <h2><?= $this->admin->realname ?></h2>
-        </div>
-    </div>
-    <!-- /menu profile quick info -->
 
     <!-- sidebar menu -->
     <div id="sidebar-menu">

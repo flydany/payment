@@ -4,7 +4,7 @@ namespace admin\controllers;
 
 use Yii;
 use yii\web\UploadedFile;
-use common\helpers\Render;
+use admin\helpers\Render;
 use common\models\Platform;
 use common\models\Merchant;
 use common\models\MerchantBank;

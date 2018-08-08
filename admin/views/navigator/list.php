@@ -2,7 +2,7 @@
 
 /* @var $this \admin\components\View */
 
-use common\helpers\Render;
+use admin\helpers\Render;
 use common\models\Navigator;
 
 $this->title = 'Navigator List';
@@ -29,12 +29,12 @@ $this->registerCss('
 <table class="table table-bordered table-condensed" id="info-table">
     <thead>
     <tr data-id="0">
-        <th><i class="fa fa-list fa-fw"></i>title</th>
-        <th><i class="fa fa-flag fa-fw"></i>navigator type</th>
-        <th><i class="fa fa-sitemap fa-fw"></i> controller</th>
-        <th><i class="fa fa-image fa-fw"></i>icon class</th>
-        <th><i class="fa fa-sort fa-fw"></i>sort</th>
-        <th><i class="fa fa-gear fa-fw"></i>gear</th>
+        <th>title</th>
+        <th>navigator type</th>
+        <th> controller</th>
+        <th>icon class</th>
+        <th>sort</th>
+        <th>gear</th>
     </tr>
     </thead>
     <tbody>

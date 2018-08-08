@@ -12,11 +12,11 @@ $this->addCrumbs('Manager');
 <div class="contenter">
     <div class="form-inline search clearfix" id="info-search">
         <div class="input-group col-xs-3">
-            <span class="input-group-addon"><i class="fa fa-superpowers fa-fw"></i></span>
+            <span class="input-group-addon">identity</span>
             <input type="text" class="form-control tabler" name="identity" placeholder="identity">
         </div>
         <div class="input-group col-xs-3">
-            <span class="input-group-addon"><i class="fa fa-book fa-fw"></i></span>
+            <span class="input-group-addon">title</span>
             <input type="text" class="form-control tabler" name="title" placeholder="title">
         </div>
         <button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button>
@@ -25,10 +25,10 @@ $this->addCrumbs('Manager');
     <table class="table table-bordered table-striped" id="info-table">
         <thead>
         <tr>
-            <th><i class="fa fa-superpowers fa-fw"></i>identity</th>
-            <th><i class="fa fa-book fa-fw"></i>title</th>
-            <th><i class="fa fa-bookmark-o fa-fw"></i>remark</th>
-            <th><i class="fa fa-gear fa-fw"></i>operation</th>
+            <th>identity</th>
+            <th>title</th>
+            <th>remark</th>
+            <th>operation</th>
         </tr>
         </thead>
         <tbody>

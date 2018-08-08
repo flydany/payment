@@ -2,7 +2,7 @@
 
 /* @var $this admin\components\View */
 
-use common\helpers\Render;
+use admin\helpers\Render;
 use common\models\Platform;
 use common\models\Project;
 use common\models\ProjectMerchant;
@@ -17,23 +17,23 @@ $this->addCrumbs('Project List', 'project/list');
 <div class="contenter">
     <div class="form-inline search clearfix" id="info-search">
         <div class="input-group col-xs-2">
-            <span class="input-group-addon"><i class="fa fa-book fa-fw"></i></span>
+            <span class="input-group-addon">title</span>
             <input type="text" class="form-control tabler" name="title" placeholder="title">
         </div>
         <div class="input-group col-xs-2">
-            <span class="input-group-addon"><i class="fa fa-shopping-cart fa-fw"></i></span>
+            <span class="input-group-addon">project</span>
             <?= Render::select('project_id', Project::selector(), null, ['prompt' => '--', 'placeholder' => 'project', 'class' => 'tabler select-picker', 'data-live-search' => 'true']) ?>
         </div>
         <div class="input-group col-xs-2">
-            <span class="input-group-addon"><i class="fa fa-thumb-tack fa-fw"></i></span>
+            <span class="input-group-addon">platform</span>
             <?= Render::select('platform_id', Platform::$platformSelector, null, ['prompt' => '--', 'class' => 'tabler select-picker']) ?>
         </div>
         <div class="input-group col-xs-2">
-            <span class="input-group-addon"><i class="fa fa-recycle fa-fw"></i></span>
+            <span class="input-group-addon">payment</span>
             <?= Render::select('paytype', Platform::$paytypeSelector, null, ['prompt' => '--', 'class' => 'tabler select-picker']) ?>
         </div>
         <div class="input-group col-xs-2">
-            <span class="input-group-addon"><i class="fa fa-check fa-fw"></i></span>
+            <span class="input-group-addon">status</span>
             <?= Render::select('status', ProjectMerchant::$statusSelector, null, ['prompt' => '--', 'class' => 'tabler select-picker']) ?>
         </div>
         <div class="input-group col-xs-1"><button class="btn btn-primary btn-round" id="search-button"><i class="fa fa-search fa-fw"></i>search</button></div>
@@ -42,14 +42,14 @@ $this->addCrumbs('Project List', 'project/list');
     <table class="table table-bordered table-striped" id="info-table">
         <thead>
         <tr>
-            <th><i class="fa fa-book fa-fw"></i>title</th>
-            <th><i class="fa fa-shopping-cart fa-fw"></i>project</th>
-            <th><i class="fa fa-thumb-tack fa-fw"></i>platform</th>
-            <th><i class="fa fa-shopping-bag fa-fw"></i>merchant</th>
-            <th><i class="fa fa-recycle fa-fw"></i>payment</th>
-            <th><i class="fa fa-check fa-fw"></i>status</th>
-            <th><i class="fa fa-clock-o fa-fw"></i>updated at</th>
-            <th><i class="fa fa-gear fa-fw"></i>operation</th>
+            <th>title</th>
+            <th>project</th>
+            <th>platform</th>
+            <th>merchant</th>
+            <th>payment</th>
+            <th>status</th>
+            <th>updated at</th>
+            <th>operation</th>
         </tr>
         </thead>
         <tbody>

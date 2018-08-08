@@ -2,7 +2,7 @@
 
 /* @var $this admin\components\View */
 
-use common\helpers\Render;
+use admin\helpers\Render;
 use common\models\AdminRole;
 
 $this->title = 'Administrator List';
@@ -15,15 +15,11 @@ $this->addCrumbs('Manager');
 <div class="contenter">
     <div class="form-inline search clearfix" id="info-search">
         <div class="input-group col-xs-3">
-            <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+            <span class="input-group-addon">username</span>
             <input type="text" class="form-control tabler" name="username" placeholder="username">
         </div>
-        <!--div class="input-group col-xs-3 selecter">
-            <span class="input-group-addon"><i class="fa fa-superpowers fa-fw"></i></span>
-            <?//= Render::select('role_id', AdminRole::identitySelector(), null, ['prompt' => '--']) ?>
-        </div-->
         <div class="input-group col-xs-3">
-            <span class="input-group-addon"><i class="fa fa-phone-square fa-fw"></i></span>
+            <span class="input-group-addon">mobile</span>
             <input type="text" class="form-control tabler" name="mobile" placeholder="mobile">
         </div>
         <button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button>
@@ -32,13 +28,12 @@ $this->addCrumbs('Manager');
     <table class="table table-bordered table-striped" id="info-table">
         <thead>
         <tr>
-            <th><i class="fa fa-user fa-fw"></i>username</th>
-            <!--th><i class="fa fa-superpowers fa-fw"></i>role</th-->
-            <th><i class="fa fa-id-card fa-fw"></i>realname</th>
-            <th><i class="fa fa-phone-square fa-fw"></i>mobile</th>
-            <th><i class="fa fa-calendar-times-o fa-fw"></i>effect date</th>
-            <th><i class="fa fa-clock-o fa-fw"></i>created at</th>
-            <th><i class="fa fa-gear fa-fw"></i>operation</th>
+            <th>username</th>
+            <th>realname</th>
+            <th>mobile</th>
+            <th>effect date</th>
+            <th>created at</th>
+            <th>operation</th>
         </tr>
         </thead>
         <tbody>
@@ -84,7 +79,6 @@ $this->addCrumbs('Manager');
     {{each infos as info key}}
     <tr id="tr-{{info.id}}" data-id="{{info.id}}">
         <td>{{info.username}}</td>
-        <!--td class="role">{{info.role}}</td-->
         <td>{{info.realname}}</td>
         <td>{{info.mobile}}</td>
         <td>{{info.effect_date}}</td>
