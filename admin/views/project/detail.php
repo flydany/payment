@@ -13,6 +13,7 @@ $this->setActiveNavigator('project/list');
 
 \admin\assets\CheckerAsset::register($this);
 \admin\assets\UploaderFileAsset::register($this);
+\admin\assets\DatetimeAsset::register($this);
 ?>
 
 <div class="contenter">
@@ -33,7 +34,10 @@ $this->setActiveNavigator('project/list');
             </div>
             <div class="form-group col-xs-6 checker">
                 <label>effect date</label>
-                <input class="form-control" type="text" name="effect_date" value="<?= Render::value($data, 'effect_date') ?>" placeholder="effect date.">
+                <div class="input-group">
+                    <input class="form-control date-picker" type="text" name="effect_date" value="<?= Render::value($data, 'effect_date') ?>" placeholder="effect date.">
+                    <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
+                </div>
             </div>
         </div>
         <div class="panel panel-primary">
@@ -61,7 +65,8 @@ $this->setActiveNavigator('project/list');
 </div>
 
 <script>
-    $(document).ready(function() {
+    jQuery(document).ready(function() {
+        $('input.date-picker').datetimepicker({ format: 'yyyy-mm-dd', autoclose: true, minView : 2 });
         // 表单数据验证
         (new checker).init({ ruleDom: '#info-detail-json' });
 

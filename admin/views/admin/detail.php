@@ -12,6 +12,7 @@ $this->title = (isset($data['id']) ? 'Update' : 'Insert'). ' Administrator';
 $this->setActiveNavigator('admin/list');
 
 \admin\assets\CheckerAsset::register($this);
+\admin\assets\DatetimeAsset::register($this);
 ?>
 
 <div class="contenter">
@@ -33,7 +34,7 @@ $this->setActiveNavigator('admin/list');
             </div>
             <div class="form-group col-xs-6 checker">
                 <label>effect date</label>
-                <input class="form-control" type="text" name="effect_date" value="<?= Render::value($data, 'effect_date', date('Y-m-d', strtotime('+1 year'))) ?>" placeholder="end date.">
+                <input class="form-control date-picker" type="text" name="effect_date" value="<?= Render::value($data, 'effect_date', date('Y-m-d', strtotime('+1 year'))) ?>" placeholder="end date.">
             </div>
         </div>
         <!--div class="form-group checker selecter">
@@ -61,7 +62,9 @@ $this->setActiveNavigator('admin/list');
 </div>
 
 <script>
-    $(document).ready(function() {
+    jQuery(document).ready(function() {
+        // 日期插件
+        $('input.date-picker').datetimepicker({ format: 'yyyy-mm-dd', autoclose: true, minView : 2 });
         // 表单数据验证
         (new checker).init({ ruleDom: '#info-detail-json' });
     });

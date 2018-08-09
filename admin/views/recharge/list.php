@@ -11,6 +11,7 @@ $this->title = 'Recharge Record';
 $this->addCrumbs('Recharge');
 
 \admin\assets\TablerAsset::register($this);
+\admin\assets\DatetimeAsset::register($this);
 ?>
 
 <div class="contenter">
@@ -39,11 +40,11 @@ $this->addCrumbs('Recharge');
             <span class="input-group-addon">bank</span>
             <?= Render::select('bank_id', Platform::$bankSelector, null, ['prompt' => '--', 'class' => 'tabler select-picker']) ?>
         </div>
-        <div class="input-group col-xs-6">
+        <div class="input-group col-xs-4">
             <span class="input-group-addon">time</span>
-            <input type="text" class="form-control tabler" name="star" placeholder="start time">
+            <input type="text" class="form-control tabler datetime-picker" name="star" placeholder="start time">
             <span class="input-group-addon"><i class="fa fa-caret-right fa-fw"></i></span>
-            <input type="text" class="form-control tabler" name="end" placeholder="end time">
+            <input type="text" class="form-control tabler datetime-picker" name="end" placeholder="end time">
         </div>
         <div class="input-group col-xs-1"><button class="btn btn-primary" id="search-button"><i class="fa fa-search fa-fw"></i>search</button></div>
     </div>
@@ -81,6 +82,8 @@ $this->addCrumbs('Recharge');
 
 <script>
     jQuery(document).ready(function() {
+        // 初始化date样式
+        $('input.datetime-picker').datetimepicker({ format: 'yyyy-mm-dd hh:ii:ss', autoclose: true });
         // 批量删除按钮事件
         tableHandler.requestMulti({ button: '.delete-mult', isKeep: false });
         // 初始化表格异步加载事件

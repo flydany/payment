@@ -19,7 +19,7 @@ class AppAsset extends AssetBundle {
         // 'admin\assets\GentelellaAsset',
         'admin\assets\DialogAsset',
         'admin\assets\SelecterAsset',
-        'dosamigos\datetimepicker\DateTimePickerAsset',
+        // 'admin\assets\DatetimeAsset',
     ];
     
     public $css = [

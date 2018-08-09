@@ -15,6 +15,7 @@ $this->title = (isset($data['id']) ? 'Update' : 'Insert'). ' Platform';
 $this->setActiveNavigator('platform/maintain-list');
 
 \admin\assets\CheckerAsset::register($this);
+\admin\assets\DatetimeAsset::register($this);
 ?>
 
 <div class="contenter">
@@ -65,7 +66,7 @@ $this->setActiveNavigator('platform/maintain-list');
                 <div class="form-group col-xs-6 checker">
                     <label>maintain begin at</label>
                     <div class="input-group">
-                        <input class="form-control datetime-picker" data-date-format="yyyy-mm-dd hh:ii:ss" type="text" name="begin_at" value="<?= date('Y-m-d H:i:s', Render::value($data, 'begin_at', time())) ?>" placeholder="begin at">
+                        <input class="form-control datetime-picker" type="text" name="begin_at" value="<?= date('Y-m-d H:i:s', Render::value($data, 'begin_at', time())) ?>" placeholder="begin at">
                         <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
                     </div>
                 </div>
@@ -109,7 +110,9 @@ $this->setActiveNavigator('platform/maintain-list');
 </div>
 
 <script>
-    $(document).ready(function() {
+    jQuery(document).ready(function() {
+        // 日期插件
+        $('input.datetime-picker').datetimepicker({ format: 'yyyy-mm-dd hh:ii:ss', autoclose: true });
         // 表单数据验证
         (new checker).init({ ruleDom: '#info-detail-json' });
 
