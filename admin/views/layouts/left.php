@@ -49,7 +49,7 @@ $this->registerJs("
         display: inline-block;
         font-style: normal;
         font-weight: 400;
-        font-size: 18px;
+        font-size: 16px;
     }
     #sidebar-menu .menu-section {
         margin-bottom: 20px
