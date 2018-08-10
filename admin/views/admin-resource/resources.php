@@ -25,10 +25,13 @@ $this->setActiveNavigator($target);
         <div class="checkbox-group">
             <div class="checkbox w-p100">
                 <input type="checkbox" autocomplete="off" checked>
-                <label class="btn btn-primary w-p100">administrator role list</label>
+                <label class="btn btn-primary w-p100 text-left">administrator role list</label>
             </div>
             <?php
             foreach(AdminRole::identitySelector() as $identity => $title) {
+                if($identity == 'super') {
+                    continue;
+                }
                 ?>
                 <div class="checkbox">
                     <input class="permission-group" id="gid-<?= $identity ?>" type="checkbox" name="identity[]" value="<?= $identity ?>"<?= in_array($identity, $resource->identities) ? ' checked' : '' ?> autocomplete="off">
@@ -41,7 +44,7 @@ $this->setActiveNavigator($target);
         <div class="checkbox-group">
             <div class="checkbox w-p100">
                 <input type="checkbox" autocomplete="off" checked>
-                <label class="btn btn-primary w-p100">administrator list</label>
+                <label class="btn btn-primary w-p100 text-left">administrator list</label>
             </div>
             <?php
             foreach(Admin::find()->select('id, username')->andWhere(['!=', 'id', '0'])->asArray()->all() as $admin) {

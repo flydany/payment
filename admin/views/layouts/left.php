@@ -7,14 +7,14 @@ use common\helpers\Render;
 
 $this->registerJs("
     jQuery(document).ready(function() {
-        jQuery('#sidebar-menu .side-menu > li > a').bind('click', function() {
-            var li = jQuery(this).parent('li');
-            if(jQuery(li).hasClass('active')) {
-                jQuery(li).removeClass('active');
+        $('#sidebar-menu .side-menu > li > a').bind('click', function() {
+            var li = $(this).parent('li');
+            if($(li).hasClass('active')) {
+                $(li).removeClass('active');
             }
             else {
-                jQuery('#sidebar-menu .side-menu > li.active').removeClass('active');
-                jQuery(li).addClass('active');
+                $('#sidebar-menu .side-menu > li.active').removeClass('active');
+                $(li).addClass('active');
             }
         });
     });
@@ -79,7 +79,6 @@ $this->registerJs("
     }
     #sidebar-menu .side-menu > li > a {
         display: block;
-        margin-bottom: 6px;
         padding: 13px 15px 12px;
         color:#F2F5F7;
     }
@@ -110,6 +109,7 @@ $this->registerJs("
     }
     #sidebar-menu .child-menu {
         display: none;
+        margin-top: 5px;
     }
     #sidebar-menu li.active > ul.child-menu {
         display:block;
@@ -196,6 +196,7 @@ $this->registerJs("
             background-color:#2A3F54;
             text-align:left;
             border-radius:0 5px 5px 0;
+            margin-top:0;
         }
         #sidebar-menu li:hover > ul.child-menu {
             display:block;
