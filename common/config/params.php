@@ -9,8 +9,8 @@ return [
     'alipay' => [
         'requestUri' => 'https://openapi.alipay.com/gateway.do',
         'partnerId' => '',
-        'privateKey' => 'alipay.private.pem',
-        'publicKey' => 'alipay.public.pem',
+        'privateKey' => '',
+        'publicKey' => '',
     ],
     
     // sms短信服务商配置

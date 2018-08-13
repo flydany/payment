@@ -7,7 +7,7 @@ use common\helpers\Checker;
 class Request extends \yii\web\Request {
 
     /**
-     * @name 获得包含host的baseUrl地址
+     * 获得包含host的baseUrl地址
      * @return string
      */
     public function getAbsoluteBaseUrl()
@@ -63,7 +63,7 @@ class Request extends \yii\web\Request {
     }
 
     /**
-     * @name 覆盖框架的获取IP地址的实现
+     * 覆盖框架的获取IP地址的实现
      * @return string
      */
     public function getUserIP()
