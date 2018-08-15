@@ -24,6 +24,7 @@ class SiteController extends Controller {
 
     public function actionTest()
     {
+        return $this->v(base64_decode('TUlHZk1BMEdDU3FHU0liM0RRRUJBUVVBQTRHTkFEQ0JpUUtCZ1FDSFBnelV2RjYwMlVGSllZalNBR1BEQ0hQNU56Si8remhHTHpsdDZ4K2c2R1V3VTRkVGU2RmtWNjlqOHF4NDd0NzBWKzkvSG5SNUFVK3FZdm5jd3pMUkQxZVhqYnJVTmtuV0t5ekdMU01ncDRtQ2k0T3g3UHRtb0g2aWhMTjVhVkFpb3g0QS9jb1Q3ODhuSEdXNHVnVmY4VHYyYlIvTkFURUcvcGQ3MEdwSU93SURBUUFC'));
         return $this->render('test');
     }
 
