@@ -3,6 +3,7 @@
 namespace admin\components;
 
 use Yii;
+use admin\assets\AppAsset;
 
 class View extends \common\components\View {
 
@@ -54,5 +55,45 @@ class View extends \common\components\View {
     {
         $number = $number ? ' of number <strong>'.$number.'</strong>' : '';
         return "you are editing the information{$number}.";
+    }
+    
+    /**
+     * 重写JS文件引入规则
+     * @param string $js js路径
+     * @param array $options 配置信息
+     * @param boolean|null $key 是否MD5 KEY
+     * @return script tag
+     */
+    public function registerJavascript($url, $options = [], $key = null)
+    {
+        if(strpos('@static/', $url) >= 0) {
+            $url = str_replace('@static', '@web/static/', $url);
+        }
+        $options = array_merge([
+            AppAsset::className(),
+            'depends' => 'admin\assets\AppAsset',
+            'position' => static::POS_HEAD,
+        ], $options);
+        return parent::registerJsFile($url, $options, $key);
+    }
+
+    /**
+     * 重写css文件引入规则
+     * @param string $js js路径
+     * @param array $options 配置信息
+     * @param boolean|null $key 是否MD5 KEY
+     * @return link tag
+     */
+    public function registerCsser($url, $options = [], $key = null)
+    {
+        if(strpos('@static/', $url) >= 0) {
+            $url = str_replace('@static', '@web/static/', $url);
+        }
+        $options = array_merge([
+            AppAsset::className(),
+            'depends' => 'admin\assets\AppAsset',
+            'position' => static::POS_HEAD,
+        ], $options);
+        return parent::registerCssFile($url, $options, $key);
     }
 }

@@ -2,10 +2,8 @@
 
 namespace common\components;
 
-use admin\assets\AppAsset;
 use Yii;
 use yii\helpers\Url;
-use common\helpers\Render;
 
 class View extends \yii\web\View {
 
@@ -43,45 +41,5 @@ class View extends \yii\web\View {
     public function getController()
     {
         return Yii::$app->controller;
-    }
-    
-    /**
-     * 重写JS文件引入规则
-     * @param string $js js路径
-     * @param array $options 配置信息
-     * @param boolean|null $key 是否MD5 KEY
-     * @return script tag
-     */
-    public function registerJavascript($url, $options = [], $key = null)
-    {
-        if(strpos('@static/', $url) >= 0) {
-            $url = str_replace('@static', '@web/static/', $url);
-        }
-        $options = array_merge([
-            AppAsset::className(),
-            'depends' => 'admin\assets\AppAsset',
-            'position' => static::POS_HEAD,
-        ], $options);
-        return parent::registerJsFile($url, $options, $key);
-    }
-
-    /**
-     * 重写css文件引入规则
-     * @param string $js js路径
-     * @param array $options 配置信息
-     * @param boolean|null $key 是否MD5 KEY
-     * @return link tag
-     */
-    public function registerCsser($url, $options = [], $key = null)
-    {
-        if(strpos('@static/', $url) >= 0) {
-            $url = str_replace('@static', '@web/static/', $url);
-        }
-        $options = array_merge([
-            AppAsset::className(),
-            'depends' => 'admin\assets\AppAsset',
-            'position' => static::POS_HEAD,
-        ], $options);
-        return parent::registerCssFile($url, $options, $key);
     }
 }

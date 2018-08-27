@@ -225,7 +225,7 @@ var checker = function() {
                 checkerClass.verifySingle(checkerClass.getDomName(this));
             });
             // 多重验证事件
-            $(dom).bind('blur', function() { $(this).change();});
+            // $(dom).bind('blur', function() { $(this).change();});
         }
         return this;
     }
@@ -280,7 +280,7 @@ var checker = function() {
                     // 循环校验每条dom相关的relate[0]规则，通过则重置对应的relate[1]规则
                     // 开始重置/还原param[name]相关的规则
                     var isPass = checkerClass.checkRelateRule(relateIndex[i]);
-                    console.log(isPass);
+                    // console.log(isPass);
                     if(isPass) {
                         checkerClass.reBuliderRules(relateIndex[i]);
                     }
@@ -290,7 +290,7 @@ var checker = function() {
                 }
             });
             // 多重验证事件
-            $(dom).bind('blur', function() { $(this).change(); });
+            // $(dom).bind('blur', function() { $(this).change(); });
         }
         return this;
     }
